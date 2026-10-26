@@ -1,0 +1,254 @@
+{
+  "7000": {
+    "component_key": "contact_no",
+    "name": "Contacto NA",
+    "category": "Contactos",
+    "cad_id": 7000
+  },
+  "7001": {
+    "component_key": "contact_nc",
+    "name": "Contacto NC",
+    "category": "Contactos",
+    "cad_id": 7001
+  },
+  "7002": {
+    "component_key": "contact_no",
+    "name": "Contacto NA+NC",
+    "category": "Contactos",
+    "cad_id": 7002
+  },
+  "7003": {
+    "component_key": "contact_nc",
+    "name": "Contacto CON",
+    "category": "Contactos",
+    "cad_id": 7003
+  },
+  "7004": {
+    "component_key": "contact_no",
+    "name": "Con. Conexión NA",
+    "category": "Contactos",
+    "cad_id": 7004
+  },
+  "7005": {
+    "component_key": "contact_nc",
+    "name": "Con. Conexión NC",
+    "category": "Contactos",
+    "cad_id": 7005
+  },
+  "9000": {
+    "component_key": "relay_coil",
+    "name": "Bobina",
+    "category": "Bobinas",
+    "cad_id": 9000
+  },
+  "9001": {
+    "component_key": "relay_coil",
+    "name": "Bobina biestable",
+    "category": "Bobinas",
+    "cad_id": 9001
+  },
+  "9003": {
+    "component_key": "relay_coil",
+    "name": "Bobina electroválvula",
+    "category": "Bobinas",
+    "cad_id": 9003
+  },
+  "9008": {
+    "component_key": "pilot_lamp",
+    "name": "Piloto señalización",
+    "category": "Senalizacion",
+    "cad_id": 9008
+  },
+  "9009": {
+    "component_key": "pilot_lamp",
+    "name": "Piloto intermitente",
+    "category": "Senalizacion",
+    "cad_id": 9009
+  },
+  "9010": {
+    "component_key": "pilot_lamp",
+    "name": "Timbre",
+    "category": "Senalizacion",
+    "cad_id": 9010
+  },
+  "9011": {
+    "component_key": "pilot_lamp",
+    "name": "Zumbador",
+    "category": "Senalizacion",
+    "cad_id": 9011
+  },
+  "8000": {
+    "component_key": "pushbutton_no",
+    "name": "Pulsador NA",
+    "category": "Accionamientos",
+    "cad_id": 8000
+  },
+  "8001": {
+    "component_key": "pushbutton_nc",
+    "name": "Pulsador NC",
+    "category": "Accionamientos",
+    "cad_id": 8001
+  },
+  "8002": {
+    "component_key": "pushbutton_no",
+    "name": "Pulsador NA-NC",
+    "category": "Accionamientos",
+    "cad_id": 8002
+  },
+  "8003": {
+    "component_key": "pushbutton_nc",
+    "name": "Pulsador CON",
+    "category": "Accionamientos",
+    "cad_id": 8003
+  },
+  "8004": {
+    "component_key": "pushbutton_no",
+    "name": "Pulsador seta NA",
+    "category": "Accionamientos",
+    "cad_id": 8004
+  },
+  "8005": {
+    "component_key": "pushbutton_nc",
+    "name": "Pulsador seta NC",
+    "category": "Accionamientos",
+    "cad_id": 8005
+  },
+  "8006": {
+    "component_key": "emergency_stop",
+    "name": "Pulsador seta NA-NC",
+    "category": "Accionamientos",
+    "cad_id": 8006
+  },
+  "8010": {
+    "component_key": "selector_2pos",
+    "name": "Interruptor NA-NC",
+    "category": "Accionamientos",
+    "cad_id": 8010
+  },
+  "5000": {
+    "component_key": "thermal_relay_3p",
+    "name": "Fusible I",
+    "category": "Protecciones",
+    "cad_id": 5000
+  },
+  "5001": {
+    "component_key": "thermal_relay_3p",
+    "name": "Fusible IN",
+    "category": "Protecciones",
+    "cad_id": 5001
+  },
+  "5002": {
+    "component_key": "breaker_3p",
+    "name": "Fusible II",
+    "category": "Protecciones",
+    "cad_id": 5002
+  },
+  "5003": {
+    "component_key": "breaker_3p",
+    "name": "Fusible III",
+    "category": "Protecciones",
+    "cad_id": 5003
+  },
+  "5004": {
+    "component_key": "breaker_3p",
+    "name": "Fusible IIIN",
+    "category": "Protecciones",
+    "cad_id": 5004
+  },
+  "6000": {
+    "component_key": "fuse",
+    "name": "Automático I",
+    "category": "Protecciones",
+    "cad_id": 6000
+  },
+  "6001": {
+    "component_key": "fuse",
+    "name": "Automático IN",
+    "category": "Protecciones",
+    "cad_id": 6001
+  },
+  "1000": {
+    "component_key": "motor_3p",
+    "name": "Motor trifásico",
+    "category": "Motores",
+    "cad_id": 1000
+  },
+  "1001": {
+    "component_key": "motor_3p",
+    "name": "Motor trifásico YD",
+    "category": "Motores",
+    "cad_id": 1001
+  },
+  "1002": {
+    "component_key": "motor_1p",
+    "name": "Motor monofásico",
+    "category": "Motores",
+    "cad_id": 1002
+  },
+  "1003": {
+    "component_key": "motor_star_delta",
+    "name": "Motor Dahalander",
+    "category": "Motores",
+    "cad_id": 1003
+  },
+  "1004": {
+    "component_key": "motor_dahlander",
+    "name": "Motor rotor bobinado",
+    "category": "Motores",
+    "cad_id": 1004
+  },
+  "2000": {
+    "component_key": "contactor_3p",
+    "name": "Contactor II",
+    "category": "Contactores",
+    "cad_id": 2000
+  },
+  "2001": {
+    "component_key": "contactor_3p",
+    "name": "Contactor III",
+    "category": "Contactores",
+    "cad_id": 2001
+  },
+  "2002": {
+    "component_key": "contactor_3p",
+    "name": "Contactor IIII",
+    "category": "Contactores",
+    "cad_id": 2002
+  },
+  "2003": {
+    "component_key": "contactor_4p",
+    "name": "Interruptor II",
+    "category": "Contactores",
+    "cad_id": 2003
+  },
+  "2004": {
+    "component_key": "contactor_2p",
+    "name": "Interruptor III",
+    "category": "Contactores",
+    "cad_id": 2004
+  },
+  "3000": {
+    "component_key": "power_l",
+    "name": "Alimentación Fase",
+    "category": "Alimentaciones",
+    "cad_id": 3000
+  },
+  "3001": {
+    "component_key": "power_n",
+    "name": "Alimentación Neutro",
+    "category": "Alimentaciones",
+    "cad_id": 3001
+  },
+  "3002": {
+    "component_key": "power_l",
+    "name": "Alimentación Protección",
+    "category": "Alimentaciones",
+    "cad_id": 3002
+  },
+  "3010": {
+    "component_key": "power_l",
+    "name": "Alimentación +-",
+    "category": "Alimentaciones",
+    "cad_id": 3010
+  }
+}

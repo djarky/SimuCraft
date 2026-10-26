@@ -1,0 +1,50 @@
+Actúa como un Ingeniero de Software Experto y especialista en Sistemas de Automatización Eléctrica. Quiero desarrollar un clon moderno, mejorado y basado en la web del software clásico "CADe SIMU" para la simulación de automatismos electrotécnicos y neumática.
+
+El CADe SIMU original tiene fallas críticas de arquitectura que NO quiero heredar:
+1. Su motor gráfico calcula conexiones por coordenadas de píxeles rígidas (si mueves un componente un píxel, se rompe la señal).
+2. El sistema de Tags es manual, estricto y propenso a errores de escritura.
+3. El comando deshacer (Ctrl+Z) corrompe el lienzo dejando nodos huérfanos o flotantes.
+
+ESTRATEGIA DE INGENIERÍA INVERSA (Si tienes acceso a los binarios vía REA/Ghidra):
+Quiero que analices el ejecutable de CADe SIMU únicamente para extraer las "reglas de negocio" y la lógica matemática/eléctrica de los componentes. No me interesa su código de interfaz. Necesito saber:
+- Cómo procesa el flujo de corriente en tiempo real entre nodos.
+- Los estados y temporizaciones exactas de bobinas, contactores, temporizadores y disyuntores.
+- Las ecuaciones detrás de los componentes neumáticos y lógicos.
+
+ARQUITECTURA DEL NUEVO SOFTWARE (A construir desde cero):
+1. Modelo de Datos: Diseñaremos un sistema basado en Grafos Relacionales (nodos y aristas), no en mapas de píxeles. Si un componente se mueve, los cables conectados deben estirarse y mantener la conexión lógica de forma magnética.
+2. Interfaz y Gráficos: Utilizaremos tecnologías modernas. 
+3. Sistema de Tags Inteligente: Automatizado. Si coloco un contactor, se debe autononbrar (KM1, KM2), y los contactos asociados se deben enlazar mediante un menú desplegable interactivo.
+4. Historial Limpio: Implementaremos el Patrón de Diseño "Command" para asegurar que el Ctrl+Z / Ctrl+Y funcione de forma impecable sin dejar residuos en el lienzo.
+
+TAREA INICIAL:
+Antes de tocar el descompilador, ayúdame a diseñar el mapa de arquitectura de nuestra aplicación web. Preséntame una propuesta de la estructura del proyecto (Frontend y Motor de Simulación) y definamos cómo estructuraremos el primer componente en el código: un circuito básico con una línea de alimentación, un pulsador de marcha (NA) y una bobina de contactor con enclavamiento. ¿Cómo mapeamos ese grafo lógico?
+¡Gran cambio de planes y estrategia de optimización, IA! No vamos a rediseñar los iconos y widgets desde cero. Vamos a utilizar la librería de símbolos de "QElectroTech" (el software GNU de diseño eléctrico). 
+
+QElectroTech tiene una biblioteca masiva de componentes vectoriales estandarizados, pero NO tiene motor de simulación. Nuestra misión ahora es un "Mashup" de ingeniería de software:
+1. Usaremos los archivos de símbolos de QElectroTech (que son XML / SVG vectoriales limpios) para la interfaz visual de nuestro lienzo.
+2. Le inyectaremos a esos elementos visuales el motor lógico y de simulación que extraeremos y mejoraremos de CADe SIMU.
+
+Ajusta la arquitectura que pensamos antes para este modelo:
+- Necesitaremos un "Parser" (convertidor) que tome el XML/SVG de un componente de QElectroTech, identifique dónde están declarados sus "bornes" o puntos de conexión en el gráfico, y los transforme en puntos de conexión (anchors) de nuestro Grafo Relacional en la web.
+- Cada componente tendrá dos capas: la Capa Visual (el SVG heredado de QElectroTech) y la Capa Lógica (las ecuaciones de estado de CADe SIMU).
+
+Con este nuevo enfoque, ¿cómo estructuramos el JSON o el objeto TypeScript que definirá a un componente (por ejemplo, un Contactor de QElectroTech listo para ser simulado)? Muéstrame un ejemplo de esa estructura de datos.
+Actúa como un Ingeniero de Software Senior especialista en Sistemas de Automatización Eléctrica, Computación Gráfica y entornos Qt. Vamos a desarrollar un clon moderno, robusto y de código abierto del clásico software "CADe SIMU" (simulador de automatismos eléctricos y neumática), pero solucionando sus peores fallas de raíz y optimizando el desarrollo.
+
+TECNOLOGÍAS SELECCIONADAS Y ARQUITECTURA:
+1. Core y UI: Utilizaremos Python con PySide6 (Qt6). Usaremos 'QGraphicsView' y 'QGraphicsScene' para gestionar el lienzo de dibujo.
+2. Gráficos y Símbolos: NO diseñaremos iconos desde cero. Utilizaremos la librería de símbolos vectoriales de "QElectroTech" (software GNU de diseño). Estos componentes son XML/SVG nativos. Aprovecharemos que PySide6 maneja Qt para renderizar estos elementos directamente con 'QSvgRenderer' o parsear sus nodos XML.
+3. Modelo de Datos contra Píxeles Rotos: Prohibido usar coordenadas rígidas de píxeles para la corriente. Modelaremos el lienzo como un Grafo Relacional (Nodos y Aristas). Los cables serán objetos dinámicos que se enlacen magnéticamente a los bornes de los componentes de QElectroTech. Si mueves un componente, los cables se recalculan y estiran automáticamente manteniendo la conexión lógica.
+4. Historial Limpio (Ctrl+Z): Implementaremos el patrón de diseño "Command" con 'QUndoStack' y 'QUndoCommand' de Qt. Cada acción (mover, cablear, borrar) será reversible al 100%, eliminando por completo los nodos flotantes o huérfanos que corrompían el lienzo en CADe SIMU.
+5. Tags Inteligentes: Sistema automatizado. Los contactores se nombrarán solos (KM1, KM2) y los contactos auxiliares se enlazarán a ellos mediante un menú desplegable contextual en la interfaz, no escribiendo texto plano.
+
+ESTRATEGIA DE INGENIERÍA INVERSA (Vía REA / Ghidra si es necesario):
+Analizaremos el ejecutable de CADe SIMU de manera conceptual o binaria únicamente para extraer las "reglas de negocio" (ecuaciones de estado de bobinas, temporizadores, disyuntores, cálculo de caídas de tensión y flujos lógicos en la matriz). Desecharemos por completo su código visual obsoleto.
+
+TU PRIMERA TAREA:
+Diseña la estructura inicial del proyecto en Python. Explícame detalladamente:
+1. Cómo estructurar la clase 'Componente' que herede de 'QGraphicsItem', cargue el SVG de QElectroTech y exponga sus "bornes" lógicos basados en el grafo.
+2. Un ejemplo de la estructura de datos (JSON o Diccionario de Python) que defina a un componente con su Capa Visual y su Capa de Simulación Lógica.
+3. Cómo plantearías el bucle (loop) del motor de simulación para verificar los estados eléctricos en el grafo en tiempo real.
+

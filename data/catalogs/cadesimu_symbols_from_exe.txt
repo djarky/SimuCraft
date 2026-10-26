@@ -1,0 +1,159 @@
+Air Motor
+AjustesDeBarrasDeHerrmientas
+Bobina biestable
+Bobina monoestable
+Botón pulsador
+CARRERA
+CONTACTOR
+Contacto NA
+Contacto NC
+Contacto auxiliar NA
+Contacto auxiliar NA-NC
+Contacto auxiliar NC
+Contacto auxiliar conmutado
+Contacto final de carrera NA
+Contacto final de carrera NA-NC
+Contacto final de carrera NC
+Contacto final de carrera conmutado
+Contacto interruptor NA
+Contacto interruptor NA-NC
+Contacto interruptor NC
+Contacto interruptor conmutado
+Contacto pulsador NA
+Contacto pulsador NA-NC
+Contacto pulsador NC
+Contacto pulsador conmutado
+Contacto pulsador seta NA
+Contacto pulsador seta NA-NC
+Contacto pulsador seta NC
+Contacto pulsador seta conmutado
+Contacto temporizador conexi
+Contacto temporizador conexión NA
+Contacto temporizador conexión NA-NC
+Contacto temporizador conexión NC
+Contacto temporizador conexión conmu
+Contacto temporizador conexión desco
+Contacto temporizador desconexi
+Contacto temporizador desconexión NA
+Contacto temporizador desconexión NC
+Contacto temporizador desconexión co
+Contactor
+Contactor I
+Contactor II
+Contactor III
+Contactor IIII
+Contactos OFF Delay
+Contactos ON Delay
+Contactos auxiliares
+Controladora motor paso a paso
+DCLMLUNMVMLURQZQPYMLUZYb
+DIFERENCIAL
+DISYUNTOR
+Diferencial IIIN
+Diferencial IN
+Disyuntor
+Disyuntor I
+Disyuntor II
+Disyuntor III
+FINAL
+Final de carrera contraido
+Final de carrera expandido
+Final de carrera mitad
+Final de carrera pinza abierta
+Final de carrera pinza cerrada
+Finale a met
+Finale a metà gara
+GKLUZXZ
+GpDLrJPjBKjENmJQbAHM17L28lUZ
+Interruptor
+Interruptor I
+Interruptor II
+Interruptor III
+Interruptor IIII
+Interruptor autom
+Interruptor automático
+Interruptor diferencial
+Interruptor horario
+Interruttore magnetotermico
+LUzNU
+LuZJ
+MOTOR
+Magnetothermic switch
+Motor Dahalander
+Motor cc
+Motor de 2 velociaddes
+Motor dos velocidades
+Motor monof
+Motor monofásico
+Motor neum
+Motor neumático
+Motor neumático reversible
+Motor rotor bobinado
+Motor trif
+Motor trifásico
+Motor trifásico YD
+Motor trifásico como monofásico
+Motore a 2 velocit
+Motore a 2 velocità
+Motore trifase
+Motore trifase YD
+OLUz
+Piloto
+Piloto ambar
+Piloto rojo
+Piloto verde
+Pilotos
+Pneumatic motor
+Pneumatici motore reversibile
+Pulsador
+Pulsador rojo
+Pulsador seta
+Pulsador verde
+RELE
+RELE1
+RELE2
+Rele
+Relè termico
+Reversible pneumatic motor
+Seccionador
+Seccionador I
+Seccionador II
+Seccionador III
+Seccionador IIIN
+Seccionador IN
+Selector
+TERMICO
+Temporizador a la conexi
+Temporizador a la conexión
+Temporizador a la conexión desconexi
+Temporizador a la desconexi
+Temporizador a la desconexión
+Temporizador generador de pulsos
+Temporizador intermitente
+Temporizador pulso a la conexi
+Temporizador pulso a la conexión
+Three-phase motor
+Three-phase motor YD
+XgwXhtXbluz
+Ybhluzv
+YjUYkTYjUZkVZlUZlUZlUZlUZlUZlUTfOTfO
+dluz
+fkakpluznvys
+glluzpz
+ioluz
+lUZTAFqbehcp
+luzT
+luzemrSZ
+luzfouYbhR
+luzfoupz
+luzgrzWelLX
+luzkrxpw
+luzmv
+luzs
+n pulsador
+phase motor
+phase motor YD
+speed motor
+termico
+zqekcXvnazreleX
+ÄÌÏluz

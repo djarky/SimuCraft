@@ -1,0 +1,5110 @@
+[
+  {
+    "CAD_ID": 0,
+    "Categoria": "Conexiones",
+    "Subtipo": "nodo_conexion",
+    "Nombre_Original_EXE": "Punto de conexión / Conexión eléctrica",
+    "Descripcion": "Punto de unión/nodo entre conductores",
+    "Tags": "$$$,-A-,192.128.000.001,PLC,L+-1-L--1-1",
+    "Terminales": "",
+    "Veces_Usado": 1202,
+    "Archivos_Usado": 18,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "2D.cad",
+      "3D.cad",
+      "Lab01-2.cad",
+      "Lab01.cad",
+      "MOTOR ARRANQUE.cad",
+      "all4.cad",
+      "all5.cad",
+      "all_simbol.cad",
+      "allpart2.cad",
+      "lab 13.cad",
+      "lab 14-1.cad",
+      "lab 15-1.cad",
+      "lab 16.cad",
+      "lab 17.cad",
+      "virtual1.cad",
+      "virtual2.cad",
+      "virtual3.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_1",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 1",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_1)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad"
+    ]
+  },
+  {
+    "CAD_ID": 2,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_2",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 2",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_2)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 7,
+    "Archivos_Usado": 6,
+    "Archivos_Lista": [
+      "Lab01-2.cad",
+      "Lab01.cad",
+      "lab 13.cad",
+      "lab 14-1.cad",
+      "lab 16.cad",
+      "virtual1.cad"
+    ]
+  },
+  {
+    "CAD_ID": 3,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_3",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 3",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_3)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "MOTOR ARRANQUE.cad"
+    ]
+  },
+  {
+    "CAD_ID": 4,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_4",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 4",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_4)",
+    "Tags": "$$$",
+    "Terminales": "",
+    "Veces_Usado": 4,
+    "Archivos_Usado": 4,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "Lab01.cad",
+      "lab 13.cad",
+      "virtual1.cad"
+    ]
+  },
+  {
+    "CAD_ID": 5,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_5",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 5",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_5)",
+    "Tags": "$$$",
+    "Terminales": "",
+    "Veces_Usado": 5,
+    "Archivos_Usado": 5,
+    "Archivos_Lista": [
+      "Lab01-2.cad",
+      "lab 13.cad",
+      "lab 15-1.cad",
+      "lab 16.cad",
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 6,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_6",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 6",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_6)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 3,
+    "Archivos_Usado": 3,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "Lab01.cad",
+      "MOTOR ARRANQUE.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_7",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 7",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_7)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 8,
+    "Archivos_Usado": 5,
+    "Archivos_Lista": [
+      "MOTOR ARRANQUE.cad",
+      "lab 13.cad",
+      "lab 14-1.cad",
+      "lab 16.cad",
+      "virtual1.cad"
+    ]
+  },
+  {
+    "CAD_ID": 8,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_8",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 8",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_8)",
+    "Tags": "",
+    "Terminales": " 0- 0- 0- 0- 0- 0- 0- 0",
+    "Veces_Usado": 11,
+    "Archivos_Usado": 7,
+    "Archivos_Lista": [
+      "Lab01-2.cad",
+      "Lab01.cad",
+      "lab 15-1.cad",
+      "lab 16.cad",
+      "lab 17.cad",
+      "virtual1.cad",
+      "virtual2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 9,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_9",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 9",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_9)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "MOTOR ARRANQUE.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_10",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 10",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_10)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "lab 14-1.cad"
+    ]
+  },
+  {
+    "CAD_ID": 11,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_11",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 11",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_11)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 4,
+    "Archivos_Usado": 4,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "Lab01-2.cad",
+      "MOTOR ARRANQUE.cad",
+      "lab 16.cad"
+    ]
+  },
+  {
+    "CAD_ID": 12,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_12",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 12",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_12)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 3,
+    "Archivos_Usado": 3,
+    "Archivos_Lista": [
+      "Lab01.cad",
+      "MOTOR ARRANQUE.cad",
+      "lab 13.cad"
+    ]
+  },
+  {
+    "CAD_ID": 13,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_13",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 13",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_13)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "virtual1.cad"
+    ]
+  },
+  {
+    "CAD_ID": 14,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_14",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 14",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_14)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 4,
+    "Archivos_Usado": 4,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "MOTOR ARRANQUE.cad",
+      "lab 16.cad",
+      "virtual1.cad"
+    ]
+  },
+  {
+    "CAD_ID": 15,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_15",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 15",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_15)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "Lab01.cad",
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 16,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_16",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 16",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_16)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "lab 13.cad",
+      "virtual1.cad"
+    ]
+  },
+  {
+    "CAD_ID": 17,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_17",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 17",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_17)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 6,
+    "Archivos_Usado": 4,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "MOTOR ARRANQUE.cad",
+      "lab 14-1.cad",
+      "lab 16.cad"
+    ]
+  },
+  {
+    "CAD_ID": 18,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_18",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 18",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_18)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "lab 15-1.cad",
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 19,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_19",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 19",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_19)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "lab 14-1.cad"
+    ]
+  },
+  {
+    "CAD_ID": 20,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_20",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 20",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_20)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 6,
+    "Archivos_Usado": 3,
+    "Archivos_Lista": [
+      "MOTOR ARRANQUE.cad",
+      "lab 14-1.cad",
+      "lab 15-1.cad"
+    ]
+  },
+  {
+    "CAD_ID": 21,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_21",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 21",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_21)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "lab 15-1.cad",
+      "virtual1.cad"
+    ]
+  },
+  {
+    "CAD_ID": 22,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_22",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 22",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_22)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "Lab01-2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 23,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_23",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 23",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_23)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "Lab01-2.cad",
+      "virtual1.cad"
+    ]
+  },
+  {
+    "CAD_ID": 24,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_24",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 24",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_24)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 6,
+    "Archivos_Usado": 4,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "lab 14-1.cad",
+      "lab 17.cad",
+      "virtual1.cad"
+    ]
+  },
+  {
+    "CAD_ID": 25,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_25",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 25",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_25)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 3,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "Lab01-2.cad",
+      "lab 15-1.cad"
+    ]
+  },
+  {
+    "CAD_ID": 26,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_26",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 26",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_26)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 27,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_27",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 27",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_27)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 28,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_28",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 28",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_28)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "Lab01-2.cad",
+      "virtual1.cad"
+    ]
+  },
+  {
+    "CAD_ID": 30,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_30",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 30",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_30)",
+    "Tags": "192.128.000.001",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad"
+    ]
+  },
+  {
+    "CAD_ID": 31,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_31",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 31",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_31)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "Lab01-2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 32,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_32",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 32",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_32)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "Lab01-2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 34,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_34",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 34",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_34)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "lab 13.cad"
+    ]
+  },
+  {
+    "CAD_ID": 35,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_35",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 35",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_35)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad"
+    ]
+  },
+  {
+    "CAD_ID": 38,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_38",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 38",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_38)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 3,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 39,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_39",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 39",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_39)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "MOTOR ARRANQUE.cad"
+    ]
+  },
+  {
+    "CAD_ID": 41,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_41",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 41",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_41)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 3,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "lab 16.cad",
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 42,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_42",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 42",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_42)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "lab 16.cad",
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 44,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_44",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 44",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_44)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "MOTOR ARRANQUE.cad",
+      "lab 16.cad"
+    ]
+  },
+  {
+    "CAD_ID": 45,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_45",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 45",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_45)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 46,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_46",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 46",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_46)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "MOTOR ARRANQUE.cad",
+      "lab 15-1.cad"
+    ]
+  },
+  {
+    "CAD_ID": 47,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_47",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 47",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_47)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 48,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_48",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 48",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_48)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 50,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_50",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 50",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_50)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 51,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_51",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 51",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_51)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "Lab01.cad"
+    ]
+  },
+  {
+    "CAD_ID": 52,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_52",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 52",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_52)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 53,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_53",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 53",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_53)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 54,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_54",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 54",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_54)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 55,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_55",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 55",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_55)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 58,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_58",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 58",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_58)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "lab 16.cad"
+    ]
+  },
+  {
+    "CAD_ID": 59,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_59",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 59",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_59)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 61,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_61",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 61",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_61)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 3,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "MOTOR ARRANQUE.cad",
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 62,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_62",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 62",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_62)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 64,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_64",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 64",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_64)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 67,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_67",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 67",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_67)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 69,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_69",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 69",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_69)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 70,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_70",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 70",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_70)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 71,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_71",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 71",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_71)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 77,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_77",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 77",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_77)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 80,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_80",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 80",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_80)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "virtual1.cad"
+    ]
+  },
+  {
+    "CAD_ID": 92,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_92",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 92",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_92)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 105,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_105",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 105",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_105)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 167,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_167",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 167",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_167)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad"
+    ]
+  },
+  {
+    "CAD_ID": 168,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_168",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 168",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_168)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad"
+    ]
+  },
+  {
+    "CAD_ID": 170,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_170",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 170",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_170)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad"
+    ]
+  },
+  {
+    "CAD_ID": 273,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_273",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 273",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_273)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 275,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_275",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 275",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_275)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 277,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_277",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 277",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_277)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 281,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_281",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 281",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_281)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 287,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_287",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 287",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_287)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 293,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "objeto_virtual_293",
+    "Nombre_Original_EXE": "Componente Virtual / Bitmap 293",
+    "Descripcion": "Elemento gráfico / interactivo de laboratorio virtual (bitmap_293)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1000,
+    "Categoria": "Motores",
+    "Subtipo": "motor_trifasico",
+    "Nombre_Original_EXE": "Motor trifásico",
+    "Descripcion": "Motor trifásico estándar asíncrono (jaula de ardilla)",
+    "Tags": "-M",
+    "Terminales": "U1-V1-W1-PE",
+    "Veces_Usado": 16,
+    "Archivos_Usado": 14,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "2D.cad",
+      "3D.cad",
+      "Lab01-2.cad",
+      "Lab01.cad",
+      "MOTOR ARRANQUE.cad",
+      "all_simbol.cad",
+      "lab 13.cad",
+      "lab 14-1.cad",
+      "lab 15-1.cad",
+      "lab 16.cad",
+      "lab 17.cad",
+      "virtual2.cad",
+      "virtual3.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1001,
+    "Categoria": "Motores",
+    "Subtipo": "motor_trifasico_yd",
+    "Nombre_Original_EXE": "Motor trifásico YD",
+    "Descripcion": "Motor trifásico estrella-triángulo (6 bornes U1,V1,W1,U2,V2,W2)",
+    "Tags": "-M",
+    "Terminales": "U1-V1-W1-PE-W2-U2-V2",
+    "Veces_Usado": 3,
+    "Archivos_Usado": 3,
+    "Archivos_Lista": [
+      "2D.cad",
+      "3D.cad",
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1002,
+    "Categoria": "Motores",
+    "Subtipo": "motor_monofasico",
+    "Nombre_Original_EXE": "Motor monofásico",
+    "Descripcion": "Motor monofásico corriente alterna",
+    "Tags": "-M",
+    "Terminales": "U1-V1-PE",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1003,
+    "Categoria": "Motores",
+    "Subtipo": "motor_dahlander",
+    "Nombre_Original_EXE": "Motor Dahalander",
+    "Descripcion": "Motor de dos velocidades por conmutación de polos (Dahlander)",
+    "Tags": "-M",
+    "Terminales": "U1-V1-W1-PE-U2-V2-W2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1004,
+    "Categoria": "Motores",
+    "Subtipo": "motor_rotor_bobinado",
+    "Nombre_Original_EXE": "Motor rotor bobinado",
+    "Descripcion": "Motor trifásico de rotor bobinado con anillos rozantes",
+    "Tags": "-M",
+    "Terminales": "U1-V1-W1-PE-K-L-M",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1005,
+    "Categoria": "Motores",
+    "Subtipo": "motor_dos_velocidades",
+    "Nombre_Original_EXE": "Motor Dos velocidades",
+    "Descripcion": "Motor de dos velocidades con devanados independientes",
+    "Tags": "-M",
+    "Terminales": "U1-V1-W1-PE-U2-V2-W2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1006,
+    "Categoria": "Motores",
+    "Subtipo": "motor_cc_iman",
+    "Nombre_Original_EXE": "Motor cc. Iman P.",
+    "Descripcion": "Motor de corriente continua de imanes permanentes",
+    "Tags": "-M",
+    "Terminales": "A1-A2-PE",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1007,
+    "Categoria": "Motores",
+    "Subtipo": "motor_cc_indep",
+    "Nombre_Original_EXE": "Motor cc. Indep.",
+    "Descripcion": "Motor de corriente continua con excitación independiente",
+    "Tags": "-M",
+    "Terminales": "A1-A2-PE-F1-F2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1008,
+    "Categoria": "Motores",
+    "Subtipo": "motor_monofasico_cond",
+    "Nombre_Original_EXE": "Motor monofásico con condensador",
+    "Descripcion": "Motor monofásico con condensador de arranque y disyuntor centrífugo",
+    "Tags": "-M",
+    "Terminales": "U1-V1-PE-U2-V2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1009,
+    "Categoria": "Motores",
+    "Subtipo": "freno",
+    "Nombre_Original_EXE": "Freno",
+    "Descripcion": "Freno electromagnético para motor",
+    "Tags": "-Fr",
+    "Terminales": "U1-V1-PE",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1010,
+    "Categoria": "Motores",
+    "Subtipo": "motor_trifasico_como_monofasico",
+    "Nombre_Original_EXE": "Motor trifásico como monofásico",
+    "Descripcion": "Conexión Steinmetz para motor trifásico en red monofásica",
+    "Tags": "-M",
+    "Terminales": "U1-V1-W1-PE",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1011,
+    "Categoria": "Motores",
+    "Subtipo": "motor_paso_paso_unipolar",
+    "Nombre_Original_EXE": "Motor paso a paso unipolar",
+    "Descripcion": "Motor paso a paso unipolar de 4/5 hilos",
+    "Tags": "-M",
+    "Terminales": "1-2-3-4-5-6",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1012,
+    "Categoria": "Motores",
+    "Subtipo": "motor_paso_paso_bipolar",
+    "Nombre_Original_EXE": "Motor paso a paso bipolar",
+    "Descripcion": "Motor paso a paso bipolar de 4 hilos",
+    "Tags": "-M",
+    "Terminales": "1-2-3-4",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1050,
+    "Categoria": "Neumatica",
+    "Subtipo": "actuador_simple_efecto",
+    "Nombre_Original_EXE": "Actuador simple efecto",
+    "Descripcion": "Cilindro neumático de simple efecto con retorno por muelle",
+    "Tags": "-R",
+    "Terminales": "1-2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1051,
+    "Categoria": "Neumatica",
+    "Subtipo": "actuador_doble_efecto",
+    "Nombre_Original_EXE": "Actuador doble efecto",
+    "Descripcion": "Cilindro neumático de doble efecto",
+    "Tags": "-R",
+    "Terminales": "1-3-5-2-4-6",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1052,
+    "Categoria": "Neumatica",
+    "Subtipo": "actuador_sin_vastago",
+    "Nombre_Original_EXE": "Actuador sin vástago",
+    "Descripcion": "Cilindro neumático lineal sin vástago",
+    "Tags": "-T",
+    "Terminales": "1-4-7-2-5-8-3-6-9",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1053,
+    "Categoria": "Neumatica",
+    "Subtipo": "actuador_sin_vastago_mag",
+    "Nombre_Original_EXE": "Actuador sin vástago magnético",
+    "Descripcion": "Cilindro sin vástago de arrastre magnético",
+    "Tags": "-G",
+    "Terminales": "1-3-5-2-4-6-PE",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1054,
+    "Categoria": "Neumatica",
+    "Subtipo": "pinza_simple_efecto",
+    "Nombre_Original_EXE": "Pinza simple efecto",
+    "Descripcion": "Pinza neumática de agarre simple efecto",
+    "Tags": "-G",
+    "Terminales": "L1-N-PE-U-V-W-PE",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1055,
+    "Categoria": "Neumatica",
+    "Subtipo": "pinza_doble_efecto",
+    "Nombre_Original_EXE": "Pinza doble efecto",
+    "Descripcion": "Pinza neumática de agarre doble efecto",
+    "Tags": "-G",
+    "Terminales": "L1-L2-L3-PE-U-V-W-PE",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1056,
+    "Categoria": "Neumatica",
+    "Subtipo": "ventosa",
+    "Nombre_Original_EXE": "Ventosa",
+    "Descripcion": "Ventosa de vacío con eyector",
+    "Tags": "-G",
+    "Terminales": "RA-RC-I1-I2-I3-I4-+",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1057,
+    "Categoria": "Neumatica",
+    "Subtipo": "motor_neumatico",
+    "Nombre_Original_EXE": "Motor neumático",
+    "Descripcion": "Motor neumático unidireccional",
+    "Tags": "-G",
+    "Terminales": "L1-N-PE-M1-M2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1058,
+    "Categoria": "Neumatica",
+    "Subtipo": "motor_neumatico_rev",
+    "Nombre_Original_EXE": "Motor neumático reversible",
+    "Descripcion": "Motor neumático bidireccional",
+    "Tags": "-G",
+    "Terminales": "L1-N-PE-M1-M2-F1-F2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1059,
+    "Categoria": "Neumatica",
+    "Subtipo": "valvula_estranguladora",
+    "Nombre_Original_EXE": "Válvula estranguladora",
+    "Descripcion": "Válvula reguladora de caudal con antirretorno",
+    "Tags": "-G",
+    "Terminales": "L1-L2-L3-PE-M1-M2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1060,
+    "Categoria": "Neumatica",
+    "Subtipo": "valvula_escape_rapido",
+    "Nombre_Original_EXE": "Válvula escape rápido",
+    "Descripcion": "Válvula de escape rápido para cilindros",
+    "Tags": "-G",
+    "Terminales": "L1-L2-L3-PE-M1-M2-F1-F2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1061,
+    "Categoria": "Neumatica",
+    "Subtipo": "electrovalvula_distribuidora",
+    "Nombre_Original_EXE": "Electroválvula distribuidora",
+    "Descripcion": "Válvula distribuidora 5/2 o 3/2 accionamiento eléctrico",
+    "Tags": "-G",
+    "Terminales": "RA-RC-IN-V+-+-AI-0V",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1062,
+    "Categoria": "Neumatica",
+    "Subtipo": "actuador_giro",
+    "Nombre_Original_EXE": "Actuador giro",
+    "Descripcion": "Actuador rotativo / oscilante neumático",
+    "Tags": "-G",
+    "Terminales": "IN-A1-A2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1065,
+    "Categoria": "Neumatica",
+    "Subtipo": "final_carrera_neumatico",
+    "Nombre_Original_EXE": "Final de carrera neumático",
+    "Descripcion": "Válvula fin de carrera neumática con palpador",
+    "Tags": "-G",
+    "Terminales": "I1-I2-I3-I4-Q1-Q2-Q3-Q4",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1066,
+    "Categoria": "Neumatica",
+    "Subtipo": "pulsador_neumatico",
+    "Nombre_Original_EXE": "Pulsador neumático",
+    "Descripcion": "Válvula 3/2 accionada por pulsador manual",
+    "Tags": "-G",
+    "Terminales": "I1-I2-I3- -Q1-Q2-Q3-Q4",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1067,
+    "Categoria": "Neumatica",
+    "Subtipo": "unidad_mantenimiento",
+    "Nombre_Original_EXE": "Unidad mantenimiento FRL",
+    "Descripcion": "Unidad de mantenimiento de aire comprimido (Filtro, Regulador, Lubricador)",
+    "Tags": "-G",
+    "Terminales": "I1-I2-I3- -Q1-Q2-Q3-Q4",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1070,
+    "Categoria": "Potencia",
+    "Subtipo": "resistencia_1p",
+    "Nombre_Original_EXE": "Resistencia I",
+    "Descripcion": "Banco de resistencia monofásica de frenado o calefactora",
+    "Tags": "-K",
+    "Terminales": "A1-A2-1-2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1071,
+    "Categoria": "Potencia",
+    "Subtipo": "resistencia_3p",
+    "Nombre_Original_EXE": "Resistencia III",
+    "Descripcion": "Banco de resistencias trifásicas estatóricas/rotóricas",
+    "Tags": "-K",
+    "Terminales": "A1-A2-1-2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1072,
+    "Categoria": "Potencia",
+    "Subtipo": "autotransformador_3p",
+    "Nombre_Original_EXE": "Autotransformador III",
+    "Descripcion": "Autotransformador trifásico para arranque a tensión reducida",
+    "Tags": "-K",
+    "Terminales": "1-3-5-2-4-6-A1-A2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1073,
+    "Categoria": "Potencia",
+    "Subtipo": "arrancador_electronico_ca",
+    "Nombre_Original_EXE": "Arrancador electrónico c.a.",
+    "Descripcion": "Etapa de potencia de arrancador suave (Soft Starter)",
+    "Tags": "-K",
+    "Terminales": "1-3-5-2-4-6-A1-A2-A3",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1074,
+    "Categoria": "Potencia",
+    "Subtipo": "variador_velocidad_cc_2p",
+    "Nombre_Original_EXE": "Variador velocidad c.c. II",
+    "Descripcion": "Variador de velocidad CC monofásico / bifásico",
+    "Tags": "-K",
+    "Terminales": "A1-A2-13-14",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1075,
+    "Categoria": "Potencia",
+    "Subtipo": "variador_velocidad_cc_3p",
+    "Nombre_Original_EXE": "Variador velocidad c.c. III",
+    "Descripcion": "Variador de velocidad CC trifásico",
+    "Tags": "-K",
+    "Terminales": "A1-A2-12-11-14",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 1076,
+    "Categoria": "2D_3D",
+    "Subtipo": "rele_temporizado_zocalo",
+    "Nombre_Original_EXE": "Rele temporizado zócalo",
+    "Descripcion": "Relé temporizado enchufable sobre base octal/undecal",
+    "Tags": "-K",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "3D.cad"
+    ]
+  },
+  {
+    "CAD_ID": 2000,
+    "Categoria": "Contactores",
+    "Subtipo": "contactor_2p",
+    "Nombre_Original_EXE": "Contactor II",
+    "Descripcion": "Contactor de potencia bipolar (2 polos de fuerza)",
+    "Tags": "-KM",
+    "Terminales": "1-3-2-4",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 2001,
+    "Categoria": "Contactores",
+    "Subtipo": "contactor_3p",
+    "Nombre_Original_EXE": "Contactor III",
+    "Descripcion": "Contactor de potencia tripolar (3 polos de fuerza)",
+    "Tags": "-KM1,-K1,-KM,K1,-K2",
+    "Terminales": "1-3-5-2-4-6",
+    "Veces_Usado": 16,
+    "Archivos_Usado": 12,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "Lab01-2.cad",
+      "Lab01.cad",
+      "MOTOR ARRANQUE.cad",
+      "all_simbol.cad",
+      "lab 13.cad",
+      "lab 14-1.cad",
+      "lab 15-1.cad",
+      "lab 16.cad",
+      "lab 17.cad",
+      "virtual2.cad",
+      "virtual3.cad"
+    ]
+  },
+  {
+    "CAD_ID": 2002,
+    "Categoria": "Contactores",
+    "Subtipo": "contactor_4p",
+    "Nombre_Original_EXE": "Contactor IIII",
+    "Descripcion": "Contactor de potencia tetrapolar (4 polos de fuerza)",
+    "Tags": "-KM",
+    "Terminales": "1-3-5-7-2-4-6-8",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 2003,
+    "Categoria": "Contactores",
+    "Subtipo": "interruptor_potencia_2p",
+    "Nombre_Original_EXE": "Interruptor II",
+    "Descripcion": "Interruptor seccionador de carga bipolar",
+    "Tags": "-S",
+    "Terminales": "1-3-2-4",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 2004,
+    "Categoria": "Contactores",
+    "Subtipo": "interruptor_potencia_3p",
+    "Nombre_Original_EXE": "Interruptor III",
+    "Descripcion": "Interruptor seccionador de carga tripolar",
+    "Tags": "-S",
+    "Terminales": "1-3-5-2-4-6",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 2005,
+    "Categoria": "Contactores",
+    "Subtipo": "interruptor_potencia_4p",
+    "Nombre_Original_EXE": "Interruptor IIII",
+    "Descripcion": "Interruptor seccionador de carga tetrapolar",
+    "Tags": "-S",
+    "Terminales": "1-3-5-7-2-4-6-8",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 2006,
+    "Categoria": "Contactores",
+    "Subtipo": "contactor_1p",
+    "Nombre_Original_EXE": "Contactor I",
+    "Descripcion": "Contactor de potencia unipolar (1 polo de fuerza)",
+    "Tags": "-KM1,-KM,-Q1,-KM2,-KM3",
+    "Terminales": "1-2",
+    "Veces_Usado": 6,
+    "Archivos_Usado": 5,
+    "Archivos_Lista": [
+      "all_simbol.cad",
+      "lab 13.cad",
+      "lab 14-1.cad",
+      "lab 16.cad",
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 2007,
+    "Categoria": "Contactores",
+    "Subtipo": "interruptor_potencia_1p",
+    "Nombre_Original_EXE": "Interruptor I",
+    "Descripcion": "Interruptor seccionador unipolar",
+    "Tags": "-S",
+    "Terminales": "1-2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 2008,
+    "Categoria": "Contactores",
+    "Subtipo": "contactor_inversor_3p",
+    "Nombre_Original_EXE": "Contactor III conmutador",
+    "Descripcion": "Contactor inversor conmutado tripolar",
+    "Tags": "-KM",
+    "Terminales": "1-3-5-2-4-6",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 2009,
+    "Categoria": "Contactores",
+    "Subtipo": "enclavamiento_mecanico",
+    "Nombre_Original_EXE": "Enclavamiento",
+    "Descripcion": "Enclavamiento mecánico entre dos contactores",
+    "Tags": "-KM1",
+    "Terminales": "-KM2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 3000,
+    "Categoria": "Alimentaciones",
+    "Subtipo": "alimentacion_fase",
+    "Nombre_Original_EXE": "Alimentación Fase",
+    "Descripcion": "Borne de alimentación de Fase (L)",
+    "Tags": "-X",
+    "Terminales": "",
+    "Veces_Usado": 7,
+    "Archivos_Usado": 7,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "MOTOR ARRANQUE.cad",
+      "all_simbol.cad",
+      "lab 13.cad",
+      "lab 15-1.cad",
+      "lab 16.cad",
+      "virtual2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 3001,
+    "Categoria": "Alimentaciones",
+    "Subtipo": "alimentacion_neutro",
+    "Nombre_Original_EXE": "Alimentación Neutro",
+    "Descripcion": "Borne de alimentación de Neutro (N)",
+    "Tags": "-X",
+    "Terminales": "",
+    "Veces_Usado": 7,
+    "Archivos_Usado": 7,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "MOTOR ARRANQUE.cad",
+      "all_simbol.cad",
+      "lab 13.cad",
+      "lab 15-1.cad",
+      "lab 16.cad",
+      "virtual2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 3002,
+    "Categoria": "Alimentaciones",
+    "Subtipo": "alimentacion_proteccion",
+    "Nombre_Original_EXE": "Alimentación Protección",
+    "Descripcion": "Borne de toma de tierra / conductor de protección (PE)",
+    "Tags": "-X",
+    "Terminales": "",
+    "Veces_Usado": 3,
+    "Archivos_Usado": 3,
+    "Archivos_Lista": [
+      "all_simbol.cad",
+      "lab 15-1.cad",
+      "virtual2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 3003,
+    "Categoria": "Alimentaciones",
+    "Subtipo": "alimentacion_f_n",
+    "Nombre_Original_EXE": "Alimentación F+N",
+    "Descripcion": "Alimentación monofásica compuesta Fase + Neutro",
+    "Tags": "-X",
+    "Terminales": "",
+    "Veces_Usado": 7,
+    "Archivos_Usado": 5,
+    "Archivos_Lista": [
+      "Lab01-2.cad",
+      "Lab01.cad",
+      "all_simbol.cad",
+      "lab 17.cad",
+      "virtual1.cad"
+    ]
+  },
+  {
+    "CAD_ID": 3004,
+    "Categoria": "Alimentaciones",
+    "Subtipo": "alimentacion_3p",
+    "Nombre_Original_EXE": "Alimentación L1+L2+L3",
+    "Descripcion": "Alimentación trifásica 3 líneas (L1, L2, L3)",
+    "Tags": "-X",
+    "Terminales": "",
+    "Veces_Usado": 4,
+    "Archivos_Usado": 4,
+    "Archivos_Lista": [
+      "all_simbol.cad",
+      "lab 13.cad",
+      "lab 15-1.cad",
+      "virtual2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 3005,
+    "Categoria": "Alimentaciones",
+    "Subtipo": "alimentacion_3p_pe",
+    "Nombre_Original_EXE": "Alimentación L1+L2+L3+PE",
+    "Descripcion": "Alimentación trifásica con tierra (L1, L2, L3 + PE)",
+    "Tags": "-X",
+    "Terminales": "",
+    "Veces_Usado": 7,
+    "Archivos_Usado": 7,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "Lab01.cad",
+      "MOTOR ARRANQUE.cad",
+      "all_simbol.cad",
+      "lab 16.cad",
+      "lab 17.cad",
+      "virtual3.cad"
+    ]
+  },
+  {
+    "CAD_ID": 3006,
+    "Categoria": "Alimentaciones",
+    "Subtipo": "alimentacion_3p_n",
+    "Nombre_Original_EXE": "Alimentación L1+L2+L3+N",
+    "Descripcion": "Alimentación trifásica con neutro (L1, L2, L3 + N)",
+    "Tags": "-X",
+    "Terminales": "",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "Lab01-2.cad",
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 3007,
+    "Categoria": "Alimentaciones",
+    "Subtipo": "alimentacion_3p_n_pe",
+    "Nombre_Original_EXE": "Alimentación L1+L2+L3+N+PE",
+    "Descripcion": "Alimentación trifásica completa con neutro y tierra",
+    "Tags": "-X",
+    "Terminales": "",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "all_simbol.cad",
+      "lab 14-1.cad"
+    ]
+  },
+  {
+    "CAD_ID": 3008,
+    "Categoria": "Alimentaciones",
+    "Subtipo": "alimentacion_positiva",
+    "Nombre_Original_EXE": "Alimentación +",
+    "Descripcion": "Borne de alimentación de corriente continua positiva (+)",
+    "Tags": "-X",
+    "Terminales": "",
+    "Veces_Usado": 4,
+    "Archivos_Usado": 4,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "Lab01-2.cad",
+      "all_simbol.cad",
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 3009,
+    "Categoria": "Alimentaciones",
+    "Subtipo": "alimentacion_negativa",
+    "Nombre_Original_EXE": "Alimentación -",
+    "Descripcion": "Borne de alimentación de corriente continua negativa (-)",
+    "Tags": "-X",
+    "Terminales": "",
+    "Veces_Usado": 4,
+    "Archivos_Usado": 4,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "Lab01-2.cad",
+      "all_simbol.cad",
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 3010,
+    "Categoria": "Alimentaciones",
+    "Subtipo": "alimentacion_dc_dual",
+    "Nombre_Original_EXE": "Alimentación +-",
+    "Descripcion": "Fuente de alimentación continua dual (+ -)",
+    "Tags": "-X",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 3011,
+    "Categoria": "Alimentaciones",
+    "Subtipo": "alimentacion_f_n_pe",
+    "Nombre_Original_EXE": "Alimentación F+N+PE",
+    "Descripcion": "Alimentación monofásica con neutro y tierra",
+    "Tags": "-X",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 3012,
+    "Categoria": "Alimentaciones",
+    "Subtipo": "transformador_1p",
+    "Nombre_Original_EXE": "Transformador",
+    "Descripcion": "Transformador monofásico reductor/elevador",
+    "Tags": "-T",
+    "Terminales": "1-2-3-4",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 3013,
+    "Categoria": "Alimentaciones",
+    "Subtipo": "puente_rectificador",
+    "Nombre_Original_EXE": "Rectificador",
+    "Descripcion": "Puente rectificador de diodos monofásico de onda completa",
+    "Tags": "-V",
+    "Terminales": "1-2-3-4",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 3014,
+    "Categoria": "Alimentaciones",
+    "Subtipo": "fuente_alimentacion_1p",
+    "Nombre_Original_EXE": "Fuente de alimentación",
+    "Descripcion": "Fuente conmutada / estabilizada monofásica CA/CC",
+    "Tags": "-V",
+    "Terminales": "1-2-3-4-PE",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 3015,
+    "Categoria": "Alimentaciones",
+    "Subtipo": "toma_tierra",
+    "Nombre_Original_EXE": "Alimentación Protección",
+    "Descripcion": "Símbolo de toma de tierra de protección",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 3016,
+    "Categoria": "Alimentaciones",
+    "Subtipo": "diodo",
+    "Nombre_Original_EXE": "Diodo",
+    "Descripcion": "Diodo semiconductor / rectificador unipolar",
+    "Tags": "-D",
+    "Terminales": "1-2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 3017,
+    "Categoria": "Alimentaciones",
+    "Subtipo": "transformador_3p",
+    "Nombre_Original_EXE": "Transformador III",
+    "Descripcion": "Transformador trifásico de potencia",
+    "Tags": "-T",
+    "Terminales": "1-2-3-4-5-6",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 3018,
+    "Categoria": "Alimentaciones",
+    "Subtipo": "fuente_alimentacion_3p",
+    "Nombre_Original_EXE": "Fuente de alimentación III",
+    "Descripcion": "Fuente de alimentación trifásica CA/CC",
+    "Tags": "-V",
+    "Terminales": "1-2-3-4-5-PE",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 3019,
+    "Categoria": "Alimentaciones",
+    "Subtipo": "bateria",
+    "Nombre_Original_EXE": "Bateria",
+    "Descripcion": "Batería / Acumulador de corriente continua",
+    "Tags": "-V",
+    "Terminales": "+--",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 3020,
+    "Categoria": "Alimentaciones",
+    "Subtipo": "toma_corriente",
+    "Nombre_Original_EXE": "Toma de corriente",
+    "Descripcion": "Base de enchufe / toma de corriente Schuko",
+    "Tags": "-TC",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 4000,
+    "Categoria": "Cables",
+    "Subtipo": "cable_fase",
+    "Nombre_Original_EXE": "Cable fase",
+    "Descripcion": "Conductor de fase (marrón/negro/gris)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 220,
+    "Archivos_Usado": 9,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "3D.cad",
+      "Lab01-2.cad",
+      "Lab01.cad",
+      "MOTOR ARRANQUE.cad",
+      "lab 13.cad",
+      "virtual1.cad",
+      "virtual2.cad",
+      "virtual3.cad"
+    ]
+  },
+  {
+    "CAD_ID": 4001,
+    "Categoria": "Cables",
+    "Subtipo": "cable_neutro",
+    "Nombre_Original_EXE": "Cable neutro",
+    "Descripcion": "Conductor de neutro (azul claro)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 133,
+    "Archivos_Usado": 14,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "3D.cad",
+      "Lab01-2.cad",
+      "Lab01.cad",
+      "MOTOR ARRANQUE.cad",
+      "allpart2.cad",
+      "lab 13.cad",
+      "lab 14-1.cad",
+      "lab 15-1.cad",
+      "lab 16.cad",
+      "lab 17.cad",
+      "virtual1.cad",
+      "virtual2.cad",
+      "virtual3.cad"
+    ]
+  },
+  {
+    "CAD_ID": 4002,
+    "Categoria": "Cables",
+    "Subtipo": "cable_proteccion",
+    "Nombre_Original_EXE": "Cable protección",
+    "Descripcion": "Conductor de protección y tierra (verde-amarillo)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "3D.cad"
+    ]
+  },
+  {
+    "CAD_ID": 4003,
+    "Categoria": "Cables",
+    "Subtipo": "cable_positivo",
+    "Nombre_Original_EXE": "Cable positivo",
+    "Descripcion": "Conductor de CC positivo (rojo)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "3D.cad"
+    ]
+  },
+  {
+    "CAD_ID": 4004,
+    "Categoria": "Cables",
+    "Subtipo": "cable_negativo",
+    "Nombre_Original_EXE": "Cable negativo",
+    "Descripcion": "Conductor de CC negativo (azul oscuro / negro)",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "3D.cad"
+    ]
+  },
+  {
+    "CAD_ID": 4009,
+    "Categoria": "Cables",
+    "Subtipo": "cable_conexion",
+    "Nombre_Original_EXE": "Conexión",
+    "Descripcion": "Conductor auxiliar o de interconexión general",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 63,
+    "Archivos_Usado": 8,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "3D.cad",
+      "Lab01-2.cad",
+      "Lab01.cad",
+      "lab 15-1.cad",
+      "lab 16.cad",
+      "lab 17.cad",
+      "virtual1.cad"
+    ]
+  },
+  {
+    "CAD_ID": 4010,
+    "Categoria": "Cables",
+    "Subtipo": "manguera",
+    "Nombre_Original_EXE": "Manguera",
+    "Descripcion": "Manguera multiconductora",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 14,
+    "Archivos_Usado": 5,
+    "Archivos_Lista": [
+      "3D.cad",
+      "lab 14-1.cad",
+      "lab 15-1.cad",
+      "lab 16.cad",
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 4011,
+    "Categoria": "Cables",
+    "Subtipo": "cable_gris",
+    "Nombre_Original_EXE": "Cable color",
+    "Descripcion": "Conductor color especial gris",
+    "Tags": "-X",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "3D.cad"
+    ]
+  },
+  {
+    "CAD_ID": 4012,
+    "Categoria": "Cables",
+    "Subtipo": "cable_blanco",
+    "Nombre_Original_EXE": "Cable color",
+    "Descripcion": "Conductor color especial blanco",
+    "Tags": "-X",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "3D.cad"
+    ]
+  },
+  {
+    "CAD_ID": 4013,
+    "Categoria": "Cables",
+    "Subtipo": "cable_espesor_2",
+    "Nombre_Original_EXE": "Espedor 2",
+    "Descripcion": "Cable de sección reforzada calibre 2",
+    "Tags": "-X",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "3D.cad"
+    ]
+  },
+  {
+    "CAD_ID": 4014,
+    "Categoria": "Cables",
+    "Subtipo": "cable_espesor_3",
+    "Nombre_Original_EXE": "Espedor 3",
+    "Descripcion": "Cable de sección reforzada calibre 3",
+    "Tags": "-X",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "3D.cad"
+    ]
+  },
+  {
+    "CAD_ID": 4015,
+    "Categoria": "Cables",
+    "Subtipo": "cable_espesor_4",
+    "Nombre_Original_EXE": "Espedor 4",
+    "Descripcion": "Cable de sección reforzada calibre 4",
+    "Tags": "-X",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "3D.cad"
+    ]
+  },
+  {
+    "CAD_ID": 4016,
+    "Categoria": "Cables",
+    "Subtipo": "cable_violeta",
+    "Nombre_Original_EXE": "Cable color",
+    "Descripcion": "Conductor de señalización violeta",
+    "Tags": "-X",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "3D.cad"
+    ]
+  },
+  {
+    "CAD_ID": 4017,
+    "Categoria": "Cables",
+    "Subtipo": "cable_color_custom",
+    "Nombre_Original_EXE": "Cable color",
+    "Descripcion": "Conductor de control especial",
+    "Tags": "-X",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "3D.cad"
+    ]
+  },
+  {
+    "CAD_ID": 4018,
+    "Categoria": "Cables",
+    "Subtipo": "punto_conexion",
+    "Nombre_Original_EXE": "Conexión",
+    "Descripcion": "Punto de empalme o derivación de conductores",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 340,
+    "Archivos_Usado": 10,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "3D.cad",
+      "Lab01-2.cad",
+      "Lab01.cad",
+      "allpart2.cad",
+      "lab 14-1.cad",
+      "lab 15-1.cad",
+      "lab 16.cad",
+      "lab 17.cad",
+      "virtual1.cad"
+    ]
+  },
+  {
+    "CAD_ID": 4019,
+    "Categoria": "Cables",
+    "Subtipo": "manguera_trifasica",
+    "Nombre_Original_EXE": "Cable III",
+    "Descripcion": "Trazado simultáneo de 3 conductores trifásicos",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 12,
+    "Archivos_Usado": 5,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "3D.cad",
+      "allpart2.cad",
+      "lab 14-1.cad",
+      "virtual3.cad"
+    ]
+  },
+  {
+    "CAD_ID": 5000,
+    "Categoria": "Protecciones",
+    "Subtipo": "fusible_1p",
+    "Nombre_Original_EXE": "Fusible I",
+    "Descripcion": "Fusible de protección unipolar (1P)",
+    "Tags": "-F2,-F",
+    "Terminales": "1-2",
+    "Veces_Usado": 3,
+    "Archivos_Usado": 3,
+    "Archivos_Lista": [
+      "all_simbol.cad",
+      "lab 14-1.cad",
+      "lab 15-1.cad"
+    ]
+  },
+  {
+    "CAD_ID": 5001,
+    "Categoria": "Protecciones",
+    "Subtipo": "fusible_1p_n",
+    "Nombre_Original_EXE": "Fusible IN",
+    "Descripcion": "Fusible unipolar más seccionador neutro (1P+N)",
+    "Tags": "-F",
+    "Terminales": "1-3-2-4",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 5002,
+    "Categoria": "Protecciones",
+    "Subtipo": "fusible_2p",
+    "Nombre_Original_EXE": "Fusible II",
+    "Descripcion": "Fusibles bipolares (2P)",
+    "Tags": "-F",
+    "Terminales": "1-3-2-4",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 5003,
+    "Categoria": "Protecciones",
+    "Subtipo": "fusible_3p",
+    "Nombre_Original_EXE": "Fusible III",
+    "Descripcion": "Fusibles tripolares de potencia (3P)",
+    "Tags": "-F1,-F",
+    "Terminales": "1-3-5-2-4-6",
+    "Veces_Usado": 3,
+    "Archivos_Usado": 3,
+    "Archivos_Lista": [
+      "all_simbol.cad",
+      "lab 14-1.cad",
+      "lab 15-1.cad"
+    ]
+  },
+  {
+    "CAD_ID": 5004,
+    "Categoria": "Protecciones",
+    "Subtipo": "fusible_3p_n",
+    "Nombre_Original_EXE": "Fusible IIIN",
+    "Descripcion": "Fusibles tripolares más neutro (3P+N)",
+    "Tags": "-F",
+    "Terminales": "1-3-5-7-2-4-6-8",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 5005,
+    "Categoria": "Protecciones",
+    "Subtipo": "seccionador_fusible_1p",
+    "Nombre_Original_EXE": "Fusible seccionable I",
+    "Descripcion": "Seccionador portafusible unipolar",
+    "Tags": "-F",
+    "Terminales": "1-2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 5006,
+    "Categoria": "Protecciones",
+    "Subtipo": "seccionador_fusible_1p_n",
+    "Nombre_Original_EXE": "Fusible seccionable IN",
+    "Descripcion": "Seccionador portafusible 1P+N",
+    "Tags": "-F",
+    "Terminales": "1-3-2-4",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 5007,
+    "Categoria": "Protecciones",
+    "Subtipo": "seccionador_fusible_2p",
+    "Nombre_Original_EXE": "Fusible seccionable II",
+    "Descripcion": "Seccionador portafusible bipolar (2P)",
+    "Tags": "-F",
+    "Terminales": "1-3-2-4",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 5008,
+    "Categoria": "Protecciones",
+    "Subtipo": "seccionador_fusible_3p",
+    "Nombre_Original_EXE": "Fusible seccionable III",
+    "Descripcion": "Seccionador portafusible tripolar (3P)",
+    "Tags": "-F",
+    "Terminales": "1-3-5-2-4-6",
+    "Veces_Usado": 3,
+    "Archivos_Usado": 3,
+    "Archivos_Lista": [
+      "all_simbol.cad",
+      "virtual2.cad",
+      "virtual3.cad"
+    ]
+  },
+  {
+    "CAD_ID": 5009,
+    "Categoria": "Protecciones",
+    "Subtipo": "seccionador_fusible_3p_n",
+    "Nombre_Original_EXE": "Fusible seccionable IIIN",
+    "Descripcion": "Seccionador portafusible tetrapolar (3P+N)",
+    "Tags": "-F",
+    "Terminales": "1-3-5-7-2-4-6-8",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 6000,
+    "Categoria": "Protecciones",
+    "Subtipo": "automatico_1p",
+    "Nombre_Original_EXE": "Automático I",
+    "Descripcion": "Interruptor magnetotérmico unipolar (PIA 1P)",
+    "Tags": "-F",
+    "Terminales": "1-2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 6001,
+    "Categoria": "Protecciones",
+    "Subtipo": "automatico_1p_n",
+    "Nombre_Original_EXE": "Automático IN",
+    "Descripcion": "Interruptor magnetotérmico 1P+N",
+    "Tags": "-F",
+    "Terminales": "1-3-2-4",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 6002,
+    "Categoria": "Protecciones",
+    "Subtipo": "automatico_2p",
+    "Nombre_Original_EXE": "Automático II",
+    "Descripcion": "Interruptor magnetotérmico bipolar (PIA 2P)",
+    "Tags": "-F",
+    "Terminales": "1-3-2-4",
+    "Veces_Usado": 4,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "all_simbol.cad",
+      "virtual1.cad"
+    ]
+  },
+  {
+    "CAD_ID": 6003,
+    "Categoria": "Protecciones",
+    "Subtipo": "automatico_3p",
+    "Nombre_Original_EXE": "Automático III",
+    "Descripcion": "Interruptor magnetotérmico tripolar (PIA 3P)",
+    "Tags": "-F",
+    "Terminales": "1-3-5-2-4-6",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 6004,
+    "Categoria": "Protecciones",
+    "Subtipo": "automatico_3p_n",
+    "Nombre_Original_EXE": "Automático IIIN",
+    "Descripcion": "Interruptor magnetotérmico tetrapolar (PIA 3P+N)",
+    "Tags": "-F",
+    "Terminales": "1-3-5-7-2-4-6-8",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 6005,
+    "Categoria": "Protecciones",
+    "Subtipo": "diferencial_1p_n",
+    "Nombre_Original_EXE": "Diferencial IN",
+    "Descripcion": "Interruptor diferencial bipolar (ID 2P / 1P+N)",
+    "Tags": "-F",
+    "Terminales": "1-3-2-4",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 6006,
+    "Categoria": "Protecciones",
+    "Subtipo": "diferencial_3p_n",
+    "Nombre_Original_EXE": "Diferencial IIIN",
+    "Descripcion": "Interruptor diferencial tetrapolar (ID 4P / 3P+N)",
+    "Tags": "-F",
+    "Terminales": "1-3-5-7-2-4-6-8",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 6007,
+    "Categoria": "Protecciones",
+    "Subtipo": "rele_termico_potencia",
+    "Nombre_Original_EXE": "Relé Térmico",
+    "Descripcion": "Relé térmico bimetálico de potencia (bloque de 3 bimetales)",
+    "Tags": "-F,-F3,F3,-F1,-F2",
+    "Terminales": "1-3-5-2-4-6",
+    "Veces_Usado": 17,
+    "Archivos_Usado": 10,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "Lab01-2.cad",
+      "Lab01.cad",
+      "MOTOR ARRANQUE.cad",
+      "all_simbol.cad",
+      "lab 14-1.cad",
+      "lab 15-1.cad",
+      "lab 16.cad",
+      "lab 17.cad",
+      "virtual2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 6008,
+    "Categoria": "Protecciones",
+    "Subtipo": "disyuntor_1p",
+    "Nombre_Original_EXE": "Disyuntor I",
+    "Descripcion": "Disyuntor / Guardamotor unipolar",
+    "Tags": "-F2,-F1,-Q",
+    "Terminales": "1-3-2-4",
+    "Veces_Usado": 3,
+    "Archivos_Usado": 3,
+    "Archivos_Lista": [
+      "Lab01-2.cad",
+      "Lab01.cad",
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 6009,
+    "Categoria": "Protecciones",
+    "Subtipo": "disyuntor_1p_n",
+    "Nombre_Original_EXE": "Disyuntor IN",
+    "Descripcion": "Disyuntor / Guardamotor 1P+N",
+    "Tags": "-Q1,F2,-Q,-F1,-F2",
+    "Terminales": "1-3-5-2-4-6",
+    "Veces_Usado": 11,
+    "Archivos_Usado": 9,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "Lab01-2.cad",
+      "Lab01.cad",
+      "MOTOR ARRANQUE.cad",
+      "all_simbol.cad",
+      "lab 13.cad",
+      "lab 16.cad",
+      "lab 17.cad",
+      "virtual3.cad"
+    ]
+  },
+  {
+    "CAD_ID": 6010,
+    "Categoria": "Protecciones",
+    "Subtipo": "disyuntor_2p",
+    "Nombre_Original_EXE": "Disyuntor II",
+    "Descripcion": "Disyuntor / Guardamotor bipolar",
+    "Tags": "-Q,F1,-Q1",
+    "Terminales": "1-2",
+    "Veces_Usado": 4,
+    "Archivos_Usado": 4,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "MOTOR ARRANQUE.cad",
+      "all_simbol.cad",
+      "lab 16.cad"
+    ]
+  },
+  {
+    "CAD_ID": 6011,
+    "Categoria": "Protecciones",
+    "Subtipo": "disyuntor_3p",
+    "Nombre_Original_EXE": "Disyuntor III",
+    "Descripcion": "Disyuntor guardamotor magnetotérmico tripolar de motor",
+    "Tags": "-Q",
+    "Terminales": "1-3-2-4",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "all_simbol.cad",
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 6012,
+    "Categoria": "Protecciones",
+    "Subtipo": "disyuntor_3p_n",
+    "Nombre_Original_EXE": "Disyuntor IIIN",
+    "Descripcion": "Disyuntor tetrapolar 3P+N",
+    "Tags": "-Q",
+    "Terminales": "1-3-5-7-2-4-6-8",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 6013,
+    "Categoria": "Protecciones",
+    "Subtipo": "limitador_sobretensiones_1p_n",
+    "Nombre_Original_EXE": "Limitador sobretensiones IN",
+    "Descripcion": "Descargador de sobretensiones transitorias monofásico",
+    "Tags": "-F",
+    "Terminales": "1-2-3",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 6014,
+    "Categoria": "Protecciones",
+    "Subtipo": "limitador_sobretensiones_3p_n",
+    "Nombre_Original_EXE": "Limitador sobretensiones IIIN",
+    "Descripcion": "Descargador de sobretensiones transitorias trifásico",
+    "Tags": "-F",
+    "Terminales": "1-2-3-4-5",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 6015,
+    "Categoria": "2D_3D",
+    "Subtipo": "disyuntor_2d_3d",
+    "Nombre_Original_EXE": "Disyuntor",
+    "Descripcion": "Disyuntor de potencia en formato vista 2D/3D",
+    "Tags": "-Q",
+    "Terminales": "1-3-5-2-4-6",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "2D.cad",
+      "3D.cad"
+    ]
+  },
+  {
+    "CAD_ID": 6016,
+    "Categoria": "2D_3D",
+    "Subtipo": "rele_termico_2d_3d",
+    "Nombre_Original_EXE": "Relé térmico",
+    "Descripcion": "Relé térmico en formato vista 2D/3D",
+    "Tags": "-F",
+    "Terminales": "1-3-5-2-4-6",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "2D.cad",
+      "3D.cad"
+    ]
+  },
+  {
+    "CAD_ID": 6017,
+    "Categoria": "2D_3D",
+    "Subtipo": "automatico_2d_3d",
+    "Nombre_Original_EXE": "Interruptor automático",
+    "Descripcion": "Interruptor automático magnetotérmico vista 2D/3D",
+    "Tags": "-F",
+    "Terminales": "N-1-3-5-2-4-6",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "2D.cad",
+      "3D.cad"
+    ]
+  },
+  {
+    "CAD_ID": 6018,
+    "Categoria": "2D_3D",
+    "Subtipo": "diferencial_2d_3d",
+    "Nombre_Original_EXE": "Interruptor diferencial",
+    "Descripcion": "Interruptor diferencial vista 2D/3D",
+    "Tags": "-F",
+    "Terminales": "N-1-3-5-2-4-6",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "2D.cad",
+      "3D.cad"
+    ]
+  },
+  {
+    "CAD_ID": 6019,
+    "Categoria": "2D_3D",
+    "Subtipo": "interruptor_2d_3d",
+    "Nombre_Original_EXE": "Interruptor",
+    "Descripcion": "Interruptor modular vista 2D/3D",
+    "Tags": "-S",
+    "Terminales": "N-1-3-5-2-4-6",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "2D.cad"
+    ]
+  },
+  {
+    "CAD_ID": 6020,
+    "Categoria": "2D_3D",
+    "Subtipo": "seccionador_2d_3d",
+    "Nombre_Original_EXE": "Seccionador",
+    "Descripcion": "Seccionador vista 2D/3D",
+    "Tags": "-S",
+    "Terminales": "N-1-3-5-2-4-6",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "2D.cad",
+      "3D.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7000,
+    "Categoria": "Contactos",
+    "Subtipo": "contacto_aux_na",
+    "Nombre_Original_EXE": "Contacto NA",
+    "Descripcion": "Contacto auxiliar normalmente abierto (13-14 / 3-4)",
+    "Tags": "-K,-KM1,-KM2,K1,-K1",
+    "Terminales": "13-14",
+    "Veces_Usado": 16,
+    "Archivos_Usado": 7,
+    "Archivos_Lista": [
+      "Lab01.cad",
+      "MOTOR ARRANQUE.cad",
+      "all_simbol.cad",
+      "lab 13.cad",
+      "lab 17.cad",
+      "virtual1.cad",
+      "virtual2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7001,
+    "Categoria": "Contactos",
+    "Subtipo": "contacto_aux_nc",
+    "Nombre_Original_EXE": "Contacto NC",
+    "Descripcion": "Contacto auxiliar normalmente cerrado (11-12 / 1-2)",
+    "Tags": "-KM1,K1,-K,-KM2",
+    "Terminales": "11-12",
+    "Veces_Usado": 5,
+    "Archivos_Usado": 4,
+    "Archivos_Lista": [
+      "MOTOR ARRANQUE.cad",
+      "all_simbol.cad",
+      "lab 16.cad",
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7002,
+    "Categoria": "Contactos",
+    "Subtipo": "contacto_aux_na_nc",
+    "Nombre_Original_EXE": "Contacto NA+NC",
+    "Descripcion": "Doble contacto auxiliar NA + NC",
+    "Tags": "-K",
+    "Terminales": "11-13-12-14",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7003,
+    "Categoria": "Contactos",
+    "Subtipo": "contacto_aux_con",
+    "Nombre_Original_EXE": "Contacto CON",
+    "Descripcion": "Contacto auxiliar conmutado (11-12-14)",
+    "Tags": "-K",
+    "Terminales": "11-12-14",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7004,
+    "Categoria": "Contactos",
+    "Subtipo": "contacto_temp_on_delay_na",
+    "Nombre_Original_EXE": "Con. Conexión NA",
+    "Descripcion": "Contacto temporizado al trabajo NA (ON Delay NO)",
+    "Tags": "-KA,-T1,-T3,-T2,-T4",
+    "Terminales": "67-68",
+    "Veces_Usado": 5,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "all_simbol.cad",
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7005,
+    "Categoria": "Contactos",
+    "Subtipo": "contacto_temp_on_delay_nc",
+    "Nombre_Original_EXE": "Con. Conexión NC",
+    "Descripcion": "Contacto temporizado al trabajo NC (ON Delay NC)",
+    "Tags": "-KA",
+    "Terminales": "55-56",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7006,
+    "Categoria": "Contactos",
+    "Subtipo": "contacto_temp_on_delay_na_nc",
+    "Nombre_Original_EXE": "Con. Conexión NA+NC",
+    "Descripcion": "Contacto temporizado al trabajo NA + NC",
+    "Tags": "-KA",
+    "Terminales": "55-57-56-58",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7007,
+    "Categoria": "Contactos",
+    "Subtipo": "contacto_temp_on_delay_con",
+    "Nombre_Original_EXE": "Con. Conexión CON",
+    "Descripcion": "Contacto temporizado al trabajo conmutado",
+    "Tags": "-KA",
+    "Terminales": "55-56-58",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7008,
+    "Categoria": "Contactos",
+    "Subtipo": "contacto_temp_off_delay_na",
+    "Nombre_Original_EXE": "Con. Desconexión NA",
+    "Descripcion": "Contacto temporizado al reposo NA (OFF Delay NO)",
+    "Tags": "-KA",
+    "Terminales": "67-68",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7009,
+    "Categoria": "Contactos",
+    "Subtipo": "contacto_temp_off_delay_nc",
+    "Nombre_Original_EXE": "Con. Desconexión NC",
+    "Descripcion": "Contacto temporizado al reposo NC (OFF Delay NC)",
+    "Tags": "-KA",
+    "Terminales": "55-56",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7010,
+    "Categoria": "Contactos",
+    "Subtipo": "contacto_temp_off_delay_na_nc",
+    "Nombre_Original_EXE": "Con. Desconexión NA+NC",
+    "Descripcion": "Contacto temporizado al reposo NA + NC",
+    "Tags": "-KA",
+    "Terminales": "55-57-56-58",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7011,
+    "Categoria": "Contactos",
+    "Subtipo": "contacto_temp_off_delay_con",
+    "Nombre_Original_EXE": "Con. Desconexión CON",
+    "Descripcion": "Contacto temporizado al reposo conmutado",
+    "Tags": "-KA",
+    "Terminales": "55-56-58",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7013,
+    "Categoria": "Contactos",
+    "Subtipo": "contacto_temp_on_off_na",
+    "Nombre_Original_EXE": "Conexión Desconexión NA",
+    "Descripcion": "Contacto temporizado conexión-desconexión NA",
+    "Tags": "-KA",
+    "Terminales": "55-56",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7014,
+    "Categoria": "Contactos",
+    "Subtipo": "contacto_temp_on_off_nc",
+    "Nombre_Original_EXE": "Conexión Desconexión NC",
+    "Descripcion": "Contacto temporizado conexión-desconexión NC",
+    "Tags": "-KA",
+    "Terminales": "55-57-56-58",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7015,
+    "Categoria": "Contactos",
+    "Subtipo": "contacto_temp_on_off_na_nc",
+    "Nombre_Original_EXE": "Conexión Desconexión NA+NC",
+    "Descripcion": "Contacto temporizado conexión-desconexión NA+NC",
+    "Tags": "-KA",
+    "Terminales": "55-56-58",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7016,
+    "Categoria": "2D_3D",
+    "Subtipo": "rele_zocalo_2d_3d",
+    "Nombre_Original_EXE": "Rele zócalo",
+    "Descripcion": "Base relé enchufable en vista 2D/3D",
+    "Tags": "-KA",
+    "Terminales": "13-14-0-1-9-1-5",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "2D.cad",
+      "3D.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7018,
+    "Categoria": "2D_3D",
+    "Subtipo": "contactor_2d_3d",
+    "Nombre_Original_EXE": "Contactor",
+    "Descripcion": "Contactor de potencia en vista 2D/3D",
+    "Tags": "-KM",
+    "Terminales": "A1-A2-1-2-3-4",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "2D.cad",
+      "3D.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7019,
+    "Categoria": "2D_3D",
+    "Subtipo": "contactos_auxiliares_2d_3d",
+    "Nombre_Original_EXE": "Contactos auxiliares",
+    "Descripcion": "Bloque contactos auxiliares frontal en 2D/3D",
+    "Tags": "-KM",
+    "Terminales": "",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "2D.cad",
+      "3D.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7020,
+    "Categoria": "2D_3D",
+    "Subtipo": "contactos_aux_on_delay_2d_3d",
+    "Nombre_Original_EXE": "Contactos auxiliares ON delay",
+    "Descripcion": "Cámara temporizada neumática ON delay 2D/3D",
+    "Tags": "-KM",
+    "Terminales": "0-1-9-1-5",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "2D.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7021,
+    "Categoria": "2D_3D",
+    "Subtipo": "contactos_aux_off_delay_2d_3d",
+    "Nombre_Original_EXE": "Contactos auxiliares OFF delay",
+    "Descripcion": "Cámara temporizada neumática OFF delay 2D/3D",
+    "Tags": "-KM",
+    "Terminales": "0-1-9-1-5",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "3D.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7500,
+    "Categoria": "Detectores",
+    "Subtipo": "sensor_inductivo_na",
+    "Nombre_Original_EXE": "Det. inductivo NA",
+    "Descripcion": "Sensor de proximidad inductivo normalmente abierto",
+    "Tags": "-B",
+    "Terminales": "1-2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7506,
+    "Categoria": "Detectores",
+    "Subtipo": "sensor_capacitivo_na",
+    "Nombre_Original_EXE": "Det. capacitivo NA",
+    "Descripcion": "Sensor de proximidad capacitivo normalmente abierto",
+    "Tags": "-B",
+    "Terminales": "1-2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7512,
+    "Categoria": "Detectores",
+    "Subtipo": "sensor_magnetico_na",
+    "Nombre_Original_EXE": "Det. magnético NA",
+    "Descripcion": "Detector magnético / interruptor reed normalmente abierto",
+    "Tags": "-B",
+    "Terminales": "1-2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7520,
+    "Categoria": "Detectores",
+    "Subtipo": "sensor_inductivo_nc",
+    "Nombre_Original_EXE": "Det. inductivo NC",
+    "Descripcion": "Sensor de proximidad inductivo normalmente cerrado",
+    "Tags": "-B",
+    "Terminales": "1-2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7526,
+    "Categoria": "Detectores",
+    "Subtipo": "sensor_capacitivo_nc",
+    "Nombre_Original_EXE": "Det. capacitivo NC",
+    "Descripcion": "Sensor de proximidad capacitivo normalmente cerrado",
+    "Tags": "-B",
+    "Terminales": "1-2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7532,
+    "Categoria": "Detectores",
+    "Subtipo": "sensor_magnetico_nc",
+    "Nombre_Original_EXE": "Det. magnético NC",
+    "Descripcion": "Detector magnético / interruptor reed normalmente cerrado",
+    "Tags": "-B",
+    "Terminales": "1-2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7550,
+    "Categoria": "Detectores",
+    "Subtipo": "fotocelula_barrera",
+    "Nombre_Original_EXE": "Barrera fotoeléctrica",
+    "Descripcion": "Fotocélula / Sensor óptico completo",
+    "Tags": "-B",
+    "Terminales": "1-2-3-4-5",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7551,
+    "Categoria": "Detectores",
+    "Subtipo": "fotocelula_emisor",
+    "Nombre_Original_EXE": "Barrera emisor",
+    "Descripcion": "Emisor de barrera óptica",
+    "Tags": "-B",
+    "Terminales": "1-2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7553,
+    "Categoria": "Detectores",
+    "Subtipo": "fotocelula_receptor_na",
+    "Nombre_Original_EXE": "Barrera receptor NA",
+    "Descripcion": "Receptor de barrera óptica NA",
+    "Tags": "-B",
+    "Terminales": "1-2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7559,
+    "Categoria": "Detectores",
+    "Subtipo": "fotocelula_receptor_nc",
+    "Nombre_Original_EXE": "Barrera receptor NC",
+    "Descripcion": "Receptor de barrera óptica NC",
+    "Tags": "-B",
+    "Terminales": "1-2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7570,
+    "Categoria": "Detectores",
+    "Subtipo": "presostato_na",
+    "Nombre_Original_EXE": "Presostato NA",
+    "Descripcion": "Sensor de presión / presostato contacto NA",
+    "Tags": "-B",
+    "Terminales": "1-2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7576,
+    "Categoria": "Detectores",
+    "Subtipo": "vacuostato_na",
+    "Nombre_Original_EXE": "Vacuostato NA",
+    "Descripcion": "Sensor de vacío / vacuostato contacto NA",
+    "Tags": "-B",
+    "Terminales": "1-2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7582,
+    "Categoria": "Detectores",
+    "Subtipo": "presostato_nc",
+    "Nombre_Original_EXE": "Presostato NC",
+    "Descripcion": "Sensor de presión / presostato contacto NC",
+    "Tags": "-B",
+    "Terminales": "1-2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7588,
+    "Categoria": "Detectores",
+    "Subtipo": "vacuostato_nc",
+    "Nombre_Original_EXE": "Vacuostato NC",
+    "Descripcion": "Sensor de vacío / vacuostato contacto NC",
+    "Tags": "-B",
+    "Terminales": "1-2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7594,
+    "Categoria": "Detectores",
+    "Subtipo": "termostato_na",
+    "Nombre_Original_EXE": "Termostato NA",
+    "Descripcion": "Sensor térmico / termostato de temperatura NA",
+    "Tags": "-B",
+    "Terminales": "1-2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 7600,
+    "Categoria": "Detectores",
+    "Subtipo": "termostato_nc",
+    "Nombre_Original_EXE": "Termostato NC",
+    "Descripcion": "Sensor térmico / termostato de temperatura NC",
+    "Tags": "-B",
+    "Terminales": "1-2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 8000,
+    "Categoria": "Accionamientos",
+    "Subtipo": "pulsador_na",
+    "Nombre_Original_EXE": "Pulsador NA",
+    "Descripcion": "Pulsador normalmente abierto (marcha)",
+    "Tags": "-S1,S2,-S2,-S,-S3",
+    "Terminales": "13-14",
+    "Veces_Usado": 19,
+    "Archivos_Usado": 11,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "Lab01-2.cad",
+      "Lab01.cad",
+      "MOTOR ARRANQUE.cad",
+      "allpart2.cad",
+      "lab 13.cad",
+      "lab 14-1.cad",
+      "lab 16.cad",
+      "lab 17.cad",
+      "virtual1.cad",
+      "virtual2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 8001,
+    "Categoria": "Accionamientos",
+    "Subtipo": "pulsador_nc",
+    "Nombre_Original_EXE": "Pulsador NC",
+    "Descripcion": "Pulsador normalmente cerrado (paro)",
+    "Tags": "-S2,-S1,-S,S1,-P",
+    "Terminales": "11-12",
+    "Veces_Usado": 9,
+    "Archivos_Usado": 8,
+    "Archivos_Lista": [
+      "Lab01.cad",
+      "MOTOR ARRANQUE.cad",
+      "allpart2.cad",
+      "lab 13.cad",
+      "lab 14-1.cad",
+      "lab 16.cad",
+      "lab 17.cad",
+      "virtual2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 8002,
+    "Categoria": "Accionamientos",
+    "Subtipo": "pulsador_na_nc",
+    "Nombre_Original_EXE": "Pulsador NA-NC",
+    "Descripcion": "Pulsador de doble contacto NA + NC",
+    "Tags": "-S,-S1,-S2",
+    "Terminales": "11-13-12-14",
+    "Veces_Usado": 3,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "allpart2.cad",
+      "lab 15-1.cad"
+    ]
+  },
+  {
+    "CAD_ID": 8003,
+    "Categoria": "Accionamientos",
+    "Subtipo": "pulsador_con",
+    "Nombre_Original_EXE": "Pulsador CON",
+    "Descripcion": "Pulsador con contacto conmutado",
+    "Tags": "-S",
+    "Terminales": "11-12-14",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 8004,
+    "Categoria": "Accionamientos",
+    "Subtipo": "pulsador_seta_na",
+    "Nombre_Original_EXE": "Pulsador seta NA",
+    "Descripcion": "Pulsador de seta de emergencia NA",
+    "Tags": "-S",
+    "Terminales": "13-14",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 8005,
+    "Categoria": "Accionamientos",
+    "Subtipo": "pulsador_seta_nc",
+    "Nombre_Original_EXE": "Pulsador seta NC",
+    "Descripcion": "Pulsador de seta con enclavamiento / parada de emergencia NC",
+    "Tags": "-S,-PE",
+    "Terminales": "11-12",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "allpart2.cad",
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 8006,
+    "Categoria": "Accionamientos",
+    "Subtipo": "pulsador_seta_na_nc",
+    "Nombre_Original_EXE": "Pulsador seta NA-NC",
+    "Descripcion": "Pulsador de seta de emergencia NA + NC",
+    "Tags": "-S",
+    "Terminales": "11-13-12-14",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 8007,
+    "Categoria": "Accionamientos",
+    "Subtipo": "pulsador_seta_con",
+    "Nombre_Original_EXE": "Pulsador seta CON",
+    "Descripcion": "Pulsador de seta con contacto conmutado",
+    "Tags": "-S",
+    "Terminales": "11-12-14",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 8008,
+    "Categoria": "Accionamientos",
+    "Subtipo": "interruptor_na",
+    "Nombre_Original_EXE": "Interruptor NA",
+    "Descripcion": "Interruptor mantenido NA",
+    "Tags": "-S",
+    "Terminales": "13-14",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 8009,
+    "Categoria": "Accionamientos",
+    "Subtipo": "interruptor_nc",
+    "Nombre_Original_EXE": "Interruptor NC",
+    "Descripcion": "Interruptor mantenido NC",
+    "Tags": "-S",
+    "Terminales": "11-12",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 8010,
+    "Categoria": "Accionamientos",
+    "Subtipo": "interruptor_na_nc",
+    "Nombre_Original_EXE": "Interruptor NA-NC",
+    "Descripcion": "Interruptor mantenido NA + NC",
+    "Tags": "-S",
+    "Terminales": "11-13-12-14",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 8011,
+    "Categoria": "Accionamientos",
+    "Subtipo": "interruptor_con",
+    "Nombre_Original_EXE": "Interruptor CON",
+    "Descripcion": "Interruptor mantenido conmutado",
+    "Tags": "-S",
+    "Terminales": "11-12-14",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 8012,
+    "Categoria": "Accionamientos",
+    "Subtipo": "final_carrera_na",
+    "Nombre_Original_EXE": "Final de carrera NA",
+    "Descripcion": "Interruptor de posición / fin de carrera mecánico NA",
+    "Tags": "-S",
+    "Terminales": "13-14",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 8013,
+    "Categoria": "Accionamientos",
+    "Subtipo": "final_carrera_nc",
+    "Nombre_Original_EXE": "Final de carrera NC",
+    "Descripcion": "Interruptor de posición / fin de carrera mecánico NC",
+    "Tags": "-S",
+    "Terminales": "11-12",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 8014,
+    "Categoria": "Accionamientos",
+    "Subtipo": "final_carrera_na_nc",
+    "Nombre_Original_EXE": "Final de carrera NA-NC",
+    "Descripcion": "Final de carrera con contacto NA + NC",
+    "Tags": "-S",
+    "Terminales": "11-13-12-14",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 8015,
+    "Categoria": "Accionamientos",
+    "Subtipo": "final_carrera_com",
+    "Nombre_Original_EXE": "Final de carrera COM",
+    "Descripcion": "Final de carrera con contacto conmutado",
+    "Tags": "-S",
+    "Terminales": "11-12-14",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 8016,
+    "Categoria": "Accionamientos",
+    "Subtipo": "contacto_termico_na",
+    "Nombre_Original_EXE": "Térmico NA",
+    "Descripcion": "Contacto auxiliar de relé térmico NA (97-98 señalización)",
+    "Tags": "-F3,-F,-F1,-F2",
+    "Terminales": "97-98",
+    "Veces_Usado": 5,
+    "Archivos_Usado": 3,
+    "Archivos_Lista": [
+      "Lab01-2.cad",
+      "allpart2.cad",
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 8017,
+    "Categoria": "Accionamientos",
+    "Subtipo": "contacto_termico_nc",
+    "Nombre_Original_EXE": "Térmico NC",
+    "Descripcion": "Contacto auxiliar de relé térmico NC (95-96 disparo/paro)",
+    "Tags": "-F3,-F1,F3,-F,-F2",
+    "Terminales": "95-96",
+    "Veces_Usado": 7,
+    "Archivos_Usado": 5,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "Lab01.cad",
+      "allpart2.cad",
+      "lab 13.cad",
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 8018,
+    "Categoria": "Accionamientos",
+    "Subtipo": "contacto_termico_na_nc",
+    "Nombre_Original_EXE": "Térmico NA-NC",
+    "Descripcion": "Contactos auxiliares térmicos NA + NC (95-96 y 97-98)",
+    "Tags": "-F3,-F,-F1",
+    "Terminales": "95-97-96-98",
+    "Veces_Usado": 4,
+    "Archivos_Usado": 4,
+    "Archivos_Lista": [
+      "allpart2.cad",
+      "lab 14-1.cad",
+      "lab 15-1.cad",
+      "lab 16.cad"
+    ]
+  },
+  {
+    "CAD_ID": 8019,
+    "Categoria": "Accionamientos",
+    "Subtipo": "contacto_termico_con",
+    "Nombre_Original_EXE": "Térmico CON",
+    "Descripcion": "Contacto auxiliar térmico conmutado (95-96-98)",
+    "Tags": "F3,-F",
+    "Terminales": "95-96-98",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "MOTOR ARRANQUE.cad",
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 8020,
+    "Categoria": "Accionamientos",
+    "Subtipo": "conmutador_1_0_2",
+    "Nombre_Original_EXE": "Conmutador I-0-II",
+    "Descripcion": "Selector rotativo con posición cero central (1 - 0 - 2)",
+    "Tags": "-S",
+    "Terminales": "1-2-3",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 8021,
+    "Categoria": "Accionamientos",
+    "Subtipo": "conmutador_1_2_3",
+    "Nombre_Original_EXE": "Conmutador I-II-III",
+    "Descripcion": "Selector rotativo de 3 posiciones",
+    "Tags": "-S",
+    "Terminales": "1-2-3-4",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 8022,
+    "Categoria": "Accionamientos",
+    "Subtipo": "conmutador_cruce",
+    "Nombre_Original_EXE": "Conmutador cruce",
+    "Descripcion": "Conmutador de cruzamiento eléctrico",
+    "Tags": "-S",
+    "Terminales": "1-2-3-4",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 8023,
+    "Categoria": "Accionamientos",
+    "Subtipo": "boton_pulsador",
+    "Nombre_Original_EXE": "Botón pulsador",
+    "Descripcion": "Pulsador electromecánico empotrado",
+    "Tags": "-S",
+    "Terminales": "0",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 8100,
+    "Categoria": "2D_3D",
+    "Subtipo": "pulsador_2d_3d",
+    "Nombre_Original_EXE": "Pulsador",
+    "Descripcion": "Pulsador de cuadro eléctrico en vista 2D/3D",
+    "Tags": "-S",
+    "Terminales": ".1-.3-.2-.4",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "3D.cad"
+    ]
+  },
+  {
+    "CAD_ID": 8101,
+    "Categoria": "2D_3D",
+    "Subtipo": "piloto_2d_3d",
+    "Nombre_Original_EXE": "Piloto",
+    "Descripcion": "Piloto de señalización luminoso en vista 2D/3D",
+    "Tags": "-H",
+    "Terminales": "X1-X2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "3D.cad"
+    ]
+  },
+  {
+    "CAD_ID": 8102,
+    "Categoria": "2D_3D",
+    "Subtipo": "diodo_led_2d_3d",
+    "Nombre_Original_EXE": "Diodo LED",
+    "Descripcion": "Diodo LED indicador en vista 2D/3D",
+    "Tags": "-H",
+    "Terminales": "13-14-13-14-11-12-13-14",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "3D.cad"
+    ]
+  },
+  {
+    "CAD_ID": 8103,
+    "Categoria": "2D_3D",
+    "Subtipo": "borna_2d_3d",
+    "Nombre_Original_EXE": "Borna",
+    "Descripcion": "Borna de paso / conexión en vista 2D/3D",
+    "Tags": "-H",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "3D.cad"
+    ]
+  },
+  {
+    "CAD_ID": 9000,
+    "Categoria": "Bobinas",
+    "Subtipo": "bobina_contactor",
+    "Nombre_Original_EXE": "Bobina",
+    "Descripcion": "Bobina monoestable estándar para contactor o relé (A1-A2)",
+    "Tags": "-K,-KM1,-K1,K1,-K2",
+    "Terminales": "A1-A2",
+    "Veces_Usado": 18,
+    "Archivos_Usado": 12,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "Lab01-2.cad",
+      "Lab01.cad",
+      "MOTOR ARRANQUE.cad",
+      "allpart2.cad",
+      "lab 13.cad",
+      "lab 14-1.cad",
+      "lab 15-1.cad",
+      "lab 16.cad",
+      "lab 17.cad",
+      "virtual1.cad",
+      "virtual2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 9001,
+    "Categoria": "Bobinas",
+    "Subtipo": "bobina_biestable",
+    "Nombre_Original_EXE": "Bobina biestable",
+    "Descripcion": "Bobina de relé biestable con doble devanado (Set/Reset)",
+    "Tags": "-K",
+    "Terminales": "A1-B1-A2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 9002,
+    "Categoria": "Bobinas",
+    "Subtipo": "telerruptor",
+    "Nombre_Original_EXE": "Telerruptor",
+    "Descripcion": "Relé de impulsos telerruptor",
+    "Tags": "-K",
+    "Terminales": "A1-A2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 9003,
+    "Categoria": "Bobinas",
+    "Subtipo": "bobina_electrovalvula",
+    "Nombre_Original_EXE": "Bobina electroválvula",
+    "Descripcion": "Solenoide de electroválvula hidráulica o neumática",
+    "Tags": "-EV  ",
+    "Terminales": "A1-A2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 9004,
+    "Categoria": "Bobinas",
+    "Subtipo": "temp_conexion_bobina",
+    "Nombre_Original_EXE": "Temp. conexión",
+    "Descripcion": "Bobina de relé temporizado a la conexión (ON Delay A1-A2)",
+    "Tags": "-K,-T3,-T4,-T1,-T2",
+    "Terminales": "A1-A2-0-1; A1-A2-1-1",
+    "Veces_Usado": 5,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "allpart2.cad",
+      "lab 17.cad"
+    ]
+  },
+  {
+    "CAD_ID": 9005,
+    "Categoria": "Bobinas",
+    "Subtipo": "temp_desconexion_bobina",
+    "Nombre_Original_EXE": "Temp. desconexión",
+    "Descripcion": "Bobina de relé temporizado a la desconexión (OFF Delay A1-A2)",
+    "Tags": "-K",
+    "Terminales": "A1-A2-0-1",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 9006,
+    "Categoria": "Bobinas",
+    "Subtipo": "temp_on_off_bobina",
+    "Nombre_Original_EXE": "Temp. conexión desconexión",
+    "Descripcion": "Bobina temporizada conexión-desconexión",
+    "Tags": "-K",
+    "Terminales": "A1-A2-0-1",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 9007,
+    "Categoria": "Bobinas",
+    "Subtipo": "rele_intermitente",
+    "Nombre_Original_EXE": "Relé intermitente",
+    "Descripcion": "Relé intermitente de destellos cíclicos",
+    "Tags": "-K",
+    "Terminales": "A1-A2-0-1",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 9008,
+    "Categoria": "Senalizacion",
+    "Subtipo": "piloto_senializacion",
+    "Nombre_Original_EXE": "Piloto señalización",
+    "Descripcion": "Lámpara piloto de señalización luminosa continua",
+    "Tags": "-H,-H1,-H2,-H3,H1",
+    "Terminales": "X1-X2-1; X1-X2-0; X1-X2-2",
+    "Veces_Usado": 20,
+    "Archivos_Usado": 7,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "MOTOR ARRANQUE.cad",
+      "allpart2.cad",
+      "lab 16.cad",
+      "lab 17.cad",
+      "virtual1.cad",
+      "virtual2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 9009,
+    "Categoria": "Senalizacion",
+    "Subtipo": "piloto_intermitente",
+    "Nombre_Original_EXE": "Piloto intermitente",
+    "Descripcion": "Lámpara piloto con destello intermitente",
+    "Tags": "-H",
+    "Terminales": "X1-X2-0",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 9010,
+    "Categoria": "Senalizacion",
+    "Subtipo": "timbre",
+    "Nombre_Original_EXE": "Timbre",
+    "Descripcion": "Avisador acústico timbre electromecánico",
+    "Tags": "-H",
+    "Terminales": "X1-X2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 9011,
+    "Categoria": "Senalizacion",
+    "Subtipo": "zumbador",
+    "Nombre_Original_EXE": "Zumbador",
+    "Descripcion": "Zumbador piezoeléctrico / buzzer acústico",
+    "Tags": "-H",
+    "Terminales": "X1-X2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 9012,
+    "Categoria": "Senalizacion",
+    "Subtipo": "sirena",
+    "Nombre_Original_EXE": "Sirena",
+    "Descripcion": "Sirena acústica de alarma",
+    "Tags": "-H",
+    "Terminales": "X1-X2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 9013,
+    "Categoria": "Senalizacion",
+    "Subtipo": "bocina",
+    "Nombre_Original_EXE": "Bocina",
+    "Descripcion": "Bocina o claxon acústico industrial",
+    "Tags": "-H",
+    "Terminales": "X1-X2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 9014,
+    "Categoria": "Bobinas",
+    "Subtipo": "interruptor_horario",
+    "Nombre_Original_EXE": "Interruptor horario",
+    "Descripcion": "Reloj programador horario diario/semanal",
+    "Tags": "-K",
+    "Terminales": "A1-A2-0-0-0-0-0-0",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 9015,
+    "Categoria": "Bobinas",
+    "Subtipo": "generador_pulsos",
+    "Nombre_Original_EXE": "Generador de pulsos",
+    "Descripcion": "Generador de tren de pulsos periódicos",
+    "Tags": "-K",
+    "Terminales": "A1-A2-0-1-0-1",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 9016,
+    "Categoria": "Bobinas",
+    "Subtipo": "contador_pulsos_bobina",
+    "Nombre_Original_EXE": "Contador de pulsos",
+    "Descripcion": "Bobina de avance de contador electromecánico",
+    "Tags": "-C",
+    "Terminales": "A1-C-D-R-0-0-A2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 9040,
+    "Categoria": "Potencia",
+    "Subtipo": "control_arrancador_suave",
+    "Nombre_Original_EXE": "Control arrancador electrónico c.a.",
+    "Descripcion": "Módulo de control para arrancador suave",
+    "Tags": "-K",
+    "Terminales": "L1-L2-L3-N",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 9041,
+    "Categoria": "Potencia",
+    "Subtipo": "control_inversor_electronico",
+    "Nombre_Original_EXE": "Control inversor electrónico c.a.",
+    "Descripcion": "Módulo de control de inversión electrónica",
+    "Tags": "-K",
+    "Terminales": "L1-L2-L3",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 9042,
+    "Categoria": "Potencia",
+    "Subtipo": "control_variador_ca",
+    "Nombre_Original_EXE": "Control Variador velocidad c.a.",
+    "Descripcion": "Módulo de maniobra de variador de frecuencia CA",
+    "Tags": "-K",
+    "Terminales": "L1-L2-L3",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 9043,
+    "Categoria": "Potencia",
+    "Subtipo": "control_variador_cc",
+    "Nombre_Original_EXE": "Control Variador velocidad c.c.",
+    "Descripcion": "Módulo de maniobra de regulador de velocidad CC",
+    "Tags": "-K",
+    "Terminales": "L1-L2-L3",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 9044,
+    "Categoria": "Potencia",
+    "Subtipo": "variador_potencia_ca_2p",
+    "Nombre_Original_EXE": "Variador velocidad c.a. II",
+    "Descripcion": "Etapa de potencia de variador CA monofásico",
+    "Tags": "-F",
+    "Terminales": "1-3-2-4-A1-A2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 9045,
+    "Categoria": "Potencia",
+    "Subtipo": "variador_potencia_ca_3p",
+    "Nombre_Original_EXE": "Variador velocidad c.a. III",
+    "Descripcion": "Etapa de potencia de variador CA trifásico",
+    "Tags": "-F",
+    "Terminales": "1-3-5-7-2-4-6-8",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10000,
+    "Categoria": "Logica",
+    "Subtipo": "puerta_and",
+    "Nombre_Original_EXE": "AND",
+    "Descripcion": "Puerta lógica AND de 2 o más entradas",
+    "Tags": "-U",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10010,
+    "Categoria": "Logica",
+    "Subtipo": "puerta_or",
+    "Nombre_Original_EXE": "OR",
+    "Descripcion": "Puerta lógica OR de 2 o más entradas",
+    "Tags": "-U",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10020,
+    "Categoria": "Logica",
+    "Subtipo": "puerta_exor",
+    "Nombre_Original_EXE": "EXOR",
+    "Descripcion": "Puerta lógica XOR (Or exclusiva)",
+    "Tags": "-U",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10030,
+    "Categoria": "Logica",
+    "Subtipo": "puerta_nand",
+    "Nombre_Original_EXE": "NAND",
+    "Descripcion": "Puerta lógica NAND",
+    "Tags": "-U",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10040,
+    "Categoria": "Logica",
+    "Subtipo": "puerta_inv",
+    "Nombre_Original_EXE": "INV",
+    "Descripcion": "Puerta lógica inversora NOT",
+    "Tags": "-U",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10041,
+    "Categoria": "Logica",
+    "Subtipo": "puerta_buffer",
+    "Nombre_Original_EXE": "INV / Buffer",
+    "Descripcion": "Puerta lógica Buffer / inversora alternativa",
+    "Tags": "-U",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10050,
+    "Categoria": "Ladder",
+    "Subtipo": "ladder_contacto_na",
+    "Nombre_Original_EXE": "NA",
+    "Descripcion": "Contacto normalmente abierto en lenguaje Ladder (LD)",
+    "Tags": "I3,Q1,I1,-I1,-I3",
+    "Terminales": "",
+    "Veces_Usado": 7,
+    "Archivos_Usado": 3,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "Lab01-2.cad",
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10051,
+    "Categoria": "Ladder",
+    "Subtipo": "ladder_contacto_nc",
+    "Nombre_Original_EXE": "NC",
+    "Descripcion": "Contacto normalmente cerrado en lenguaje Ladder (LD)",
+    "Tags": "I2,Q1,I1,-I2,-U",
+    "Terminales": "",
+    "Veces_Usado": 5,
+    "Archivos_Usado": 3,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "Lab01-2.cad",
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10052,
+    "Categoria": "Ladder",
+    "Subtipo": "ladder_flanco_ascendente",
+    "Nombre_Original_EXE": "Flanco ascendente",
+    "Descripcion": "Detector de flanco ascendente P_TRIG en Ladder",
+    "Tags": "-U",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10053,
+    "Categoria": "Ladder",
+    "Subtipo": "ladder_flanco_descendente",
+    "Nombre_Original_EXE": "Flanco descendente",
+    "Descripcion": "Detector de flanco descendente N_TRIG en Ladder",
+    "Tags": "-U",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10060,
+    "Categoria": "Ladder",
+    "Subtipo": "ladder_bobina_asignar",
+    "Nombre_Original_EXE": "Asignar",
+    "Descripcion": "Bobina de salida normal en Ladder ( )",
+    "Tags": "Q1,Q2,Q4,Q3,-Q1",
+    "Terminales": "",
+    "Veces_Usado": 6,
+    "Archivos_Usado": 3,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "Lab01-2.cad",
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10061,
+    "Categoria": "Ladder",
+    "Subtipo": "ladder_bobina_set",
+    "Nombre_Original_EXE": "Set",
+    "Descripcion": "Bobina de activación enclavada (S) Set en Ladder",
+    "Tags": "-U",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10062,
+    "Categoria": "Ladder",
+    "Subtipo": "ladder_bobina_reset",
+    "Nombre_Original_EXE": "Reset",
+    "Descripcion": "Bobina de desactivación (R) Reset en Ladder",
+    "Tags": "-U",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10063,
+    "Categoria": "Logica",
+    "Subtipo": "generador_pulsos_logico",
+    "Nombre_Original_EXE": "Generatore di impulsi",
+    "Descripcion": "Generador de reloj de pulsos lógicos (Clock)",
+    "Tags": "-C",
+    "Terminales": "R-C-D-Q-0-0",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10064,
+    "Categoria": "Logica",
+    "Subtipo": "puerta_nor",
+    "Nombre_Original_EXE": "NOR",
+    "Descripcion": "Puerta lógica NOR",
+    "Tags": "-U",
+    "Terminales": "S-R-Q",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10065,
+    "Categoria": "Logica",
+    "Subtipo": "biestable_rs",
+    "Nombre_Original_EXE": "Biestable",
+    "Descripcion": "Biestable / Flip-Flop RS digital",
+    "Tags": "-U",
+    "Terminales": "S-R-Q",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10066,
+    "Categoria": "Logica",
+    "Subtipo": "divisor_binario",
+    "Nombre_Original_EXE": "Divisor Binario",
+    "Descripcion": "Divisor de frecuencia binario digital (T-Flip Flop)",
+    "Tags": "-T",
+    "Terminales": "IN-Q-0-1",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10067,
+    "Categoria": "Logica",
+    "Subtipo": "temporizador_pulso_digital",
+    "Nombre_Original_EXE": "Temporizador pulso conexión",
+    "Descripcion": "Temporizador monostable de pulso digital",
+    "Tags": "-T",
+    "Terminales": "IN-Q-0-1",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10068,
+    "Categoria": "Logica",
+    "Subtipo": "temporizador_desconexion_digital",
+    "Nombre_Original_EXE": "Temporizador desconexión",
+    "Descripcion": "Temporizador digital a la desconexión (TOF)",
+    "Tags": "-T",
+    "Terminales": "IN-Q-0-1",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10069,
+    "Categoria": "Logica",
+    "Subtipo": "temporizador_intermitente_digital",
+    "Nombre_Original_EXE": "Temporizador intermitente",
+    "Descripcion": "Temporizador oscilador intermitente digital",
+    "Tags": "-T",
+    "Terminales": "IN-Q-0-1-0-1",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10070,
+    "Categoria": "Logica",
+    "Subtipo": "prueba_entrada_logica",
+    "Nombre_Original_EXE": "Prueba",
+    "Descripcion": "Sonda / interruptor de inyección de nivel lógico (0/1)",
+    "Tags": "-I",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10071,
+    "Categoria": "Logica",
+    "Subtipo": "visualiza_salida_logica",
+    "Nombre_Original_EXE": "Visualiza",
+    "Descripcion": "Sonda indicadora de estado lógico (LED digital)",
+    "Tags": "-Q",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10072,
+    "Categoria": "Logica",
+    "Subtipo": "display_bcd",
+    "Nombre_Original_EXE": "Display BCD",
+    "Descripcion": "Display numérico digital decodificador BCD",
+    "Tags": "-D",
+    "Terminales": "a-b-0-c-d",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10073,
+    "Categoria": "Logica",
+    "Subtipo": "display_7_seg",
+    "Nombre_Original_EXE": "Display 7 Seg.",
+    "Descripcion": "Display visualizador de 7 segmentos",
+    "Tags": "-D",
+    "Terminales": "a-b-0-c-d-e-f-g",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10074,
+    "Categoria": "Logica",
+    "Subtipo": "preselector_digital",
+    "Nombre_Original_EXE": "Preselector",
+    "Descripcion": "Rueda preselectora BCD digital manual",
+    "Tags": "-D",
+    "Terminales": "1-2-4-8-C",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10075,
+    "Categoria": "Logica",
+    "Subtipo": "contador_digital",
+    "Nombre_Original_EXE": "Contador",
+    "Descripcion": "Contador digital de impulsos",
+    "Tags": "-C",
+    "Terminales": "+---R-Q-0-0-L",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10076,
+    "Categoria": "Ladder",
+    "Subtipo": "ladder_first_scan",
+    "Nombre_Original_EXE": "First Scan",
+    "Descripcion": "Contacto especial de primer ciclo de scan en Ladder",
+    "Tags": "FIRST",
+    "Terminales": "SCAN",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10077,
+    "Categoria": "Logica",
+    "Subtipo": "contador_asc_desc",
+    "Nombre_Original_EXE": "Contador ascendente-descendente",
+    "Descripcion": "Contador bidireccional digital (Up/Down)",
+    "Tags": "-C",
+    "Terminales": "14-1-2-3-12-9-8-11",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10078,
+    "Categoria": "Logica",
+    "Subtipo": "contador_4_bits",
+    "Nombre_Original_EXE": "Contador 4 bits",
+    "Descripcion": "Contador binario síncrono de 4 bits",
+    "Tags": "-C",
+    "Terminales": "1-2-3-4-5-6",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10080,
+    "Categoria": "Logica",
+    "Subtipo": "decodificador_7_seg",
+    "Nombre_Original_EXE": "Decodificador 7 segmentos",
+    "Descripcion": "Decodificador integrado BCD a 7 segmentos",
+    "Tags": "-C",
+    "Terminales": "7-1-2-6-13-12-11-10",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10081,
+    "Categoria": "Logica",
+    "Subtipo": "temporizador_conexion_digital",
+    "Nombre_Original_EXE": "Temporizador conexión",
+    "Descripcion": "Temporizador digital a la conexión (TON)",
+    "Tags": "-T",
+    "Terminales": "IN-Q-0-1",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10082,
+    "Categoria": "Logica",
+    "Subtipo": "contador_4_bits_decadas",
+    "Nombre_Original_EXE": "Contador 4 bits decadas",
+    "Descripcion": "Contador de décadas módulo 10",
+    "Tags": "-C",
+    "Terminales": "15-1-10-9-14-4-5-11",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10083,
+    "Categoria": "Logica",
+    "Subtipo": "contador_4_bits_asc_des",
+    "Nombre_Original_EXE": "Contador 4 bits ASC/DES",
+    "Descripcion": "Contador de 4 bits Up/Down configurable",
+    "Tags": "-C",
+    "Terminales": "14-13-15-3-2-4-7-10",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10100,
+    "Categoria": "GRAFCET",
+    "Subtipo": "grafcet_etapa_inicial",
+    "Nombre_Original_EXE": "Etapa inicial",
+    "Descripcion": "Etapa inicial doble cuadrado GRAFCET",
+    "Tags": "0",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10101,
+    "Categoria": "GRAFCET",
+    "Subtipo": "grafcet_etapa",
+    "Nombre_Original_EXE": "Etapa",
+    "Descripcion": "Etapa simple numerada GRAFCET",
+    "Tags": "1",
+    "Terminales": "",
+    "Veces_Usado": 8,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10102,
+    "Categoria": "GRAFCET",
+    "Subtipo": "grafcet_transicion",
+    "Nombre_Original_EXE": "Transición",
+    "Descripcion": "Barrera de transición con receptividad asociada",
+    "Tags": "1,=1",
+    "Terminales": "",
+    "Veces_Usado": 9,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10103,
+    "Categoria": "GRAFCET",
+    "Subtipo": "grafcet_accion",
+    "Nombre_Original_EXE": "Acción",
+    "Descripcion": "Bloque de acción asociada a etapa",
+    "Tags": "",
+    "Terminales": "0-0-0-0-0-0-0",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10104,
+    "Categoria": "GRAFCET",
+    "Subtipo": "grafcet_divergencia_o",
+    "Nombre_Original_EXE": "Divergencia en \"O\"",
+    "Descripcion": "Divergencia alternativa en OR",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10105,
+    "Categoria": "GRAFCET",
+    "Subtipo": "grafcet_convergencia_o",
+    "Nombre_Original_EXE": "Convergencia en \"O\"",
+    "Descripcion": "Convergencia alternativa en OR",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10106,
+    "Categoria": "GRAFCET",
+    "Subtipo": "grafcet_enlace_cero",
+    "Nombre_Original_EXE": "\"0\"",
+    "Descripcion": "Línea de enlace y sincronismo GRAFCET",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 6,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10107,
+    "Categoria": "GRAFCET",
+    "Subtipo": "grafcet_divergencia_y",
+    "Nombre_Original_EXE": "Divergencia en \"Y\"",
+    "Descripcion": "Divergencia simultánea en AND (doble barra)",
+    "Tags": "1",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10108,
+    "Categoria": "GRAFCET",
+    "Subtipo": "grafcet_convergencia_y",
+    "Nombre_Original_EXE": "Convergencia en \"Y\"",
+    "Descripcion": "Convergencia simultánea en AND (doble barra)",
+    "Tags": "1",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10111,
+    "Categoria": "GRAFCET",
+    "Subtipo": "grafcet_enlace_io",
+    "Nombre_Original_EXE": "Enlace de entrada / salida",
+    "Descripcion": "Enlace de salto entre etapas o páginas",
+    "Tags": "M",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10112,
+    "Categoria": "GRAFCET",
+    "Subtipo": "grafcet_macro_etapa",
+    "Nombre_Original_EXE": "Macro etapa",
+    "Descripcion": "Macroetapa jerárquica encapsulada",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10200,
+    "Categoria": "PLC",
+    "Subtipo": "intercambio_entradas_pc_simu",
+    "Nombre_Original_EXE": "Intercambio entradas PC_SIMU",
+    "Descripcion": "Tabla de comunicación de entradas para PC_SIMU",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "all4.cad",
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10201,
+    "Categoria": "PLC",
+    "Subtipo": "intercambio_salidas_pc_simu",
+    "Nombre_Original_EXE": "Intercambio salidas PC_SIMU",
+    "Descripcion": "Tabla de comunicación de salidas para PC_SIMU",
+    "Tags": "",
+    "Terminales": "",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 2,
+    "Archivos_Lista": [
+      "all4.cad",
+      "allpart2.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10202,
+    "Categoria": "PLC",
+    "Subtipo": "modulo_logico_logo",
+    "Nombre_Original_EXE": "Módulo lógico",
+    "Descripcion": "Relé programable Siemens LOGO! (230RC / 24RC)",
+    "Tags": "LOGO",
+    "Terminales": "",
+    "Veces_Usado": 3,
+    "Archivos_Usado": 3,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "Lab01-2.cad",
+      "all4.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10203,
+    "Categoria": "PLC",
+    "Subtipo": "plc_s7_1200",
+    "Nombre_Original_EXE": "PLC S7-1200",
+    "Descripcion": "Autómata programable Siemens SIMATIC S7-1200 (CPU 1214C)",
+    "Tags": "PLC",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all4.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10204,
+    "Categoria": "PLC",
+    "Subtipo": "entrada_digital_plc",
+    "Nombre_Original_EXE": "Entrada digital PLC",
+    "Descripcion": "Borne de entrada digital individual PLC (%I0.x)",
+    "Tags": "I0.0",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all4.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10205,
+    "Categoria": "PLC",
+    "Subtipo": "salida_digital_plc",
+    "Nombre_Original_EXE": "Salida digital PLC",
+    "Descripcion": "Borne de salida digital individual PLC (%Q0.x)",
+    "Tags": "Q0.0",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all4.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10206,
+    "Categoria": "PLC",
+    "Subtipo": "cpu_plc",
+    "Nombre_Original_EXE": "CPU PLC",
+    "Descripcion": "CPU genérica de autómata programable",
+    "Tags": "-CPU",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all4.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10207,
+    "Categoria": "PLC",
+    "Subtipo": "alimentacion_io_plc_pos",
+    "Nombre_Original_EXE": "Alimentación I/O digital PLC",
+    "Descripcion": "Borne de alimentación positiva para E/S PLC (1L / +24V)",
+    "Tags": "1M",
+    "Terminales": "",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all5.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10208,
+    "Categoria": "PLC",
+    "Subtipo": "alimentacion_io_plc_neg",
+    "Nombre_Original_EXE": "Alimentación I/O digital PLC",
+    "Descripcion": "Borne de alimentación común / masa para E/S PLC (1M / 0V)",
+    "Tags": "1L",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all5.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10209,
+    "Categoria": "PLC",
+    "Subtipo": "plc_s7_1500",
+    "Nombre_Original_EXE": "PLC CPU S7-1500",
+    "Descripcion": "Autómata modular Siemens SIMATIC S7-1500",
+    "Tags": "PLC",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all4.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10210,
+    "Categoria": "PLC",
+    "Subtipo": "modulo_s7_1500_dido",
+    "Nombre_Original_EXE": "S7-1500 DI/DO",
+    "Descripcion": "Módulo de entradas y salidas digitales S7-1500",
+    "Tags": "PLC",
+    "Terminales": "0-0",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all4.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10212,
+    "Categoria": "PLC",
+    "Subtipo": "et_200",
+    "Nombre_Original_EXE": "ET-200",
+    "Descripcion": "Módulo cabecera de periferia distribuida Siemens ET-200",
+    "Tags": "PLC",
+    "Terminales": "0-0",
+    "Veces_Usado": 2,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all4.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10213,
+    "Categoria": "PLC",
+    "Subtipo": "et_200_8di",
+    "Nombre_Original_EXE": "ET-200 8DI",
+    "Descripcion": "Módulo de 8 entradas digitales para ET-200",
+    "Tags": "PLC",
+    "Terminales": "0-0",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all4.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10214,
+    "Categoria": "PLC",
+    "Subtipo": "logo_4di_4do",
+    "Nombre_Original_EXE": "LOGO 4DI/4DO",
+    "Descripcion": "Módulo de expansión para Siemens LOGO! 4DI / 4DO",
+    "Tags": "LOGO",
+    "Terminales": "9-5",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all4.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10215,
+    "Categoria": "PLC",
+    "Subtipo": "s7_1200_8di_8do",
+    "Nombre_Original_EXE": "S7-1200 8DI/8DO",
+    "Descripcion": "Módulo de ampliación Siemens SM 1223 (8DI / 8DO)",
+    "Tags": "PLC",
+    "Terminales": "2-2",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all4.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10220,
+    "Categoria": "PLC",
+    "Subtipo": "arduino_uno",
+    "Nombre_Original_EXE": "Arduino uno",
+    "Descripcion": "Placa microcontroladora Arduino UNO",
+    "Tags": "ARDUINO_UNO",
+    "Terminales": "",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all5.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10500,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "actuador_lineal_v1",
+    "Nombre_Original_EXE": "Actuador lineal virtual",
+    "Descripcion": "Actuador o cilindro lineal en simulación virtual",
+    "Tags": "-A",
+    "Terminales": "50-50--a0--a1--a0--a1--A+",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all5.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10501,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "actuador_lineal_v2",
+    "Nombre_Original_EXE": "Actuador lineal virtual",
+    "Descripcion": "Actuador lineal con finales de carrera a0/a1",
+    "Tags": "-A",
+    "Terminales": "50-50--a0--a1--a0--a1--A+",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all5.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10502,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "actuador_lineal_v3",
+    "Nombre_Original_EXE": "Actuador lineal virtual",
+    "Descripcion": "Actuador lineal de doble vástago virtual",
+    "Tags": "-A",
+    "Terminales": "50-50--a0--a1--a0--a1--A+",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all5.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10503,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "actuador_lineal_v4",
+    "Nombre_Original_EXE": "Actuador lineal virtual",
+    "Descripcion": "Cilindro neumático simulado virtual",
+    "Tags": "-A",
+    "Terminales": "50-50--a0--a1--a0--a1--A+",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all5.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10504,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "cinta_transportadora_v1",
+    "Nombre_Original_EXE": "Cinta transportadora virtual",
+    "Descripcion": "Cinta de transporte con motor reversible",
+    "Tags": "-A",
+    "Terminales": "50-50--a0--a1--a0--a1--A+",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all5.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10505,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "cinta_transportadora_v2",
+    "Nombre_Original_EXE": "Cinta transportadora virtual",
+    "Descripcion": "Cinta de transporte con sensores de presencia",
+    "Tags": "-A",
+    "Terminales": "50-50--a0--a1--a0--a1--A+",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all5.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10507,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "valvula_cilindro_virtual",
+    "Nombre_Original_EXE": "Válvula virtual",
+    "Descripcion": "Válvula de control para maqueta virtual",
+    "Tags": "-V",
+    "Terminales": "-v-V+",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all5.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10508,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "motor_virtual_1",
+    "Nombre_Original_EXE": "Motor maqueta virtual",
+    "Descripcion": "Motor de accionamiento maqueta",
+    "Tags": "-M",
+    "Terminales": "50--M+",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all5.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10509,
+    "Categoria": "Virtual_2D",
+    "Subtipo": "motor_virtual_2",
+    "Nombre_Original_EXE": "Motor maqueta virtual",
+    "Descripcion": "Motor con encoder para simulación",
+    "Tags": "-M",
+    "Terminales": "50-50--MD",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all5.cad"
+    ]
+  },
+  {
+    "CAD_ID": 10550,
+    "Categoria": "Motores",
+    "Subtipo": "actuador_lineal_electrico",
+    "Nombre_Original_EXE": "Actuador lineal eléctrico",
+    "Descripcion": "Cilindro / husillo actuador eléctrico lineal",
+    "Tags": "-M",
+    "Terminales": "50-50--FC2--FC1-000.025.050.075.100.-G   .0.-M   .0--MD",
+    "Veces_Usado": 1,
+    "Archivos_Usado": 1,
+    "Archivos_Lista": [
+      "all_simbol.cad"
+    ]
+  },
+  {
+    "CAD_ID": 20000,
+    "Categoria": "Formato",
+    "Subtipo": "cajetin_rotulacion",
+    "Nombre_Original_EXE": "Cajetín",
+    "Descripcion": "Formato de lámina y cuadro de rotulación de plano normalizado",
+    "Tags": "XXX",
+    "Terminales": "",
+    "Veces_Usado": 18,
+    "Archivos_Usado": 18,
+    "Archivos_Lista": [
+      "15 oct 1.1 ladder.cad",
+      "2D.cad",
+      "3D.cad",
+      "Lab01-2.cad",
+      "Lab01.cad",
+      "MOTOR ARRANQUE.cad",
+      "all4.cad",
+      "all5.cad",
+      "all_simbol.cad",
+      "allpart2.cad",
+      "lab 13.cad",
+      "lab 14-1.cad",
+      "lab 15-1.cad",
+      "lab 16.cad",
+      "lab 17.cad",
+      "virtual1.cad",
+      "virtual2.cad",
+      "virtual3.cad"
+    ]
+  }
+]

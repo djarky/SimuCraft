@@ -1,0 +1,472 @@
+{
+  "Protección": {
+    "Disyuntor/Magnetotérmico": [
+      {
+        "id": "q_1p",
+        "name": "Disyuntor 1P",
+        "desc": "Disyuntor monofásico",
+        "variants": [
+          "1P"
+        ]
+      },
+      {
+        "id": "q_1p_n",
+        "name": "Disyuntor 1P+N",
+        "desc": "Disyuntor 1P+N",
+        "variants": [
+          "1P+N"
+        ]
+      },
+      {
+        "id": "q_2p",
+        "name": "Disyuntor 2P",
+        "desc": "Disyuntor bifásico",
+        "variants": [
+          "2P"
+        ]
+      },
+      {
+        "id": "q_3p",
+        "name": "Disyuntor 3P",
+        "desc": "Disyuntor trifásico",
+        "variants": [
+          "3P"
+        ]
+      },
+      {
+        "id": "q_3p_n",
+        "name": "Disyuntor 3P+N",
+        "desc": "Disyuntor trifásico+neutro",
+        "variants": [
+          "3P+N"
+        ]
+      },
+      {
+        "id": "q_4p",
+        "name": "Disyuntor 4P",
+        "desc": "Disyuntor 4 polos",
+        "variants": [
+          "4P"
+        ]
+      }
+    ],
+    "Guardamotor": [
+      {
+        "id": "gv_1p",
+        "name": "Guardamotor 1P",
+        "desc": "Relé térmico-magnético 1P",
+        "variants": [
+          "1P"
+        ]
+      },
+      {
+        "id": "gv_3p",
+        "name": "Guardamotor 3P",
+        "desc": "Guardamotor trifásico",
+        "variants": [
+          "3P"
+        ]
+      },
+      {
+        "id": "gv_3p_n",
+        "name": "Guardamotor 3P+N",
+        "desc": "Guardamotor 3P+N",
+        "variants": [
+          "3P+N"
+        ]
+      }
+    ],
+    "Seccionador": [
+      {
+        "id": "sw_1p",
+        "name": "Seccionador 1P",
+        "desc": "Seccionador monofásico",
+        "variants": [
+          "1P"
+        ]
+      },
+      {
+        "id": "sw_3p",
+        "name": "Seccionador 3P",
+        "desc": "Seccionador trifásico",
+        "variants": [
+          "3P"
+        ]
+      },
+      {
+        "id": "sw_3p_n",
+        "name": "Seccionador 3P+N",
+        "desc": "Seccionador 3P+N",
+        "variants": [
+          "3P+N"
+        ]
+      }
+    ],
+    "Interruptor Diferencial": [
+      {
+        "id": "idr_2p",
+        "name": "Diferencial 2P",
+        "desc": "Interruptor diferencial 2P",
+        "variants": [
+          "2P"
+        ]
+      },
+      {
+        "id": "idr_4p",
+        "name": "Diferencial 4P",
+        "desc": "Interruptor diferencial 4P",
+        "variants": [
+          "4P"
+        ]
+      }
+    ]
+  },
+  "Maniobra": {
+    "Contactor": [
+      {
+        "id": "km_1p",
+        "name": "Contactor 1P",
+        "desc": "Contactor monofásico",
+        "variants": [
+          "1P"
+        ]
+      },
+      {
+        "id": "km_2p",
+        "name": "Contactor 2P",
+        "desc": "Contactor bifásico",
+        "variants": [
+          "2P"
+        ]
+      },
+      {
+        "id": "km_3p",
+        "name": "Contactor 3P",
+        "desc": "Contactor trifásico",
+        "variants": [
+          "3P"
+        ]
+      },
+      {
+        "id": "km_4p",
+        "name": "Contactor 4P",
+        "desc": "Contactor 4 polos",
+        "variants": [
+          "4P"
+        ]
+      }
+    ],
+    "Bobina": [
+      {
+        "id": "a1_a2",
+        "name": "Bobina A1-A2",
+        "desc": "Bobina de contactor/relé",
+        "variants": [
+          "AC/DC"
+        ]
+      }
+    ],
+    "Pulsador": [
+      {
+        "id": "s_na",
+        "name": "Pulsador NA",
+        "desc": "Pulsador normalmente abierto",
+        "variants": [
+          "NA"
+        ]
+      },
+      {
+        "id": "s_nc",
+        "name": "Pulsador NC",
+        "desc": "Pulsador normalmente cerrado",
+        "variants": [
+          "NC"
+        ]
+      },
+      {
+        "id": "s_na_nc",
+        "name": "Pulsador NA+NC",
+        "desc": "Pulsador conmutado",
+        "variants": [
+          "NA/NC"
+        ]
+      },
+      {
+        "id": "s_seta_na",
+        "name": "Pulsador seta NA",
+        "desc": "Pulsador seta",
+        "variants": [
+          "NA"
+        ]
+      },
+      {
+        "id": "s_seta_nc",
+        "name": "Pulsador seta NC",
+        "desc": "Pulsador seta NC",
+        "variants": [
+          "NC"
+        ]
+      }
+    ],
+    "Selector": [
+      {
+        "id": "sel_1",
+        "name": "Selector 1 posición",
+        "desc": "Interruptor selector",
+        "variants": [
+          "1P"
+        ]
+      },
+      {
+        "id": "sel_2",
+        "name": "Selector 2 posiciones",
+        "desc": "Selector conmutado",
+        "variants": [
+          "2P"
+        ]
+      }
+    ],
+    "Final de Carrera": [
+      {
+        "id": "fc_na",
+        "name": "Final carrera NA",
+        "desc": "Final de carrera NA",
+        "variants": [
+          "NA"
+        ]
+      },
+      {
+        "id": "fc_nc",
+        "name": "Final carrera NC",
+        "desc": "Final de carrera NC",
+        "variants": [
+          "NC"
+        ]
+      },
+      {
+        "id": "fc_na_nc",
+        "name": "Final carrera NA+NC",
+        "desc": "Final de carrera conmutado",
+        "variants": [
+          "NA/NC"
+        ]
+      }
+    ]
+  },
+  "Receptores": {
+    "Motor": [
+      {
+        "id": "m_1p",
+        "name": "Motor Monofásico",
+        "desc": "Motor monofásico",
+        "variants": [
+          "1F"
+        ]
+      },
+      {
+        "id": "m_3p",
+        "name": "Motor Trifásico",
+        "desc": "Motor trifásico",
+        "variants": [
+          "3F"
+        ]
+      },
+      {
+        "id": "m_3p_y",
+        "name": "Motor Trifásico Y/Δ",
+        "desc": "Motor Dahlander/estrella-triángulo",
+        "variants": [
+          "Y/Δ"
+        ]
+      },
+      {
+        "id": "m_2vel",
+        "name": "Motor 2 Velocidades",
+        "desc": "Motor Dahlander",
+        "variants": [
+          "2V"
+        ]
+      }
+    ],
+    "Lámpara/Piloto": [
+      {
+        "id": "h_rojo",
+        "name": "Piloto Rojo",
+        "desc": "Lámpara piloto roja",
+        "variants": [
+          "H1"
+        ]
+      },
+      {
+        "id": "h_verde",
+        "name": "Piloto Verde",
+        "desc": "Lámpara piloto verde",
+        "variants": [
+          "H2"
+        ]
+      },
+      {
+        "id": "h_ambar",
+        "name": "Piloto Ámbar",
+        "desc": "Lámpara piloto ámbar",
+        "variants": [
+          "H3"
+        ]
+      },
+      {
+        "id": "h_blanco",
+        "name": "Piloto Blanco",
+        "desc": "Lámpara piloto blanca",
+        "variants": [
+          "H4"
+        ]
+      }
+    ],
+    "Resistencia/Calefacción": [
+      {
+        "id": "r_1p",
+        "name": "Resistencia 1P",
+        "desc": "Resistencia monofásica",
+        "variants": [
+          "1P"
+        ]
+      },
+      {
+        "id": "r_3p",
+        "name": "Resistencia 3P",
+        "desc": "Resistencia trifásica",
+        "variants": [
+          "3P"
+        ]
+      }
+    ]
+  },
+  "Auxiliares": {
+    "Contacto Auxiliar": [
+      {
+        "id": "no_aux",
+        "name": "Contacto NA",
+        "desc": "Contacto auxiliar NA",
+        "variants": [
+          "13-14"
+        ]
+      },
+      {
+        "id": "nc_aux",
+        "name": "Contacto NC",
+        "desc": "Contacto auxiliar NC",
+        "variants": [
+          "21-22"
+        ]
+      },
+      {
+        "id": "no_nc_aux",
+        "name": "Contacto NA+NC",
+        "desc": "Contacto auxiliar conmutado",
+        "variants": [
+          "13-14/21-22"
+        ]
+      }
+    ],
+    "Temporizador": [
+      {
+        "id": "t_on",
+        "name": "Temporizador a la Conexión",
+        "desc": "ON Delay",
+        "variants": [
+          "ON"
+        ]
+      },
+      {
+        "id": "t_off",
+        "name": "Temporizador a la Desconexión",
+        "desc": "OFF Delay",
+        "variants": [
+          "OFF"
+        ]
+      },
+      {
+        "id": "t_pulso",
+        "name": "Temporizador a Impulso",
+        "desc": "Pulso a la conexión",
+        "variants": [
+          "PULSO"
+        ]
+      },
+      {
+        "id": "t_flash",
+        "name": "Temporizador Intermitente",
+        "desc": "Intermitente",
+        "variants": [
+          "FLASH"
+        ]
+      }
+    ],
+    "Relé": [
+      {
+        "id": "rel_2c",
+        "name": "Relé 2 contactos",
+        "desc": "Relé auxiliar",
+        "variants": [
+          "2C"
+        ]
+      },
+      {
+        "id": "rel_4c",
+        "name": "Relé 4 contactos",
+        "desc": "Relé auxiliar 4 contactos",
+        "variants": [
+          "4C"
+        ]
+      }
+    ]
+  },
+  "Distribución": {
+    "Barras": [
+      {
+        "id": "bar_3p",
+        "name": "Barras Trifásicas",
+        "desc": "Rieles trifásicos",
+        "variants": [
+          "L1-L2-L3"
+        ]
+      },
+      {
+        "id": "bar_3p_n",
+        "name": "Barras 3P+N",
+        "desc": "Rieles 3P+N",
+        "variants": [
+          "3P+N"
+        ]
+      }
+    ],
+    "Bornes": [
+      {
+        "id": "borne",
+        "name": "Borne",
+        "desc": "Punto de conexión",
+        "variants": [
+          "X"
+        ]
+      }
+    ]
+  },
+  "PLC/Automatismo": {
+    "PLC": [
+      {
+        "id": "logo",
+        "name": "LOGO! Siemens",
+        "desc": "Siemens LOGO!",
+        "variants": [
+          "6ED1 052-1FB00-0BA7"
+        ]
+      },
+      {
+        "id": "clp",
+        "name": "CLP/PLC",
+        "desc": "Controlador lógico programable",
+        "variants": []
+      }
+    ]
+  }
+}

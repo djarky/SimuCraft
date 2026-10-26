@@ -1,0 +1,464 @@
+[
+  {
+    "type_id": 1000,
+    "count": 13,
+    "tags": [
+      "-M"
+    ],
+    "num_files": 11
+  },
+  {
+    "type_id": 2001,
+    "count": 15,
+    "tags": [
+      "-K",
+      "-K1",
+      "-K2",
+      "-KM",
+      "-KM1",
+      "-KM2",
+      "-KM3",
+      "K1"
+    ],
+    "num_files": 11
+  },
+  {
+    "type_id": 2006,
+    "count": 5,
+    "tags": [
+      "-KM1",
+      "-KM2",
+      "-KM3",
+      "-Q1"
+    ],
+    "num_files": 4
+  },
+  {
+    "type_id": 3000,
+    "count": 6,
+    "tags": [
+      "-X"
+    ],
+    "num_files": 6
+  },
+  {
+    "type_id": 3001,
+    "count": 6,
+    "tags": [
+      "-X"
+    ],
+    "num_files": 6
+  },
+  {
+    "type_id": 3002,
+    "count": 2,
+    "tags": [
+      "-X"
+    ],
+    "num_files": 2
+  },
+  {
+    "type_id": 3003,
+    "count": 6,
+    "tags": [
+      "-X"
+    ],
+    "num_files": 4
+  },
+  {
+    "type_id": 3004,
+    "count": 3,
+    "tags": [
+      "-X"
+    ],
+    "num_files": 3
+  },
+  {
+    "type_id": 3005,
+    "count": 6,
+    "tags": [
+      "-X"
+    ],
+    "num_files": 6
+  },
+  {
+    "type_id": 3006,
+    "count": 1,
+    "tags": [
+      "-X"
+    ],
+    "num_files": 1
+  },
+  {
+    "type_id": 3007,
+    "count": 1,
+    "tags": [
+      "-X"
+    ],
+    "num_files": 1
+  },
+  {
+    "type_id": 3008,
+    "count": 2,
+    "tags": [
+      "-X"
+    ],
+    "num_files": 2
+  },
+  {
+    "type_id": 3009,
+    "count": 2,
+    "tags": [
+      "-X"
+    ],
+    "num_files": 2
+  },
+  {
+    "type_id": 4000,
+    "count": 205,
+    "tags": [
+      ""
+    ],
+    "num_files": 8
+  },
+  {
+    "type_id": 4001,
+    "count": 131,
+    "tags": [
+      ""
+    ],
+    "num_files": 12
+  },
+  {
+    "type_id": 4009,
+    "count": 62,
+    "tags": [
+      ""
+    ],
+    "num_files": 7
+  },
+  {
+    "type_id": 4010,
+    "count": 13,
+    "tags": [
+      ""
+    ],
+    "num_files": 4
+  },
+  {
+    "type_id": 4018,
+    "count": 337,
+    "tags": [
+      ""
+    ],
+    "num_files": 8
+  },
+  {
+    "type_id": 4019,
+    "count": 10,
+    "tags": [
+      ""
+    ],
+    "num_files": 3
+  },
+  {
+    "type_id": 5000,
+    "count": 2,
+    "tags": [
+      "-F2"
+    ],
+    "num_files": 2
+  },
+  {
+    "type_id": 5003,
+    "count": 2,
+    "tags": [
+      "-F1"
+    ],
+    "num_files": 2
+  },
+  {
+    "type_id": 5008,
+    "count": 2,
+    "tags": [
+      "-F"
+    ],
+    "num_files": 2
+  },
+  {
+    "type_id": 6002,
+    "count": 3,
+    "tags": [
+      "-F"
+    ],
+    "num_files": 1
+  },
+  {
+    "type_id": 6007,
+    "count": 15,
+    "tags": [
+      "-F",
+      "-F1",
+      "-F2",
+      "-F3",
+      "F3"
+    ],
+    "num_files": 9
+  },
+  {
+    "type_id": 6008,
+    "count": 2,
+    "tags": [
+      "-F1",
+      "-F2"
+    ],
+    "num_files": 2
+  },
+  {
+    "type_id": 6009,
+    "count": 10,
+    "tags": [
+      "-F1",
+      "-F2",
+      "-Q",
+      "-Q1",
+      "-Q2",
+      "-Q3",
+      "F2"
+    ],
+    "num_files": 8
+  },
+  {
+    "type_id": 6010,
+    "count": 3,
+    "tags": [
+      "-Q",
+      "-Q1",
+      "F1"
+    ],
+    "num_files": 3
+  },
+  {
+    "type_id": 6011,
+    "count": 1,
+    "tags": [
+      "-Q"
+    ],
+    "num_files": 1
+  },
+  {
+    "type_id": 7000,
+    "count": 15,
+    "tags": [
+      "-K",
+      "-K1",
+      "-KM1",
+      "-KM2",
+      "-KM3",
+      "K1"
+    ],
+    "num_files": 6
+  },
+  {
+    "type_id": 7001,
+    "count": 4,
+    "tags": [
+      "-KM1",
+      "-KM2",
+      "K1"
+    ],
+    "num_files": 3
+  },
+  {
+    "type_id": 7004,
+    "count": 4,
+    "tags": [
+      "-T1",
+      "-T2",
+      "-T3",
+      "-T4"
+    ],
+    "num_files": 1
+  },
+  {
+    "type_id": 8000,
+    "count": 18,
+    "tags": [
+      "-A",
+      "-B",
+      "-C",
+      "-D",
+      "-M",
+      "-P",
+      "-S",
+      "-S1",
+      "-S2",
+      "-S3",
+      "-S4",
+      "S1",
+      "S2"
+    ],
+    "num_files": 10
+  },
+  {
+    "type_id": 8001,
+    "count": 8,
+    "tags": [
+      "-P",
+      "-S",
+      "-S1",
+      "-S2",
+      "S1"
+    ],
+    "num_files": 7
+  },
+  {
+    "type_id": 8002,
+    "count": 2,
+    "tags": [
+      "-S1",
+      "-S2"
+    ],
+    "num_files": 1
+  },
+  {
+    "type_id": 8005,
+    "count": 1,
+    "tags": [
+      "-PE"
+    ],
+    "num_files": 1
+  },
+  {
+    "type_id": 8016,
+    "count": 4,
+    "tags": [
+      "-F1",
+      "-F2",
+      "-F3"
+    ],
+    "num_files": 2
+  },
+  {
+    "type_id": 8017,
+    "count": 6,
+    "tags": [
+      "-F1",
+      "-F2",
+      "-F3",
+      "F3"
+    ],
+    "num_files": 4
+  },
+  {
+    "type_id": 8018,
+    "count": 3,
+    "tags": [
+      "-F1",
+      "-F3"
+    ],
+    "num_files": 3
+  },
+  {
+    "type_id": 8019,
+    "count": 1,
+    "tags": [
+      "F3"
+    ],
+    "num_files": 1
+  },
+  {
+    "type_id": 9000,
+    "count": 17,
+    "tags": [
+      "-K",
+      "-K1",
+      "-K2",
+      "-KM1",
+      "-KM2",
+      "-KM3",
+      "K1"
+    ],
+    "num_files": 11
+  },
+  {
+    "type_id": 9004,
+    "count": 4,
+    "tags": [
+      "-T1",
+      "-T2",
+      "-T3",
+      "-T4"
+    ],
+    "num_files": 1
+  },
+  {
+    "type_id": 9008,
+    "count": 19,
+    "tags": [
+      "-H",
+      "-H1",
+      "-H2",
+      "-H3",
+      "-H4",
+      "-H5",
+      "-H6",
+      "H1",
+      "H2",
+      "H3"
+    ],
+    "num_files": 6
+  },
+  {
+    "type_id": 10050,
+    "count": 6,
+    "tags": [
+      "-I1",
+      "-I3",
+      "-Q1",
+      "I1",
+      "I3",
+      "Q1"
+    ],
+    "num_files": 2
+  },
+  {
+    "type_id": 10051,
+    "count": 4,
+    "tags": [
+      "-I2",
+      "I1",
+      "I2",
+      "Q1"
+    ],
+    "num_files": 2
+  },
+  {
+    "type_id": 10060,
+    "count": 5,
+    "tags": [
+      "-Q1",
+      "Q1",
+      "Q2",
+      "Q3",
+      "Q4"
+    ],
+    "num_files": 2
+  },
+  {
+    "type_id": 10202,
+    "count": 2,
+    "tags": [
+      "LOGO"
+    ],
+    "num_files": 2
+  },
+  {
+    "type_id": 20000,
+    "count": 12,
+    "tags": [
+      "XXX"
+    ],
+    "num_files": 12
+  }
+]

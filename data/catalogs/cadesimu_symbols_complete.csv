@@ -1,0 +1,344 @@
+CAD_ID,Categoria,Subtipo,Nombre_Original_EXE,Descripcion,Tags,Terminales,Veces_Usado,Archivos_Usado
+0,Conexiones,nodo_conexion,Punto de conexión / Conexión eléctrica,Punto de unión/nodo entre conductores,"$$$,-A-,192.128.000.001,PLC,L+-1-L--1-1",,1202,18
+1,Virtual_2D,objeto_virtual_1,Componente Virtual / Bitmap 1,Elemento gráfico / interactivo de laboratorio virtual (bitmap_1),,,1,1
+2,Virtual_2D,objeto_virtual_2,Componente Virtual / Bitmap 2,Elemento gráfico / interactivo de laboratorio virtual (bitmap_2),,,7,6
+3,Virtual_2D,objeto_virtual_3,Componente Virtual / Bitmap 3,Elemento gráfico / interactivo de laboratorio virtual (bitmap_3),,,2,2
+4,Virtual_2D,objeto_virtual_4,Componente Virtual / Bitmap 4,Elemento gráfico / interactivo de laboratorio virtual (bitmap_4),$$$,,4,4
+5,Virtual_2D,objeto_virtual_5,Componente Virtual / Bitmap 5,Elemento gráfico / interactivo de laboratorio virtual (bitmap_5),$$$,,5,5
+6,Virtual_2D,objeto_virtual_6,Componente Virtual / Bitmap 6,Elemento gráfico / interactivo de laboratorio virtual (bitmap_6),,,3,3
+7,Virtual_2D,objeto_virtual_7,Componente Virtual / Bitmap 7,Elemento gráfico / interactivo de laboratorio virtual (bitmap_7),,,8,5
+8,Virtual_2D,objeto_virtual_8,Componente Virtual / Bitmap 8,Elemento gráfico / interactivo de laboratorio virtual (bitmap_8),, 0- 0- 0- 0- 0- 0- 0- 0,11,7
+9,Virtual_2D,objeto_virtual_9,Componente Virtual / Bitmap 9,Elemento gráfico / interactivo de laboratorio virtual (bitmap_9),,,1,1
+10,Virtual_2D,objeto_virtual_10,Componente Virtual / Bitmap 10,Elemento gráfico / interactivo de laboratorio virtual (bitmap_10),,,1,1
+11,Virtual_2D,objeto_virtual_11,Componente Virtual / Bitmap 11,Elemento gráfico / interactivo de laboratorio virtual (bitmap_11),,,4,4
+12,Virtual_2D,objeto_virtual_12,Componente Virtual / Bitmap 12,Elemento gráfico / interactivo de laboratorio virtual (bitmap_12),,,3,3
+13,Virtual_2D,objeto_virtual_13,Componente Virtual / Bitmap 13,Elemento gráfico / interactivo de laboratorio virtual (bitmap_13),,,1,1
+14,Virtual_2D,objeto_virtual_14,Componente Virtual / Bitmap 14,Elemento gráfico / interactivo de laboratorio virtual (bitmap_14),,,4,4
+15,Virtual_2D,objeto_virtual_15,Componente Virtual / Bitmap 15,Elemento gráfico / interactivo de laboratorio virtual (bitmap_15),,,2,2
+16,Virtual_2D,objeto_virtual_16,Componente Virtual / Bitmap 16,Elemento gráfico / interactivo de laboratorio virtual (bitmap_16),,,2,2
+17,Virtual_2D,objeto_virtual_17,Componente Virtual / Bitmap 17,Elemento gráfico / interactivo de laboratorio virtual (bitmap_17),,,6,4
+18,Virtual_2D,objeto_virtual_18,Componente Virtual / Bitmap 18,Elemento gráfico / interactivo de laboratorio virtual (bitmap_18),,,2,2
+19,Virtual_2D,objeto_virtual_19,Componente Virtual / Bitmap 19,Elemento gráfico / interactivo de laboratorio virtual (bitmap_19),,,1,1
+20,Virtual_2D,objeto_virtual_20,Componente Virtual / Bitmap 20,Elemento gráfico / interactivo de laboratorio virtual (bitmap_20),,,6,3
+21,Virtual_2D,objeto_virtual_21,Componente Virtual / Bitmap 21,Elemento gráfico / interactivo de laboratorio virtual (bitmap_21),,,2,2
+22,Virtual_2D,objeto_virtual_22,Componente Virtual / Bitmap 22,Elemento gráfico / interactivo de laboratorio virtual (bitmap_22),,,2,1
+23,Virtual_2D,objeto_virtual_23,Componente Virtual / Bitmap 23,Elemento gráfico / interactivo de laboratorio virtual (bitmap_23),,,2,2
+24,Virtual_2D,objeto_virtual_24,Componente Virtual / Bitmap 24,Elemento gráfico / interactivo de laboratorio virtual (bitmap_24),,,6,4
+25,Virtual_2D,objeto_virtual_25,Componente Virtual / Bitmap 25,Elemento gráfico / interactivo de laboratorio virtual (bitmap_25),,,3,2
+26,Virtual_2D,objeto_virtual_26,Componente Virtual / Bitmap 26,Elemento gráfico / interactivo de laboratorio virtual (bitmap_26),,,2,2
+27,Virtual_2D,objeto_virtual_27,Componente Virtual / Bitmap 27,Elemento gráfico / interactivo de laboratorio virtual (bitmap_27),,,2,2
+28,Virtual_2D,objeto_virtual_28,Componente Virtual / Bitmap 28,Elemento gráfico / interactivo de laboratorio virtual (bitmap_28),,,2,2
+30,Virtual_2D,objeto_virtual_30,Componente Virtual / Bitmap 30,Elemento gráfico / interactivo de laboratorio virtual (bitmap_30),192.128.000.001,,1,1
+31,Virtual_2D,objeto_virtual_31,Componente Virtual / Bitmap 31,Elemento gráfico / interactivo de laboratorio virtual (bitmap_31),,,1,1
+32,Virtual_2D,objeto_virtual_32,Componente Virtual / Bitmap 32,Elemento gráfico / interactivo de laboratorio virtual (bitmap_32),,,2,1
+34,Virtual_2D,objeto_virtual_34,Componente Virtual / Bitmap 34,Elemento gráfico / interactivo de laboratorio virtual (bitmap_34),,,2,2
+35,Virtual_2D,objeto_virtual_35,Componente Virtual / Bitmap 35,Elemento gráfico / interactivo de laboratorio virtual (bitmap_35),,,2,1
+38,Virtual_2D,objeto_virtual_38,Componente Virtual / Bitmap 38,Elemento gráfico / interactivo de laboratorio virtual (bitmap_38),,,3,1
+39,Virtual_2D,objeto_virtual_39,Componente Virtual / Bitmap 39,Elemento gráfico / interactivo de laboratorio virtual (bitmap_39),,,1,1
+41,Virtual_2D,objeto_virtual_41,Componente Virtual / Bitmap 41,Elemento gráfico / interactivo de laboratorio virtual (bitmap_41),,,3,2
+42,Virtual_2D,objeto_virtual_42,Componente Virtual / Bitmap 42,Elemento gráfico / interactivo de laboratorio virtual (bitmap_42),,,2,2
+44,Virtual_2D,objeto_virtual_44,Componente Virtual / Bitmap 44,Elemento gráfico / interactivo de laboratorio virtual (bitmap_44),,,2,2
+45,Virtual_2D,objeto_virtual_45,Componente Virtual / Bitmap 45,Elemento gráfico / interactivo de laboratorio virtual (bitmap_45),,,2,1
+46,Virtual_2D,objeto_virtual_46,Componente Virtual / Bitmap 46,Elemento gráfico / interactivo de laboratorio virtual (bitmap_46),,,2,2
+47,Virtual_2D,objeto_virtual_47,Componente Virtual / Bitmap 47,Elemento gráfico / interactivo de laboratorio virtual (bitmap_47),,,2,1
+48,Virtual_2D,objeto_virtual_48,Componente Virtual / Bitmap 48,Elemento gráfico / interactivo de laboratorio virtual (bitmap_48),,,1,1
+50,Virtual_2D,objeto_virtual_50,Componente Virtual / Bitmap 50,Elemento gráfico / interactivo de laboratorio virtual (bitmap_50),,,2,1
+51,Virtual_2D,objeto_virtual_51,Componente Virtual / Bitmap 51,Elemento gráfico / interactivo de laboratorio virtual (bitmap_51),,,2,2
+52,Virtual_2D,objeto_virtual_52,Componente Virtual / Bitmap 52,Elemento gráfico / interactivo de laboratorio virtual (bitmap_52),,,1,1
+53,Virtual_2D,objeto_virtual_53,Componente Virtual / Bitmap 53,Elemento gráfico / interactivo de laboratorio virtual (bitmap_53),,,1,1
+54,Virtual_2D,objeto_virtual_54,Componente Virtual / Bitmap 54,Elemento gráfico / interactivo de laboratorio virtual (bitmap_54),,,1,1
+55,Virtual_2D,objeto_virtual_55,Componente Virtual / Bitmap 55,Elemento gráfico / interactivo de laboratorio virtual (bitmap_55),,,1,1
+58,Virtual_2D,objeto_virtual_58,Componente Virtual / Bitmap 58,Elemento gráfico / interactivo de laboratorio virtual (bitmap_58),,,1,1
+59,Virtual_2D,objeto_virtual_59,Componente Virtual / Bitmap 59,Elemento gráfico / interactivo de laboratorio virtual (bitmap_59),,,2,1
+61,Virtual_2D,objeto_virtual_61,Componente Virtual / Bitmap 61,Elemento gráfico / interactivo de laboratorio virtual (bitmap_61),,,3,2
+62,Virtual_2D,objeto_virtual_62,Componente Virtual / Bitmap 62,Elemento gráfico / interactivo de laboratorio virtual (bitmap_62),,,1,1
+64,Virtual_2D,objeto_virtual_64,Componente Virtual / Bitmap 64,Elemento gráfico / interactivo de laboratorio virtual (bitmap_64),,,1,1
+67,Virtual_2D,objeto_virtual_67,Componente Virtual / Bitmap 67,Elemento gráfico / interactivo de laboratorio virtual (bitmap_67),,,2,1
+69,Virtual_2D,objeto_virtual_69,Componente Virtual / Bitmap 69,Elemento gráfico / interactivo de laboratorio virtual (bitmap_69),,,1,1
+70,Virtual_2D,objeto_virtual_70,Componente Virtual / Bitmap 70,Elemento gráfico / interactivo de laboratorio virtual (bitmap_70),,,1,1
+71,Virtual_2D,objeto_virtual_71,Componente Virtual / Bitmap 71,Elemento gráfico / interactivo de laboratorio virtual (bitmap_71),,,1,1
+77,Virtual_2D,objeto_virtual_77,Componente Virtual / Bitmap 77,Elemento gráfico / interactivo de laboratorio virtual (bitmap_77),,,1,1
+80,Virtual_2D,objeto_virtual_80,Componente Virtual / Bitmap 80,Elemento gráfico / interactivo de laboratorio virtual (bitmap_80),,,1,1
+92,Virtual_2D,objeto_virtual_92,Componente Virtual / Bitmap 92,Elemento gráfico / interactivo de laboratorio virtual (bitmap_92),,,1,1
+105,Virtual_2D,objeto_virtual_105,Componente Virtual / Bitmap 105,Elemento gráfico / interactivo de laboratorio virtual (bitmap_105),,,1,1
+167,Virtual_2D,objeto_virtual_167,Componente Virtual / Bitmap 167,Elemento gráfico / interactivo de laboratorio virtual (bitmap_167),,,1,1
+168,Virtual_2D,objeto_virtual_168,Componente Virtual / Bitmap 168,Elemento gráfico / interactivo de laboratorio virtual (bitmap_168),,,1,1
+170,Virtual_2D,objeto_virtual_170,Componente Virtual / Bitmap 170,Elemento gráfico / interactivo de laboratorio virtual (bitmap_170),,,1,1
+273,Virtual_2D,objeto_virtual_273,Componente Virtual / Bitmap 273,Elemento gráfico / interactivo de laboratorio virtual (bitmap_273),,,1,1
+275,Virtual_2D,objeto_virtual_275,Componente Virtual / Bitmap 275,Elemento gráfico / interactivo de laboratorio virtual (bitmap_275),,,1,1
+277,Virtual_2D,objeto_virtual_277,Componente Virtual / Bitmap 277,Elemento gráfico / interactivo de laboratorio virtual (bitmap_277),,,1,1
+281,Virtual_2D,objeto_virtual_281,Componente Virtual / Bitmap 281,Elemento gráfico / interactivo de laboratorio virtual (bitmap_281),,,1,1
+287,Virtual_2D,objeto_virtual_287,Componente Virtual / Bitmap 287,Elemento gráfico / interactivo de laboratorio virtual (bitmap_287),,,1,1
+293,Virtual_2D,objeto_virtual_293,Componente Virtual / Bitmap 293,Elemento gráfico / interactivo de laboratorio virtual (bitmap_293),,,1,1
+1000,Motores,motor_trifasico,Motor trifásico,Motor trifásico estándar asíncrono (jaula de ardilla),-M,U1-V1-W1-PE,16,14
+1001,Motores,motor_trifasico_yd,Motor trifásico YD,"Motor trifásico estrella-triángulo (6 bornes U1,V1,W1,U2,V2,W2)",-M,U1-V1-W1-PE-W2-U2-V2,3,3
+1002,Motores,motor_monofasico,Motor monofásico,Motor monofásico corriente alterna,-M,U1-V1-PE,1,1
+1003,Motores,motor_dahlander,Motor Dahalander,Motor de dos velocidades por conmutación de polos (Dahlander),-M,U1-V1-W1-PE-U2-V2-W2,1,1
+1004,Motores,motor_rotor_bobinado,Motor rotor bobinado,Motor trifásico de rotor bobinado con anillos rozantes,-M,U1-V1-W1-PE-K-L-M,1,1
+1005,Motores,motor_dos_velocidades,Motor Dos velocidades,Motor de dos velocidades con devanados independientes,-M,U1-V1-W1-PE-U2-V2-W2,1,1
+1006,Motores,motor_cc_iman,Motor cc. Iman P.,Motor de corriente continua de imanes permanentes,-M,A1-A2-PE,1,1
+1007,Motores,motor_cc_indep,Motor cc. Indep.,Motor de corriente continua con excitación independiente,-M,A1-A2-PE-F1-F2,1,1
+1008,Motores,motor_monofasico_cond,Motor monofásico con condensador,Motor monofásico con condensador de arranque y disyuntor centrífugo,-M,U1-V1-PE-U2-V2,1,1
+1009,Motores,freno,Freno,Freno electromagnético para motor,-Fr,U1-V1-PE,1,1
+1010,Motores,motor_trifasico_como_monofasico,Motor trifásico como monofásico,Conexión Steinmetz para motor trifásico en red monofásica,-M,U1-V1-W1-PE,1,1
+1011,Motores,motor_paso_paso_unipolar,Motor paso a paso unipolar,Motor paso a paso unipolar de 4/5 hilos,-M,1-2-3-4-5-6,1,1
+1012,Motores,motor_paso_paso_bipolar,Motor paso a paso bipolar,Motor paso a paso bipolar de 4 hilos,-M,1-2-3-4,1,1
+1050,Neumatica,actuador_simple_efecto,Actuador simple efecto,Cilindro neumático de simple efecto con retorno por muelle,-R,1-2,1,1
+1051,Neumatica,actuador_doble_efecto,Actuador doble efecto,Cilindro neumático de doble efecto,-R,1-3-5-2-4-6,1,1
+1052,Neumatica,actuador_sin_vastago,Actuador sin vástago,Cilindro neumático lineal sin vástago,-T,1-4-7-2-5-8-3-6-9,1,1
+1053,Neumatica,actuador_sin_vastago_mag,Actuador sin vástago magnético,Cilindro sin vástago de arrastre magnético,-G,1-3-5-2-4-6-PE,1,1
+1054,Neumatica,pinza_simple_efecto,Pinza simple efecto,Pinza neumática de agarre simple efecto,-G,L1-N-PE-U-V-W-PE,1,1
+1055,Neumatica,pinza_doble_efecto,Pinza doble efecto,Pinza neumática de agarre doble efecto,-G,L1-L2-L3-PE-U-V-W-PE,1,1
+1056,Neumatica,ventosa,Ventosa,Ventosa de vacío con eyector,-G,RA-RC-I1-I2-I3-I4-+,1,1
+1057,Neumatica,motor_neumatico,Motor neumático,Motor neumático unidireccional,-G,L1-N-PE-M1-M2,1,1
+1058,Neumatica,motor_neumatico_rev,Motor neumático reversible,Motor neumático bidireccional,-G,L1-N-PE-M1-M2-F1-F2,1,1
+1059,Neumatica,valvula_estranguladora,Válvula estranguladora,Válvula reguladora de caudal con antirretorno,-G,L1-L2-L3-PE-M1-M2,1,1
+1060,Neumatica,valvula_escape_rapido,Válvula escape rápido,Válvula de escape rápido para cilindros,-G,L1-L2-L3-PE-M1-M2-F1-F2,1,1
+1061,Neumatica,electrovalvula_distribuidora,Electroválvula distribuidora,Válvula distribuidora 5/2 o 3/2 accionamiento eléctrico,-G,RA-RC-IN-V+-+-AI-0V,1,1
+1062,Neumatica,actuador_giro,Actuador giro,Actuador rotativo / oscilante neumático,-G,IN-A1-A2,1,1
+1065,Neumatica,final_carrera_neumatico,Final de carrera neumático,Válvula fin de carrera neumática con palpador,-G,I1-I2-I3-I4-Q1-Q2-Q3-Q4,1,1
+1066,Neumatica,pulsador_neumatico,Pulsador neumático,Válvula 3/2 accionada por pulsador manual,-G,I1-I2-I3- -Q1-Q2-Q3-Q4,1,1
+1067,Neumatica,unidad_mantenimiento,Unidad mantenimiento FRL,"Unidad de mantenimiento de aire comprimido (Filtro, Regulador, Lubricador)",-G,I1-I2-I3- -Q1-Q2-Q3-Q4,1,1
+1070,Potencia,resistencia_1p,Resistencia I,Banco de resistencia monofásica de frenado o calefactora,-K,A1-A2-1-2,1,1
+1071,Potencia,resistencia_3p,Resistencia III,Banco de resistencias trifásicas estatóricas/rotóricas,-K,A1-A2-1-2,1,1
+1072,Potencia,autotransformador_3p,Autotransformador III,Autotransformador trifásico para arranque a tensión reducida,-K,1-3-5-2-4-6-A1-A2,1,1
+1073,Potencia,arrancador_electronico_ca,Arrancador electrónico c.a.,Etapa de potencia de arrancador suave (Soft Starter),-K,1-3-5-2-4-6-A1-A2-A3,2,1
+1074,Potencia,variador_velocidad_cc_2p,Variador velocidad c.c. II,Variador de velocidad CC monofásico / bifásico,-K,A1-A2-13-14,1,1
+1075,Potencia,variador_velocidad_cc_3p,Variador velocidad c.c. III,Variador de velocidad CC trifásico,-K,A1-A2-12-11-14,1,1
+1076,2D_3D,rele_temporizado_zocalo,Rele temporizado zócalo,Relé temporizado enchufable sobre base octal/undecal,-K,,1,1
+2000,Contactores,contactor_2p,Contactor II,Contactor de potencia bipolar (2 polos de fuerza),-KM,1-3-2-4,1,1
+2001,Contactores,contactor_3p,Contactor III,Contactor de potencia tripolar (3 polos de fuerza),"-KM1,-K1,-KM,K1,-K2",1-3-5-2-4-6,16,12
+2002,Contactores,contactor_4p,Contactor IIII,Contactor de potencia tetrapolar (4 polos de fuerza),-KM,1-3-5-7-2-4-6-8,1,1
+2003,Contactores,interruptor_potencia_2p,Interruptor II,Interruptor seccionador de carga bipolar,-S,1-3-2-4,1,1
+2004,Contactores,interruptor_potencia_3p,Interruptor III,Interruptor seccionador de carga tripolar,-S,1-3-5-2-4-6,1,1
+2005,Contactores,interruptor_potencia_4p,Interruptor IIII,Interruptor seccionador de carga tetrapolar,-S,1-3-5-7-2-4-6-8,1,1
+2006,Contactores,contactor_1p,Contactor I,Contactor de potencia unipolar (1 polo de fuerza),"-KM1,-KM,-Q1,-KM2,-KM3",1-2,6,5
+2007,Contactores,interruptor_potencia_1p,Interruptor I,Interruptor seccionador unipolar,-S,1-2,1,1
+2008,Contactores,contactor_inversor_3p,Contactor III conmutador,Contactor inversor conmutado tripolar,-KM,1-3-5-2-4-6,1,1
+2009,Contactores,enclavamiento_mecanico,Enclavamiento,Enclavamiento mecánico entre dos contactores,-KM1,-KM2,1,1
+3000,Alimentaciones,alimentacion_fase,Alimentación Fase,Borne de alimentación de Fase (L),-X,,7,7
+3001,Alimentaciones,alimentacion_neutro,Alimentación Neutro,Borne de alimentación de Neutro (N),-X,,7,7
+3002,Alimentaciones,alimentacion_proteccion,Alimentación Protección,Borne de toma de tierra / conductor de protección (PE),-X,,3,3
+3003,Alimentaciones,alimentacion_f_n,Alimentación F+N,Alimentación monofásica compuesta Fase + Neutro,-X,,7,5
+3004,Alimentaciones,alimentacion_3p,Alimentación L1+L2+L3,"Alimentación trifásica 3 líneas (L1, L2, L3)",-X,,4,4
+3005,Alimentaciones,alimentacion_3p_pe,Alimentación L1+L2+L3+PE,"Alimentación trifásica con tierra (L1, L2, L3 + PE)",-X,,7,7
+3006,Alimentaciones,alimentacion_3p_n,Alimentación L1+L2+L3+N,"Alimentación trifásica con neutro (L1, L2, L3 + N)",-X,,2,2
+3007,Alimentaciones,alimentacion_3p_n_pe,Alimentación L1+L2+L3+N+PE,Alimentación trifásica completa con neutro y tierra,-X,,2,2
+3008,Alimentaciones,alimentacion_positiva,Alimentación +,Borne de alimentación de corriente continua positiva (+),-X,,4,4
+3009,Alimentaciones,alimentacion_negativa,Alimentación -,Borne de alimentación de corriente continua negativa (-),-X,,4,4
+3010,Alimentaciones,alimentacion_dc_dual,Alimentación +-,Fuente de alimentación continua dual (+ -),-X,,1,1
+3011,Alimentaciones,alimentacion_f_n_pe,Alimentación F+N+PE,Alimentación monofásica con neutro y tierra,-X,,1,1
+3012,Alimentaciones,transformador_1p,Transformador,Transformador monofásico reductor/elevador,-T,1-2-3-4,1,1
+3013,Alimentaciones,puente_rectificador,Rectificador,Puente rectificador de diodos monofásico de onda completa,-V,1-2-3-4,1,1
+3014,Alimentaciones,fuente_alimentacion_1p,Fuente de alimentación,Fuente conmutada / estabilizada monofásica CA/CC,-V,1-2-3-4-PE,1,1
+3015,Alimentaciones,toma_tierra,Alimentación Protección,Símbolo de toma de tierra de protección,,,1,1
+3016,Alimentaciones,diodo,Diodo,Diodo semiconductor / rectificador unipolar,-D,1-2,1,1
+3017,Alimentaciones,transformador_3p,Transformador III,Transformador trifásico de potencia,-T,1-2-3-4-5-6,1,1
+3018,Alimentaciones,fuente_alimentacion_3p,Fuente de alimentación III,Fuente de alimentación trifásica CA/CC,-V,1-2-3-4-5-PE,1,1
+3019,Alimentaciones,bateria,Bateria,Batería / Acumulador de corriente continua,-V,+--,1,1
+3020,Alimentaciones,toma_corriente,Toma de corriente,Base de enchufe / toma de corriente Schuko,-TC,,1,1
+4000,Cables,cable_fase,Cable fase,Conductor de fase (marrón/negro/gris),,,220,9
+4001,Cables,cable_neutro,Cable neutro,Conductor de neutro (azul claro),,,133,14
+4002,Cables,cable_proteccion,Cable protección,Conductor de protección y tierra (verde-amarillo),,,1,1
+4003,Cables,cable_positivo,Cable positivo,Conductor de CC positivo (rojo),,,1,1
+4004,Cables,cable_negativo,Cable negativo,Conductor de CC negativo (azul oscuro / negro),,,1,1
+4009,Cables,cable_conexion,Conexión,Conductor auxiliar o de interconexión general,,,63,8
+4010,Cables,manguera,Manguera,Manguera multiconductora,,,14,5
+4011,Cables,cable_gris,Cable color,Conductor color especial gris,-X,,1,1
+4012,Cables,cable_blanco,Cable color,Conductor color especial blanco,-X,,1,1
+4013,Cables,cable_espesor_2,Espedor 2,Cable de sección reforzada calibre 2,-X,,1,1
+4014,Cables,cable_espesor_3,Espedor 3,Cable de sección reforzada calibre 3,-X,,1,1
+4015,Cables,cable_espesor_4,Espedor 4,Cable de sección reforzada calibre 4,-X,,1,1
+4016,Cables,cable_violeta,Cable color,Conductor de señalización violeta,-X,,1,1
+4017,Cables,cable_color_custom,Cable color,Conductor de control especial,-X,,1,1
+4018,Cables,punto_conexion,Conexión,Punto de empalme o derivación de conductores,,,340,10
+4019,Cables,manguera_trifasica,Cable III,Trazado simultáneo de 3 conductores trifásicos,,,12,5
+5000,Protecciones,fusible_1p,Fusible I,Fusible de protección unipolar (1P),"-F2,-F",1-2,3,3
+5001,Protecciones,fusible_1p_n,Fusible IN,Fusible unipolar más seccionador neutro (1P+N),-F,1-3-2-4,1,1
+5002,Protecciones,fusible_2p,Fusible II,Fusibles bipolares (2P),-F,1-3-2-4,1,1
+5003,Protecciones,fusible_3p,Fusible III,Fusibles tripolares de potencia (3P),"-F1,-F",1-3-5-2-4-6,3,3
+5004,Protecciones,fusible_3p_n,Fusible IIIN,Fusibles tripolares más neutro (3P+N),-F,1-3-5-7-2-4-6-8,1,1
+5005,Protecciones,seccionador_fusible_1p,Fusible seccionable I,Seccionador portafusible unipolar,-F,1-2,1,1
+5006,Protecciones,seccionador_fusible_1p_n,Fusible seccionable IN,Seccionador portafusible 1P+N,-F,1-3-2-4,1,1
+5007,Protecciones,seccionador_fusible_2p,Fusible seccionable II,Seccionador portafusible bipolar (2P),-F,1-3-2-4,1,1
+5008,Protecciones,seccionador_fusible_3p,Fusible seccionable III,Seccionador portafusible tripolar (3P),-F,1-3-5-2-4-6,3,3
+5009,Protecciones,seccionador_fusible_3p_n,Fusible seccionable IIIN,Seccionador portafusible tetrapolar (3P+N),-F,1-3-5-7-2-4-6-8,1,1
+6000,Protecciones,automatico_1p,Automático I,Interruptor magnetotérmico unipolar (PIA 1P),-F,1-2,1,1
+6001,Protecciones,automatico_1p_n,Automático IN,Interruptor magnetotérmico 1P+N,-F,1-3-2-4,1,1
+6002,Protecciones,automatico_2p,Automático II,Interruptor magnetotérmico bipolar (PIA 2P),-F,1-3-2-4,4,2
+6003,Protecciones,automatico_3p,Automático III,Interruptor magnetotérmico tripolar (PIA 3P),-F,1-3-5-2-4-6,1,1
+6004,Protecciones,automatico_3p_n,Automático IIIN,Interruptor magnetotérmico tetrapolar (PIA 3P+N),-F,1-3-5-7-2-4-6-8,1,1
+6005,Protecciones,diferencial_1p_n,Diferencial IN,Interruptor diferencial bipolar (ID 2P / 1P+N),-F,1-3-2-4,1,1
+6006,Protecciones,diferencial_3p_n,Diferencial IIIN,Interruptor diferencial tetrapolar (ID 4P / 3P+N),-F,1-3-5-7-2-4-6-8,1,1
+6007,Protecciones,rele_termico_potencia,Relé Térmico,Relé térmico bimetálico de potencia (bloque de 3 bimetales),"-F,-F3,F3,-F1,-F2",1-3-5-2-4-6,17,10
+6008,Protecciones,disyuntor_1p,Disyuntor I,Disyuntor / Guardamotor unipolar,"-F2,-F1,-Q",1-3-2-4,3,3
+6009,Protecciones,disyuntor_1p_n,Disyuntor IN,Disyuntor / Guardamotor 1P+N,"-Q1,F2,-Q,-F1,-F2",1-3-5-2-4-6,11,9
+6010,Protecciones,disyuntor_2p,Disyuntor II,Disyuntor / Guardamotor bipolar,"-Q,F1,-Q1",1-2,4,4
+6011,Protecciones,disyuntor_3p,Disyuntor III,Disyuntor guardamotor magnetotérmico tripolar de motor,-Q,1-3-2-4,2,2
+6012,Protecciones,disyuntor_3p_n,Disyuntor IIIN,Disyuntor tetrapolar 3P+N,-Q,1-3-5-7-2-4-6-8,1,1
+6013,Protecciones,limitador_sobretensiones_1p_n,Limitador sobretensiones IN,Descargador de sobretensiones transitorias monofásico,-F,1-2-3,1,1
+6014,Protecciones,limitador_sobretensiones_3p_n,Limitador sobretensiones IIIN,Descargador de sobretensiones transitorias trifásico,-F,1-2-3-4-5,1,1
+6015,2D_3D,disyuntor_2d_3d,Disyuntor,Disyuntor de potencia en formato vista 2D/3D,-Q,1-3-5-2-4-6,2,2
+6016,2D_3D,rele_termico_2d_3d,Relé térmico,Relé térmico en formato vista 2D/3D,-F,1-3-5-2-4-6,2,2
+6017,2D_3D,automatico_2d_3d,Interruptor automático,Interruptor automático magnetotérmico vista 2D/3D,-F,N-1-3-5-2-4-6,2,2
+6018,2D_3D,diferencial_2d_3d,Interruptor diferencial,Interruptor diferencial vista 2D/3D,-F,N-1-3-5-2-4-6,2,2
+6019,2D_3D,interruptor_2d_3d,Interruptor,Interruptor modular vista 2D/3D,-S,N-1-3-5-2-4-6,1,1
+6020,2D_3D,seccionador_2d_3d,Seccionador,Seccionador vista 2D/3D,-S,N-1-3-5-2-4-6,2,2
+7000,Contactos,contacto_aux_na,Contacto NA,Contacto auxiliar normalmente abierto (13-14 / 3-4),"-K,-KM1,-KM2,K1,-K1",13-14,16,7
+7001,Contactos,contacto_aux_nc,Contacto NC,Contacto auxiliar normalmente cerrado (11-12 / 1-2),"-KM1,K1,-K,-KM2",11-12,5,4
+7002,Contactos,contacto_aux_na_nc,Contacto NA+NC,Doble contacto auxiliar NA + NC,-K,11-13-12-14,1,1
+7003,Contactos,contacto_aux_con,Contacto CON,Contacto auxiliar conmutado (11-12-14),-K,11-12-14,1,1
+7004,Contactos,contacto_temp_on_delay_na,Con. Conexión NA,Contacto temporizado al trabajo NA (ON Delay NO),"-KA,-T1,-T3,-T2,-T4",67-68,5,2
+7005,Contactos,contacto_temp_on_delay_nc,Con. Conexión NC,Contacto temporizado al trabajo NC (ON Delay NC),-KA,55-56,1,1
+7006,Contactos,contacto_temp_on_delay_na_nc,Con. Conexión NA+NC,Contacto temporizado al trabajo NA + NC,-KA,55-57-56-58,1,1
+7007,Contactos,contacto_temp_on_delay_con,Con. Conexión CON,Contacto temporizado al trabajo conmutado,-KA,55-56-58,1,1
+7008,Contactos,contacto_temp_off_delay_na,Con. Desconexión NA,Contacto temporizado al reposo NA (OFF Delay NO),-KA,67-68,1,1
+7009,Contactos,contacto_temp_off_delay_nc,Con. Desconexión NC,Contacto temporizado al reposo NC (OFF Delay NC),-KA,55-56,1,1
+7010,Contactos,contacto_temp_off_delay_na_nc,Con. Desconexión NA+NC,Contacto temporizado al reposo NA + NC,-KA,55-57-56-58,1,1
+7011,Contactos,contacto_temp_off_delay_con,Con. Desconexión CON,Contacto temporizado al reposo conmutado,-KA,55-56-58,1,1
+7013,Contactos,contacto_temp_on_off_na,Conexión Desconexión NA,Contacto temporizado conexión-desconexión NA,-KA,55-56,2,1
+7014,Contactos,contacto_temp_on_off_nc,Conexión Desconexión NC,Contacto temporizado conexión-desconexión NC,-KA,55-57-56-58,1,1
+7015,Contactos,contacto_temp_on_off_na_nc,Conexión Desconexión NA+NC,Contacto temporizado conexión-desconexión NA+NC,-KA,55-56-58,1,1
+7016,2D_3D,rele_zocalo_2d_3d,Rele zócalo,Base relé enchufable en vista 2D/3D,-KA,13-14-0-1-9-1-5,2,2
+7018,2D_3D,contactor_2d_3d,Contactor,Contactor de potencia en vista 2D/3D,-KM,A1-A2-1-2-3-4,2,2
+7019,2D_3D,contactos_auxiliares_2d_3d,Contactos auxiliares,Bloque contactos auxiliares frontal en 2D/3D,-KM,,2,2
+7020,2D_3D,contactos_aux_on_delay_2d_3d,Contactos auxiliares ON delay,Cámara temporizada neumática ON delay 2D/3D,-KM,0-1-9-1-5,1,1
+7021,2D_3D,contactos_aux_off_delay_2d_3d,Contactos auxiliares OFF delay,Cámara temporizada neumática OFF delay 2D/3D,-KM,0-1-9-1-5,1,1
+7500,Detectores,sensor_inductivo_na,Det. inductivo NA,Sensor de proximidad inductivo normalmente abierto,-B,1-2,1,1
+7506,Detectores,sensor_capacitivo_na,Det. capacitivo NA,Sensor de proximidad capacitivo normalmente abierto,-B,1-2,1,1
+7512,Detectores,sensor_magnetico_na,Det. magnético NA,Detector magnético / interruptor reed normalmente abierto,-B,1-2,1,1
+7520,Detectores,sensor_inductivo_nc,Det. inductivo NC,Sensor de proximidad inductivo normalmente cerrado,-B,1-2,1,1
+7526,Detectores,sensor_capacitivo_nc,Det. capacitivo NC,Sensor de proximidad capacitivo normalmente cerrado,-B,1-2,1,1
+7532,Detectores,sensor_magnetico_nc,Det. magnético NC,Detector magnético / interruptor reed normalmente cerrado,-B,1-2,1,1
+7550,Detectores,fotocelula_barrera,Barrera fotoeléctrica,Fotocélula / Sensor óptico completo,-B,1-2-3-4-5,1,1
+7551,Detectores,fotocelula_emisor,Barrera emisor,Emisor de barrera óptica,-B,1-2,1,1
+7553,Detectores,fotocelula_receptor_na,Barrera receptor NA,Receptor de barrera óptica NA,-B,1-2,1,1
+7559,Detectores,fotocelula_receptor_nc,Barrera receptor NC,Receptor de barrera óptica NC,-B,1-2,1,1
+7570,Detectores,presostato_na,Presostato NA,Sensor de presión / presostato contacto NA,-B,1-2,1,1
+7576,Detectores,vacuostato_na,Vacuostato NA,Sensor de vacío / vacuostato contacto NA,-B,1-2,1,1
+7582,Detectores,presostato_nc,Presostato NC,Sensor de presión / presostato contacto NC,-B,1-2,1,1
+7588,Detectores,vacuostato_nc,Vacuostato NC,Sensor de vacío / vacuostato contacto NC,-B,1-2,1,1
+7594,Detectores,termostato_na,Termostato NA,Sensor térmico / termostato de temperatura NA,-B,1-2,1,1
+7600,Detectores,termostato_nc,Termostato NC,Sensor térmico / termostato de temperatura NC,-B,1-2,1,1
+8000,Accionamientos,pulsador_na,Pulsador NA,Pulsador normalmente abierto (marcha),"-S1,S2,-S2,-S,-S3",13-14,19,11
+8001,Accionamientos,pulsador_nc,Pulsador NC,Pulsador normalmente cerrado (paro),"-S2,-S1,-S,S1,-P",11-12,9,8
+8002,Accionamientos,pulsador_na_nc,Pulsador NA-NC,Pulsador de doble contacto NA + NC,"-S,-S1,-S2",11-13-12-14,3,2
+8003,Accionamientos,pulsador_con,Pulsador CON,Pulsador con contacto conmutado,-S,11-12-14,1,1
+8004,Accionamientos,pulsador_seta_na,Pulsador seta NA,Pulsador de seta de emergencia NA,-S,13-14,1,1
+8005,Accionamientos,pulsador_seta_nc,Pulsador seta NC,Pulsador de seta con enclavamiento / parada de emergencia NC,"-S,-PE",11-12,2,2
+8006,Accionamientos,pulsador_seta_na_nc,Pulsador seta NA-NC,Pulsador de seta de emergencia NA + NC,-S,11-13-12-14,1,1
+8007,Accionamientos,pulsador_seta_con,Pulsador seta CON,Pulsador de seta con contacto conmutado,-S,11-12-14,1,1
+8008,Accionamientos,interruptor_na,Interruptor NA,Interruptor mantenido NA,-S,13-14,1,1
+8009,Accionamientos,interruptor_nc,Interruptor NC,Interruptor mantenido NC,-S,11-12,1,1
+8010,Accionamientos,interruptor_na_nc,Interruptor NA-NC,Interruptor mantenido NA + NC,-S,11-13-12-14,1,1
+8011,Accionamientos,interruptor_con,Interruptor CON,Interruptor mantenido conmutado,-S,11-12-14,1,1
+8012,Accionamientos,final_carrera_na,Final de carrera NA,Interruptor de posición / fin de carrera mecánico NA,-S,13-14,1,1
+8013,Accionamientos,final_carrera_nc,Final de carrera NC,Interruptor de posición / fin de carrera mecánico NC,-S,11-12,1,1
+8014,Accionamientos,final_carrera_na_nc,Final de carrera NA-NC,Final de carrera con contacto NA + NC,-S,11-13-12-14,1,1
+8015,Accionamientos,final_carrera_com,Final de carrera COM,Final de carrera con contacto conmutado,-S,11-12-14,1,1
+8016,Accionamientos,contacto_termico_na,Térmico NA,Contacto auxiliar de relé térmico NA (97-98 señalización),"-F3,-F,-F1,-F2",97-98,5,3
+8017,Accionamientos,contacto_termico_nc,Térmico NC,Contacto auxiliar de relé térmico NC (95-96 disparo/paro),"-F3,-F1,F3,-F,-F2",95-96,7,5
+8018,Accionamientos,contacto_termico_na_nc,Térmico NA-NC,Contactos auxiliares térmicos NA + NC (95-96 y 97-98),"-F3,-F,-F1",95-97-96-98,4,4
+8019,Accionamientos,contacto_termico_con,Térmico CON,Contacto auxiliar térmico conmutado (95-96-98),"F3,-F",95-96-98,2,2
+8020,Accionamientos,conmutador_1_0_2,Conmutador I-0-II,Selector rotativo con posición cero central (1 - 0 - 2),-S,1-2-3,1,1
+8021,Accionamientos,conmutador_1_2_3,Conmutador I-II-III,Selector rotativo de 3 posiciones,-S,1-2-3-4,1,1
+8022,Accionamientos,conmutador_cruce,Conmutador cruce,Conmutador de cruzamiento eléctrico,-S,1-2-3-4,1,1
+8023,Accionamientos,boton_pulsador,Botón pulsador,Pulsador electromecánico empotrado,-S,0,1,1
+8100,2D_3D,pulsador_2d_3d,Pulsador,Pulsador de cuadro eléctrico en vista 2D/3D,-S,.1-.3-.2-.4,1,1
+8101,2D_3D,piloto_2d_3d,Piloto,Piloto de señalización luminoso en vista 2D/3D,-H,X1-X2,1,1
+8102,2D_3D,diodo_led_2d_3d,Diodo LED,Diodo LED indicador en vista 2D/3D,-H,13-14-13-14-11-12-13-14,1,1
+8103,2D_3D,borna_2d_3d,Borna,Borna de paso / conexión en vista 2D/3D,-H,,1,1
+9000,Bobinas,bobina_contactor,Bobina,Bobina monoestable estándar para contactor o relé (A1-A2),"-K,-KM1,-K1,K1,-K2",A1-A2,18,12
+9001,Bobinas,bobina_biestable,Bobina biestable,Bobina de relé biestable con doble devanado (Set/Reset),-K,A1-B1-A2,1,1
+9002,Bobinas,telerruptor,Telerruptor,Relé de impulsos telerruptor,-K,A1-A2,1,1
+9003,Bobinas,bobina_electrovalvula,Bobina electroválvula,Solenoide de electroválvula hidráulica o neumática,-EV  ,A1-A2,1,1
+9004,Bobinas,temp_conexion_bobina,Temp. conexión,Bobina de relé temporizado a la conexión (ON Delay A1-A2),"-K,-T3,-T4,-T1,-T2",A1-A2-0-1; A1-A2-1-1,5,2
+9005,Bobinas,temp_desconexion_bobina,Temp. desconexión,Bobina de relé temporizado a la desconexión (OFF Delay A1-A2),-K,A1-A2-0-1,1,1
+9006,Bobinas,temp_on_off_bobina,Temp. conexión desconexión,Bobina temporizada conexión-desconexión,-K,A1-A2-0-1,1,1
+9007,Bobinas,rele_intermitente,Relé intermitente,Relé intermitente de destellos cíclicos,-K,A1-A2-0-1,1,1
+9008,Senalizacion,piloto_senializacion,Piloto señalización,Lámpara piloto de señalización luminosa continua,"-H,-H1,-H2,-H3,H1",X1-X2-1; X1-X2-0; X1-X2-2,20,7
+9009,Senalizacion,piloto_intermitente,Piloto intermitente,Lámpara piloto con destello intermitente,-H,X1-X2-0,1,1
+9010,Senalizacion,timbre,Timbre,Avisador acústico timbre electromecánico,-H,X1-X2,1,1
+9011,Senalizacion,zumbador,Zumbador,Zumbador piezoeléctrico / buzzer acústico,-H,X1-X2,1,1
+9012,Senalizacion,sirena,Sirena,Sirena acústica de alarma,-H,X1-X2,1,1
+9013,Senalizacion,bocina,Bocina,Bocina o claxon acústico industrial,-H,X1-X2,1,1
+9014,Bobinas,interruptor_horario,Interruptor horario,Reloj programador horario diario/semanal,-K,A1-A2-0-0-0-0-0-0,1,1
+9015,Bobinas,generador_pulsos,Generador de pulsos,Generador de tren de pulsos periódicos,-K,A1-A2-0-1-0-1,1,1
+9016,Bobinas,contador_pulsos_bobina,Contador de pulsos,Bobina de avance de contador electromecánico,-C,A1-C-D-R-0-0-A2,1,1
+9040,Potencia,control_arrancador_suave,Control arrancador electrónico c.a.,Módulo de control para arrancador suave,-K,L1-L2-L3-N,1,1
+9041,Potencia,control_inversor_electronico,Control inversor electrónico c.a.,Módulo de control de inversión electrónica,-K,L1-L2-L3,1,1
+9042,Potencia,control_variador_ca,Control Variador velocidad c.a.,Módulo de maniobra de variador de frecuencia CA,-K,L1-L2-L3,1,1
+9043,Potencia,control_variador_cc,Control Variador velocidad c.c.,Módulo de maniobra de regulador de velocidad CC,-K,L1-L2-L3,1,1
+9044,Potencia,variador_potencia_ca_2p,Variador velocidad c.a. II,Etapa de potencia de variador CA monofásico,-F,1-3-2-4-A1-A2,1,1
+9045,Potencia,variador_potencia_ca_3p,Variador velocidad c.a. III,Etapa de potencia de variador CA trifásico,-F,1-3-5-7-2-4-6-8,1,1
+10000,Logica,puerta_and,AND,Puerta lógica AND de 2 o más entradas,-U,,1,1
+10010,Logica,puerta_or,OR,Puerta lógica OR de 2 o más entradas,-U,,1,1
+10020,Logica,puerta_exor,EXOR,Puerta lógica XOR (Or exclusiva),-U,,1,1
+10030,Logica,puerta_nand,NAND,Puerta lógica NAND,-U,,1,1
+10040,Logica,puerta_inv,INV,Puerta lógica inversora NOT,-U,,1,1
+10041,Logica,puerta_buffer,INV / Buffer,Puerta lógica Buffer / inversora alternativa,-U,,1,1
+10050,Ladder,ladder_contacto_na,NA,Contacto normalmente abierto en lenguaje Ladder (LD),"I3,Q1,I1,-I1,-I3",,7,3
+10051,Ladder,ladder_contacto_nc,NC,Contacto normalmente cerrado en lenguaje Ladder (LD),"I2,Q1,I1,-I2,-U",,5,3
+10052,Ladder,ladder_flanco_ascendente,Flanco ascendente,Detector de flanco ascendente P_TRIG en Ladder,-U,,1,1
+10053,Ladder,ladder_flanco_descendente,Flanco descendente,Detector de flanco descendente N_TRIG en Ladder,-U,,1,1
+10060,Ladder,ladder_bobina_asignar,Asignar,Bobina de salida normal en Ladder ( ),"Q1,Q2,Q4,Q3,-Q1",,6,3
+10061,Ladder,ladder_bobina_set,Set,Bobina de activación enclavada (S) Set en Ladder,-U,,1,1
+10062,Ladder,ladder_bobina_reset,Reset,Bobina de desactivación (R) Reset en Ladder,-U,,1,1
+10063,Logica,generador_pulsos_logico,Generatore di impulsi,Generador de reloj de pulsos lógicos (Clock),-C,R-C-D-Q-0-0,2,1
+10064,Logica,puerta_nor,NOR,Puerta lógica NOR,-U,S-R-Q,2,1
+10065,Logica,biestable_rs,Biestable,Biestable / Flip-Flop RS digital,-U,S-R-Q,2,1
+10066,Logica,divisor_binario,Divisor Binario,Divisor de frecuencia binario digital (T-Flip Flop),-T,IN-Q-0-1,2,1
+10067,Logica,temporizador_pulso_digital,Temporizador pulso conexión,Temporizador monostable de pulso digital,-T,IN-Q-0-1,2,1
+10068,Logica,temporizador_desconexion_digital,Temporizador desconexión,Temporizador digital a la desconexión (TOF),-T,IN-Q-0-1,2,1
+10069,Logica,temporizador_intermitente_digital,Temporizador intermitente,Temporizador oscilador intermitente digital,-T,IN-Q-0-1-0-1,2,1
+10070,Logica,prueba_entrada_logica,Prueba,Sonda / interruptor de inyección de nivel lógico (0/1),-I,,1,1
+10071,Logica,visualiza_salida_logica,Visualiza,Sonda indicadora de estado lógico (LED digital),-Q,,1,1
+10072,Logica,display_bcd,Display BCD,Display numérico digital decodificador BCD,-D,a-b-0-c-d,1,1
+10073,Logica,display_7_seg,Display 7 Seg.,Display visualizador de 7 segmentos,-D,a-b-0-c-d-e-f-g,1,1
+10074,Logica,preselector_digital,Preselector,Rueda preselectora BCD digital manual,-D,1-2-4-8-C,1,1
+10075,Logica,contador_digital,Contador,Contador digital de impulsos,-C,+---R-Q-0-0-L,2,1
+10076,Ladder,ladder_first_scan,First Scan,Contacto especial de primer ciclo de scan en Ladder,FIRST,SCAN,1,1
+10077,Logica,contador_asc_desc,Contador ascendente-descendente,Contador bidireccional digital (Up/Down),-C,14-1-2-3-12-9-8-11,1,1
+10078,Logica,contador_4_bits,Contador 4 bits,Contador binario síncrono de 4 bits,-C,1-2-3-4-5-6,1,1
+10080,Logica,decodificador_7_seg,Decodificador 7 segmentos,Decodificador integrado BCD a 7 segmentos,-C,7-1-2-6-13-12-11-10,1,1
+10081,Logica,temporizador_conexion_digital,Temporizador conexión,Temporizador digital a la conexión (TON),-T,IN-Q-0-1,1,1
+10082,Logica,contador_4_bits_decadas,Contador 4 bits decadas,Contador de décadas módulo 10,-C,15-1-10-9-14-4-5-11,2,1
+10083,Logica,contador_4_bits_asc_des,Contador 4 bits ASC/DES,Contador de 4 bits Up/Down configurable,-C,14-13-15-3-2-4-7-10,1,1
+10100,GRAFCET,grafcet_etapa_inicial,Etapa inicial,Etapa inicial doble cuadrado GRAFCET,0,,1,1
+10101,GRAFCET,grafcet_etapa,Etapa,Etapa simple numerada GRAFCET,1,,8,1
+10102,GRAFCET,grafcet_transicion,Transición,Barrera de transición con receptividad asociada,"1,=1",,9,1
+10103,GRAFCET,grafcet_accion,Acción,Bloque de acción asociada a etapa,,0-0-0-0-0-0-0,2,1
+10104,GRAFCET,grafcet_divergencia_o,"Divergencia en ""O""",Divergencia alternativa en OR,,,1,1
+10105,GRAFCET,grafcet_convergencia_o,"Convergencia en ""O""",Convergencia alternativa en OR,,,1,1
+10106,GRAFCET,grafcet_enlace_cero,"""0""",Línea de enlace y sincronismo GRAFCET,,,6,1
+10107,GRAFCET,grafcet_divergencia_y,"Divergencia en ""Y""",Divergencia simultánea en AND (doble barra),1,,1,1
+10108,GRAFCET,grafcet_convergencia_y,"Convergencia en ""Y""",Convergencia simultánea en AND (doble barra),1,,1,1
+10111,GRAFCET,grafcet_enlace_io,Enlace de entrada / salida,Enlace de salto entre etapas o páginas,M,,1,1
+10112,GRAFCET,grafcet_macro_etapa,Macro etapa,Macroetapa jerárquica encapsulada,,,1,1
+10200,PLC,intercambio_entradas_pc_simu,Intercambio entradas PC_SIMU,Tabla de comunicación de entradas para PC_SIMU,,,2,2
+10201,PLC,intercambio_salidas_pc_simu,Intercambio salidas PC_SIMU,Tabla de comunicación de salidas para PC_SIMU,,,2,2
+10202,PLC,modulo_logico_logo,Módulo lógico,Relé programable Siemens LOGO! (230RC / 24RC),LOGO,,3,3
+10203,PLC,plc_s7_1200,PLC S7-1200,Autómata programable Siemens SIMATIC S7-1200 (CPU 1214C),PLC,,1,1
+10204,PLC,entrada_digital_plc,Entrada digital PLC,Borne de entrada digital individual PLC (%I0.x),I0.0,,1,1
+10205,PLC,salida_digital_plc,Salida digital PLC,Borne de salida digital individual PLC (%Q0.x),Q0.0,,1,1
+10206,PLC,cpu_plc,CPU PLC,CPU genérica de autómata programable,-CPU,,1,1
+10207,PLC,alimentacion_io_plc_pos,Alimentación I/O digital PLC,Borne de alimentación positiva para E/S PLC (1L / +24V),1M,,2,1
+10208,PLC,alimentacion_io_plc_neg,Alimentación I/O digital PLC,Borne de alimentación común / masa para E/S PLC (1M / 0V),1L,,1,1
+10209,PLC,plc_s7_1500,PLC CPU S7-1500,Autómata modular Siemens SIMATIC S7-1500,PLC,,1,1
+10210,PLC,modulo_s7_1500_dido,S7-1500 DI/DO,Módulo de entradas y salidas digitales S7-1500,PLC,0-0,1,1
+10212,PLC,et_200,ET-200,Módulo cabecera de periferia distribuida Siemens ET-200,PLC,0-0,2,1
+10213,PLC,et_200_8di,ET-200 8DI,Módulo de 8 entradas digitales para ET-200,PLC,0-0,1,1
+10214,PLC,logo_4di_4do,LOGO 4DI/4DO,Módulo de expansión para Siemens LOGO! 4DI / 4DO,LOGO,9-5,1,1
+10215,PLC,s7_1200_8di_8do,S7-1200 8DI/8DO,Módulo de ampliación Siemens SM 1223 (8DI / 8DO),PLC,2-2,1,1
+10220,PLC,arduino_uno,Arduino uno,Placa microcontroladora Arduino UNO,ARDUINO_UNO,,1,1
+10500,Virtual_2D,actuador_lineal_v1,Actuador lineal virtual,Actuador o cilindro lineal en simulación virtual,-A,50-50--a0--a1--a0--a1--A+,1,1
+10501,Virtual_2D,actuador_lineal_v2,Actuador lineal virtual,Actuador lineal con finales de carrera a0/a1,-A,50-50--a0--a1--a0--a1--A+,1,1
+10502,Virtual_2D,actuador_lineal_v3,Actuador lineal virtual,Actuador lineal de doble vástago virtual,-A,50-50--a0--a1--a0--a1--A+,1,1
+10503,Virtual_2D,actuador_lineal_v4,Actuador lineal virtual,Cilindro neumático simulado virtual,-A,50-50--a0--a1--a0--a1--A+,1,1
+10504,Virtual_2D,cinta_transportadora_v1,Cinta transportadora virtual,Cinta de transporte con motor reversible,-A,50-50--a0--a1--a0--a1--A+,1,1
+10505,Virtual_2D,cinta_transportadora_v2,Cinta transportadora virtual,Cinta de transporte con sensores de presencia,-A,50-50--a0--a1--a0--a1--A+,1,1
+10507,Virtual_2D,valvula_cilindro_virtual,Válvula virtual,Válvula de control para maqueta virtual,-V,-v-V+,1,1
+10508,Virtual_2D,motor_virtual_1,Motor maqueta virtual,Motor de accionamiento maqueta,-M,50--M+,1,1
+10509,Virtual_2D,motor_virtual_2,Motor maqueta virtual,Motor con encoder para simulación,-M,50-50--MD,1,1
+10550,Motores,actuador_lineal_electrico,Actuador lineal eléctrico,Cilindro / husillo actuador eléctrico lineal,-M,50-50--FC2--FC1-000.025.050.075.100.-G   .0.-M   .0--MD,1,1
+20000,Formato,cajetin_rotulacion,Cajetín,Formato de lámina y cuadro de rotulación de plano normalizado,XXX,,18,18

@@ -1,0 +1,12 @@
+{
+  "Contacto final de carrera conmutado": {
+    "qet_file": "2_Seta de Referencia Ponto Final  B.elmt",
+    "qet_path": "10_electric/biblioteca_qeletrotech_WEG/comandos_eletricos/1.2_setas/2_Seta de Referencia Ponto Final  B.elmt",
+    "qet_full": "/home/vibecode/DevS/qelectrotech-elements/elements/10_electric/biblioteca_qeletrotech_WEG/comandos_eletricos/1.2_setas/2_Seta de Referencia Ponto Final  B.elmt"
+  },
+  "speed motor": {
+    "qet_file": "4_Motor Monofasico.elmt",
+    "qet_path": "10_electric/biblioteca_qeletrotech_WEG/comandos_eletricos/6.8_motores/motor_referencia_externa/4_Motor Monofasico.elmt",
+    "qet_full": "/home/vibecode/DevS/qelectrotech-elements/elements/10_electric/biblioteca_qeletrotech_WEG/comandos_eletricos/6.8_motores/motor_referencia_externa/4_Motor Monofasico.elmt"
+  }
+}
