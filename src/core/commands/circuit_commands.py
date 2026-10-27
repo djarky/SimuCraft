@@ -197,3 +197,98 @@ class RemoveWireCommand(BaseCommand):
             self.end_terminal.connected_wires.append(self.wire_item)
         if hasattr(self.wire_item, 'update_path'):
             self.wire_item.update_path()
+
+
+class RemoveMultipleItemsCommand(BaseCommand):
+    """Eliminar múltiples componentes y cables de la escena con un único Undo/Redo."""
+
+    def __init__(self, scene, components: list, wires: list, text: str = "Eliminar selección"):
+        super().__init__(text)
+        self.scene = scene
+        self.components_data = []
+        self.wires_data = []
+
+        seen_wires = set()
+        for comp in components:
+            pos = comp.pos()
+            connected = []
+            for term in getattr(comp, 'terminals', []):
+                for w in list(getattr(term, 'connected_wires', [])):
+                    if w not in seen_wires:
+                        seen_wires.add(w)
+                        edge = self.scene.circuit_graph.edges.get(w.edge_id)
+                        connected.append((w, edge, w.terminal1, w.terminal2))
+            self.components_data.append((comp, pos, connected))
+
+        for w in wires:
+            if w not in seen_wires:
+                seen_wires.add(w)
+                edge = self.scene.circuit_graph.edges.get(w.edge_id)
+                self.wires_data.append((w, edge, w.terminal1, w.terminal2))
+
+    def execute(self):
+        # 1. Eliminar cables independientes
+        for w, edge, t1, t2 in self.wires_data:
+            if w in self.scene.wires:
+                self.scene.wires.remove(w)
+            if w.scene() == self.scene:
+                self.scene.removeItem(w)
+            if t1 and w in getattr(t1, 'connected_wires', []):
+                t1.connected_wires.remove(w)
+            if t2 and w in getattr(t2, 'connected_wires', []):
+                t2.connected_wires.remove(w)
+            if edge:
+                self.scene.circuit_graph.remove_edge(edge.id)
+
+        # 2. Eliminar componentes y sus cables conectados
+        for comp, pos, connected in self.components_data:
+            for w, edge, t1, t2 in connected:
+                if w in self.scene.wires:
+                    self.scene.wires.remove(w)
+                if w.scene() == self.scene:
+                    self.scene.removeItem(w)
+                if t1 and w in getattr(t1, 'connected_wires', []):
+                    t1.connected_wires.remove(w)
+                if t2 and w in getattr(t2, 'connected_wires', []):
+                    t2.connected_wires.remove(w)
+                if edge:
+                    self.scene.circuit_graph.remove_edge(edge.id)
+            if comp.scene() == self.scene:
+                self.scene.removeItem(comp)
+            self.scene.circuit_graph.remove_component(comp.id)
+
+    def _redo(self):
+        self.execute()
+
+    def _undo(self):
+        # 1. Restaurar componentes
+        for comp, pos, connected in self.components_data:
+            comp.setPos(pos)
+            self.scene.add_component(comp)
+            for w, edge, t1, t2 in connected:
+                if edge:
+                    self.scene.circuit_graph.add_edge(edge)
+                self.scene.addItem(w)
+                if w not in self.scene.wires:
+                    self.scene.wires.append(w)
+                if t1 and w not in getattr(t1, 'connected_wires', []):
+                    t1.connected_wires.append(w)
+                if t2 and w not in getattr(t2, 'connected_wires', []):
+                    t2.connected_wires.append(w)
+                if hasattr(w, 'update_path'):
+                    w.update_path()
+
+        # 2. Restaurar cables independientes
+        for w, edge, t1, t2 in self.wires_data:
+            if edge:
+                self.scene.circuit_graph.add_edge(edge)
+            self.scene.addItem(w)
+            if w not in self.scene.wires:
+                self.scene.wires.append(w)
+            if t1 and w not in getattr(t1, 'connected_wires', []):
+                t1.connected_wires.append(w)
+            if t2 and w not in getattr(t2, 'connected_wires', []):
+                t2.connected_wires.append(w)
+            if hasattr(w, 'update_path'):
+                w.update_path()
+

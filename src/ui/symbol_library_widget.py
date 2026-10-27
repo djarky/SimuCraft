@@ -200,7 +200,6 @@ class SymbolPreviewCard(QFrame):
         self.lbl_terminals.setWordWrap(True)
         layout.addWidget(self.lbl_terminals)
 
-        # Botón de añadir al lienzo
         self.btn_add = QPushButton("➕ Añadir al Esquema")
         self.btn_add.setEnabled(False)
         self.btn_add.setStyleSheet("""
@@ -226,6 +225,12 @@ class SymbolPreviewCard(QFrame):
         """)
         self.btn_add.clicked.connect(self._on_add_clicked)
         layout.addWidget(self.btn_add)
+
+        self.lbl_hint = QLabel("💡 Clic simple para insertar con vista previa | ESC para salir")
+        self.lbl_hint.setStyleSheet("font-size: 10px; color: #89dceb; font-style: italic;")
+        self.lbl_hint.setWordWrap(True)
+        self.lbl_hint.setAlignment(Qt.AlignCenter)
+        layout.addWidget(self.lbl_hint)
 
     def set_component(self, defn: Optional[Dict[str, Any]]):
         """Actualizar la tarjeta con la información y dibujo del símbolo."""
@@ -267,6 +272,7 @@ class SymbolPreviewCard(QFrame):
 class SymbolLibraryWidget(QWidget):
     """Widget principal de la Biblioteca de Símbolos con pestañas y vista previa dinámica."""
 
+    component_selected = Signal(dict)
     component_double_clicked = Signal(dict)
     example_double_clicked = Signal(str)
 
@@ -424,6 +430,7 @@ class SymbolLibraryWidget(QWidget):
 
         # Parte inferior: Tarjeta de Vista Previa
         self.preview_card = SymbolPreviewCard()
+        self.preview_card.add_requested.connect(self.component_selected.emit)
         self.preview_card.add_requested.connect(self.component_double_clicked.emit)
         splitter.addWidget(self.preview_card)
 
@@ -598,6 +605,11 @@ class SymbolLibraryWidget(QWidget):
 
     def _on_std_item_clicked(self, item: QListWidgetItem):
         self._update_std_preview(item)
+        key = item.data(Qt.UserRole)
+        if key:
+            defn = create_standard_component(key)
+            if defn:
+                self.component_selected.emit(defn)
 
     def _on_std_current_changed(self, current: Optional[QListWidgetItem], previous):
         if current:
@@ -617,6 +629,11 @@ class SymbolLibraryWidget(QWidget):
 
     def _on_qet_item_clicked(self, item: QListWidgetItem):
         self._update_qet_preview(item)
+        path = item.data(Qt.UserRole)
+        if path:
+            defn = self.qet_loader.load_symbol(path)
+            if defn:
+                self.component_selected.emit(defn)
 
     def _on_qet_current_changed(self, current: Optional[QListWidgetItem], previous):
         if current:

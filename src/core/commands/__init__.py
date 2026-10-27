@@ -6,10 +6,13 @@ from .circuit_commands import (
     MoveComponentCommand,
     AddWireCommand,
     RemoveWireCommand,
+    RemoveMultipleItemsCommand,
 )
 
 __all__ = [
     'BaseCommand', 'CommandManager',
     'AddComponentCommand', 'RemoveComponentCommand',
     'MoveComponentCommand', 'AddWireCommand', 'RemoveWireCommand',
+    'RemoveMultipleItemsCommand',
 ]
+

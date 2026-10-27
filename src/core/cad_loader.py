@@ -146,6 +146,7 @@ class CADLoader:
         all_junction_points: Set[Tuple[float, float]] = set()
         
         for w in cad_data['wires']:
+            tid = w.get('tid', 4000)
             p = w['params']
             if len(p) >= 12:
                 try:
@@ -164,7 +165,7 @@ class CADLoader:
                 all_junction_points.add((x2, y2))
                 
                 if x1 != x2 or y1 != y2:
-                    raw_wires.append((x1, y1, x2, y2))
+                    raw_wires.append((x1, y1, x2, y2, tid))
                     
         # 3. Detectar puntos de alimentación en el extremo superior de cables
         DEFAULT_L = (216.0, 288.0)
@@ -202,8 +203,8 @@ class CADLoader:
                 terminals_by_pos.append((term_pos, term))
                 all_junction_points.add((round(term_pos.x(), 1), round(term_pos.y(), 1)))
 
-        # 4. Crear cables subdividiendo en conexiones T intermedias
-        for x1, y1, x2, y2 in raw_wires:
+        # 4. Crear cables subdividiendo en conexiones T intermedias conservando su tipo
+        for x1, y1, x2, y2, tid in raw_wires:
             segments = cls._split_wire_at_junctions(x1, y1, x2, y2, all_junction_points)
             for sx1, sy1, sx2, sy2 in segments:
                 pt1 = QPointF(sx1, sy1)
@@ -212,7 +213,7 @@ class CADLoader:
                 t1 = cls._find_closest_terminal(pt1, terminals_by_pos, tolerance=8.0)
                 t2 = cls._find_closest_terminal(pt2, terminals_by_pos, tolerance=8.0)
                 
-                wire_item = scene.create_wire_between_points(pt1, pt2, t1, t2)
+                wire_item = scene.create_wire_between_points(pt1, pt2, t1, t2, wire_type=tid)
                 if wire_item:
                     created_wires.append(wire_item)
                     

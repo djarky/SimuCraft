@@ -45,8 +45,15 @@ class TerminalItem(QGraphicsEllipseItem):
         super().hoverLeaveEvent(event)
         
     def mousePressEvent(self, event):
+        scene = self.scene()
+        if scene and getattr(scene, 'placement_mode', False):
+            event.ignore()
+            return
+        if getattr(self.component, 'is_preview', False):
+            event.ignore()
+            return
+
         if event.button() == Qt.LeftButton:
-            scene = self.scene()
             if scene:
                 # Si ya estamos en modo cableado y hay un terminal inicial, finalizar aquí
                 if getattr(scene, 'wiring_mode', False) and scene.start_terminal and scene.start_terminal != self:
