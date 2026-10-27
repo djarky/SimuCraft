@@ -82,6 +82,10 @@ class CircuitView(QGraphicsView):
                     event.accept()
                     return
                 if getattr(scene, 'wiring_mode', False):
+                    if getattr(scene, 'temp_wire', None) and getattr(scene.temp_wire, 'waypoints', None):
+                        scene.temp_wire.pop_waypoint()
+                        event.accept()
+                        return
                     scene.cancel_wire()
                     event.accept()
                     return

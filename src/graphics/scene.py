@@ -379,7 +379,7 @@ class CircuitScene(QGraphicsScene):
         self.wiring_mode = False
 
     def finish_wire(self, end_terminal):
-        """Finalizar cableado creando nodo y arista en el grafo relacional"""
+        """Finalizar cableado creando nodo y arista en el grafo relacional conservando waypoints"""
         if not self.start_terminal or not end_terminal:
             self.cancel_wire()
             return
@@ -403,6 +403,8 @@ class CircuitScene(QGraphicsScene):
         )
         self.circuit_graph.add_edge(edge)
 
+        captured_waypoints = list(self.temp_wire.waypoints) if self.temp_wire else []
+
         wire = WireItem(
             terminal1=self.start_terminal,
             terminal2=end_terminal,
@@ -411,21 +413,115 @@ class CircuitScene(QGraphicsScene):
             width=self.current_wire_width,
             style=self.current_wire_style
         )
+        wire.waypoints = captured_waypoints
+        wire.update_path()
         wire.edge_id = edge.id
 
         if self.temp_wire and self.temp_wire.scene() == self:
             self.removeItem(self.temp_wire)
         self.temp_wire = None
 
+        self.addItem(wire)
+        self.wires.append(wire)
+
         start_t = self.start_terminal
+        if start_t:
+            start_t.connected_wires.append(wire)
+        if end_terminal:
+            end_terminal.connected_wires.append(wire)
+
         self.start_terminal = None
+        self.wiring_mode = False
 
         main_win = self._get_main_window()
         if main_win and hasattr(main_win, 'command_manager'):
             from ..core.commands import AddWireCommand
             cmd = AddWireCommand(self, wire, edge, start_t, end_terminal)
-            cmd.executed = True
             main_win.command_manager.push(cmd)
+        if main_win and hasattr(main_win, 'statusBar'):
+            main_win.statusBar().showMessage("✔ Cable enrutado y conectado con éxito.")
+        return wire
+
+    def finish_wire_to_wire(self, target_wire, junction_pt: QPointF):
+        """Finalizar cableado creando una derivación / bifurcación en T hacia otro conductor existente"""
+        if not self.start_terminal:
+            self.cancel_wire()
+            return None
+
+        # 1. Asegurar nodo inicial en el grafo
+        if not self.start_terminal.graph_node_id:
+            node = Node(node_type=NodeType.TERMINAL)
+            self.circuit_graph.add_node(node)
+            self.start_terminal.graph_node_id = node.id
+
+        # 2. Obtener o crear nodo de bifurcación
+        k = (round(junction_pt.x(), 1), round(junction_pt.y(), 1))
+        if k in self.junction_nodes:
+            junction_node_id = self.junction_nodes[k]
+        else:
+            j_node = Node(node_type=NodeType.JUNCTION)
+            junction_node_id = self.circuit_graph.add_node(j_node)
+            self.junction_nodes[k] = junction_node_id
+
+        # 3. Conectar el cable existente al nodo de bifurcación si tiene edge_id
+        if target_wire.edge_id:
+            target_edge = self.circuit_graph.edges.get(target_wire.edge_id)
+            if target_edge:
+                edge_bif = Edge(
+                    node1_id=target_edge.node1_id,
+                    node2_id=junction_node_id,
+                    component_id=None
+                )
+                self.circuit_graph.add_edge(edge_bif)
+
+        # 4. Crear arista para el nuevo cable de derivación
+        edge = Edge(
+            node1_id=self.start_terminal.graph_node_id,
+            node2_id=junction_node_id,
+            terminal1_id=self.start_terminal.terminal_id,
+            terminal2_id=None,
+            component_id=None
+        )
+        self.circuit_graph.add_edge(edge)
+
+        captured_waypoints = list(self.temp_wire.waypoints) if self.temp_wire else []
+        wire = WireItem(
+            terminal1=self.start_terminal,
+            terminal2=None,
+            pt2=junction_pt,
+            wire_type=self.current_wire_type,
+            color=self.current_wire_color,
+            width=self.current_wire_width,
+            style=self.current_wire_style
+        )
+        wire.waypoints = captured_waypoints
+        wire.has_end_junction = True  # Punto de empalme normalizado (●)
+        wire.update_path()
+        wire.edge_id = edge.id
+
+        if self.temp_wire and self.temp_wire.scene() == self:
+            self.removeItem(self.temp_wire)
+        self.temp_wire = None
+
+        self.addItem(wire)
+        self.wires.append(wire)
+
+        start_t = self.start_terminal
+        if start_t:
+            start_t.connected_wires.append(wire)
+
+        self.start_terminal = None
+        self.wiring_mode = False
+
+        main_win = self._get_main_window()
+        if main_win and hasattr(main_win, 'command_manager'):
+            from ..core.commands import AddWireCommand
+            cmd = AddWireCommand(self, wire, edge, start_t, None)
+            main_win.command_manager.push(cmd)
+        if main_win and hasattr(main_win, 'statusBar'):
+            main_win.statusBar().showMessage(
+                f"✔ Bifurcación en T creada en ({int(junction_pt.x())}, {int(junction_pt.y())})"
+            )
         return wire
 
     def create_wire_between_points(
@@ -526,28 +622,64 @@ class CircuitScene(QGraphicsScene):
 
         # 2. Modo cablear activo
         if self.wiring_mode:
+            GRID = 20.0
+            pos = event.scenePos()
+            snap_x = round(pos.x() / GRID) * GRID
+            snap_y = round(pos.y() / GRID) * GRID
+            snap_pt = QPointF(snap_x, snap_y)
+
             if event.button() == Qt.LeftButton:
-                items = self.items(event.scenePos())
+                items = self.items(pos)
+
+                # A) Clic sobre un borne / terminal de destino válido
                 for item in items:
                     from .terminal_item import TerminalItem
                     if isinstance(item, TerminalItem) and item != self.start_terminal:
                         self.finish_wire(item)
                         event.accept()
                         return
-                self.cancel_wire()
-                event.accept()
-                return
+
+                # B) Clic sobre otro cable existente para crear una bifurcación / derivación en T
+                for item in items:
+                    from .wire_item import WireItem
+                    if isinstance(item, WireItem) and item != self.temp_wire:
+                        self.finish_wire_to_wire(item, snap_pt)
+                        event.accept()
+                        return
+
+                # C) Clic en el lienzo libre: AGREGAR NODO / WAYPOINT DE PASO INTERMEDIO
+                if self.temp_wire:
+                    self.temp_wire.add_waypoint(snap_pt)
+                    main_win = self._get_main_window()
+                    if main_win and hasattr(main_win, 'statusBar'):
+                        wp_count = len(self.temp_wire.waypoints)
+                        main_win.statusBar().showMessage(
+                            f"📍 Nodo {wp_count} fijado en ({int(snap_x)}, {int(snap_y)}). "
+                            f"Haga clic en otro punto para continuar la ruta, en un borne o cable para finalizar | ESC/Clic der. para deshacer nodo."
+                        )
+                    event.accept()
+                    return
+
             elif event.button() == Qt.RightButton:
-                self.cancel_wire()
-                event.accept()
-                return
+                # Clic derecho: Deshacer último waypoint o cancelar cableado
+                if self.temp_wire and self.temp_wire.waypoints:
+                    self.temp_wire.pop_waypoint()
+                    main_win = self._get_main_window()
+                    if main_win and hasattr(main_win, 'statusBar'):
+                        main_win.statusBar().showMessage("↩ Último nodo de cable deshecho.")
+                    event.accept()
+                    return
+                else:
+                    self.cancel_wire()
+                    event.accept()
+                    return
 
         super().mousePressEvent(event)
 
     def keyPressEvent(self, event):
         """
         Manejar teclas de navegación y control:
-        - ESC: Salir del modo de inserción o cableado.
+        - ESC: Salir del modo de inserción o deshacer nodo de cableado.
         - Delete / Backspace: Eliminar elementos seleccionados.
         """
         if event.key() == Qt.Key_Escape:
@@ -556,6 +688,13 @@ class CircuitScene(QGraphicsScene):
                 event.accept()
                 return
             if self.wiring_mode:
+                if self.temp_wire and self.temp_wire.waypoints:
+                    self.temp_wire.pop_waypoint()
+                    main_win = self._get_main_window()
+                    if main_win and hasattr(main_win, 'statusBar'):
+                        main_win.statusBar().showMessage("↩ Último nodo de cable deshecho (ESC).")
+                    event.accept()
+                    return
                 self.cancel_wire()
                 event.accept()
                 return

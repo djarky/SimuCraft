@@ -206,6 +206,201 @@ class TestUIImprovements(unittest.TestCase):
         self.assertTrue(4000 in wire_types or 4009 in wire_types)
 
 
+    def test_flexible_wire_routing_waypoints(self):
+        """Verifica que el cableado dinámico permita agregar y deshacer waypoints/nodos intermedios."""
+        scene = CircuitScene()
+        from src.graphics.component_item import ComponentItem
+        from src.components.standard_components import create_standard_component
+
+        comp1 = ComponentItem(create_standard_component('power_l', 'L1'))
+        comp1.setPos(100, 100)
+        scene.add_component(comp1)
+
+        comp2 = ComponentItem(create_standard_component('contactor_coil', 'KM1'))
+        comp2.setPos(300, 300)
+        scene.add_component(comp2)
+
+        t1 = comp1.terminals[0]
+        t2 = comp2.terminals[0]
+
+        # Iniciar cableado desde t1
+        scene.start_wire(t1)
+        self.assertTrue(scene.wiring_mode)
+        self.assertIsNotNone(scene.temp_wire)
+
+        # Añadir 2 waypoints intermedios
+        scene.temp_wire.add_waypoint(QPointF(100, 200))
+        scene.temp_wire.add_waypoint(QPointF(200, 200))
+        self.assertEqual(len(scene.temp_wire.waypoints), 2)
+
+        # Deshacer el último waypoint (como con ESC o Clic derecho)
+        popped = scene.temp_wire.pop_waypoint()
+        self.assertEqual(popped, QPointF(200, 200))
+        self.assertEqual(len(scene.temp_wire.waypoints), 1)
+
+        # Añadir nuevo waypoint
+        scene.temp_wire.add_waypoint(QPointF(250, 200))
+        self.assertEqual(len(scene.temp_wire.waypoints), 2)
+
+        # Finalizar cableado en t2
+        final_wire = scene.finish_wire(t2)
+        self.assertIsNotNone(final_wire)
+        self.assertEqual(len(final_wire.waypoints), 2)
+        self.assertEqual(final_wire.waypoints[0], QPointF(100, 200))
+        self.assertEqual(final_wire.waypoints[1], QPointF(250, 200))
+        self.assertEqual(final_wire.get_start_pos(), t1.get_scene_pos())
+        self.assertEqual(final_wire.get_end_pos(), t2.get_scene_pos())
+
+    def test_wire_t_junction_bifurcation(self):
+        """Verifica la creación de una bifurcación en T hacia otro cable existente con punto de empalme."""
+        scene = CircuitScene()
+        from src.graphics.component_item import ComponentItem
+        from src.components.standard_components import create_standard_component
+
+        comp1 = ComponentItem(create_standard_component('power_l', 'L1'))
+        comp1.setPos(100, 100)
+        scene.add_component(comp1)
+
+        comp2 = ComponentItem(create_standard_component('contactor_coil', 'KM1'))
+        comp2.setPos(300, 100)
+        scene.add_component(comp2)
+
+        t1 = comp1.terminals[0]
+        t2 = comp2.terminals[0]
+
+        # Cable principal
+        main_wire = scene.create_wire_between_points(t1.get_scene_pos(), t2.get_scene_pos(), t1, t2)
+        self.assertIsNotNone(main_wire)
+
+        # Crear tercer componente para derivar
+        comp3 = ComponentItem(create_standard_component('pilot_lamp', 'H1'))
+        comp3.setPos(200, 300)
+        scene.add_component(comp3)
+        t3 = comp3.terminals[0]
+
+        # Iniciar cable desde t3 hacia el cable principal
+        scene.start_wire(t3)
+        junction_pt = QPointF(200, 100)
+        branch_wire = scene.finish_wire_to_wire(main_wire, junction_pt)
+
+        self.assertIsNotNone(branch_wire)
+        self.assertTrue(branch_wire.has_end_junction)
+        self.assertEqual(branch_wire.get_end_pos(), junction_pt)
+        self.assertEqual(branch_wire.get_start_pos(), t3.get_scene_pos())
+
+        # Verificar que el nodo de bifurcación exista en el grafo del circuito
+        k = (round(junction_pt.x(), 1), round(junction_pt.y(), 1))
+        self.assertIn(k, scene.junction_nodes)
+        j_node_id = scene.junction_nodes[k]
+        self.assertIn(j_node_id, scene.circuit_graph.nodes)
+
+    def test_move_routed_wire_keeping_anchors(self):
+        """Verifica que un cable ya enrutado pueda moverse manteniendo sus puntos de anclaje intactos."""
+        scene = CircuitScene()
+        from src.graphics.component_item import ComponentItem
+        from src.components.standard_components import create_standard_component
+
+        comp1 = ComponentItem(create_standard_component('power_l', 'L1'))
+        comp1.setPos(100, 100)
+        scene.add_component(comp1)
+
+        comp2 = ComponentItem(create_standard_component('contactor_coil', 'KM1'))
+        comp2.setPos(300, 300)
+        scene.add_component(comp2)
+
+        t1 = comp1.terminals[0]
+        t2 = comp2.terminals[0]
+
+        start_anchor = QPointF(t1.get_scene_pos())
+        end_anchor = QPointF(t2.get_scene_pos())
+
+        wire = scene.create_wire_between_points(start_anchor, end_anchor, t1, t2)
+
+        # 1. Al seleccionar el cable, deben aparecer los manejadores de control
+        wire.setSelected(True)
+        self.assertGreater(len(wire.handles), 0)
+
+        # 2. Arrastrar el manejador para acomodar el cable
+        handle = wire.handles[0]
+        new_pos = QPointF(240, 180)
+        wire.on_handle_dragged(handle.handle_type, handle.index, new_pos)
+
+        # 3. Comprobar que los puntos de anclaje inicial y final NO cambiaron
+        self.assertEqual(wire.get_start_pos(), start_anchor)
+        self.assertEqual(wire.get_end_pos(), end_anchor)
+
+        # 4. Comprobar que el cable adoptó el nuevo nodo/waypoint
+        self.assertEqual(len(wire.waypoints), 1)
+        self.assertEqual(wire.waypoints[0], new_pos)
+
+        # 5. Insertar otro nodo intermedio (simulando doble clic)
+        wire.insert_waypoint_at_pos(QPointF(160, 120))
+        self.assertEqual(len(wire.waypoints), 2)
+        # Los anclajes de conexión siguen intactos
+        self.assertEqual(wire.get_start_pos(), start_anchor)
+        self.assertEqual(wire.get_end_pos(), end_anchor)
+
+        # 6. Eliminar el nodo recién insertado
+        wire.remove_waypoint_at_index(0)
+        self.assertEqual(len(wire.waypoints), 1)
+        self.assertEqual(wire.get_start_pos(), start_anchor)
+        self.assertEqual(wire.get_end_pos(), end_anchor)
+
+        # 7. Deseleccionar el cable: los handles deben ocultarse limpiamente
+        wire.setSelected(False)
+        self.assertEqual(len(wire.handles), 0)
+
+    def test_t_junction_electrical_simulation_propagation(self):
+        """Verifica que la energía se propague a través de una bifurcación en T a la carga conectada."""
+        scene = CircuitScene()
+        from src.graphics.component_item import ComponentItem
+        from src.components.standard_components import create_standard_component
+        from src.core.simulation.solver import CircuitSolver
+
+        # Fuente L (230V)
+        power_l = ComponentItem(create_standard_component('power_l', 'L1'))
+        power_l.setPos(100, 100)
+        scene.add_component(power_l)
+        tl = power_l.terminals[0]
+
+        # Borne intermedio
+        comp_end = ComponentItem(create_standard_component('contactor_coil', 'KM1'))
+        comp_end.setPos(400, 100)
+        scene.add_component(comp_end)
+        t_km1 = comp_end.terminals[0]
+
+        # Cable principal
+        main_wire = scene.create_wire_between_points(tl.get_scene_pos(), t_km1.get_scene_pos(), tl, t_km1)
+
+        # Derivación a lámpara piloto H1
+        lamp = ComponentItem(create_standard_component('pilot_lamp', 'H1'))
+        lamp.setPos(200, 300)
+        scene.add_component(lamp)
+        t_h1 = lamp.terminals[0]
+
+        # Crear bifurcación en T
+        scene.start_wire(t_h1)
+        branch_wire = scene.finish_wire_to_wire(main_wire, QPointF(200, 100))
+
+        # Resolver el circuito
+        solver = CircuitSolver(scene.circuit_graph)
+        iterations = solver.solve()
+        self.assertGreater(iterations, 0)
+
+        # Comprobar que el potencial de 230V llegó al borne de la lámpara H1
+        node_h1 = scene.circuit_graph.nodes.get(t_h1.graph_node_id)
+        self.assertIsNotNone(node_h1)
+        self.assertTrue(node_h1.potential_known)
+        self.assertEqual(node_h1.potential, 230.0)
+
+        # Comprobar estado visual de los cables
+        main_wire.update_simulation_state(scene.circuit_graph)
+        branch_wire.update_simulation_state(scene.circuit_graph)
+        self.assertTrue(main_wire.is_simulating)
+        self.assertTrue(branch_wire.is_simulating)
+
+
 if __name__ == '__main__':
     unittest.main()
+
 

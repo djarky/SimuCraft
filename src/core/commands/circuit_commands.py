@@ -138,7 +138,8 @@ class AddWireCommand(BaseCommand):
     def _redo(self):
         if self.edge:
             self.scene.circuit_graph.add_edge(self.edge)
-        self.scene.addItem(self.wire_item)
+        if self.wire_item.scene() != self.scene:
+            self.scene.addItem(self.wire_item)
         if self.wire_item not in self.scene.wires:
             self.scene.wires.append(self.wire_item)
         if self.start_terminal and self.wire_item not in self.start_terminal.connected_wires:
