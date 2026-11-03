@@ -18,6 +18,9 @@ except ImportError:
 class Simulator(QObject):
     simulation_step = Signal()
     state_changed = Signal()
+    short_circuit_detected = Signal(dict)
+    short_circuit_cleared = Signal()
+    protection_tripped = Signal(str, str)
     
     def __init__(self, graph: CircuitGraph, parent=None):
         super().__init__(parent)
@@ -77,6 +80,16 @@ class Simulator(QObject):
             if not changed:
                 break
         
+        # Notificar disparos de protecciones
+        for dev in self.solver.tripped_devices:
+            self.protection_tripped.emit(dev, "Cortocircuito")
+
+        # Notificar cortocircuitos activos a la UI
+        if self.solver.has_short_circuit():
+            self.short_circuit_detected.emit(self.solver.short_circuits[0])
+        else:
+            self.short_circuit_cleared.emit()
+
         # Notificar cambio a la interfaz gráfica
         self.simulation_step.emit()
     

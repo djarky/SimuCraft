@@ -27,6 +27,8 @@ class Node:
     connected_edges: List[str] = field(default_factory=list)
     component_terminals: List[tuple] = field(default_factory=list)  # (component_id, terminal_id)
     name: str = ""
+    source_phase: Optional[str] = None
+    source_id: Optional[str] = None
     
     def set_potential(self, voltage: float, known: bool = True):
         self.potential = voltage
@@ -35,6 +37,8 @@ class Node:
     def clear_potential(self):
         self.potential_known = False
         self.potential = 0.0
+        self.source_phase = None
+        self.source_id = None
     
     def is_energized(self, threshold: float = 0.1) -> bool:
         return self.potential_known and abs(self.potential) > threshold

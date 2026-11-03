@@ -9,7 +9,7 @@ from typing import Optional, Dict, Any, List
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QSplitter, QTabWidget,
     QListWidget, QListWidgetItem, QLabel, QPushButton, QLineEdit,
-    QFrame, QStyleOptionGraphicsItem, QComboBox
+    QFrame, QComboBox
 )
 from PySide6.QtCore import Qt, Signal, QSize, QPointF, QByteArray, QRectF
 from PySide6.QtGui import QPixmap, QPainter, QColor, QFont, QPen, QBrush, QIcon
@@ -64,7 +64,13 @@ def render_component_preview(
     bg_color: Optional[QColor] = None,
     show_terminals: bool = True
 ) -> QPixmap:
-    """Renderizar un componente estándar o QET en un QPixmap nítido con antialiasing."""
+    """Renderizar un componente estándar o QET en un QPixmap nítido con antialiasing.
+
+    Usa una QGraphicsScene temporal para renderizar fuera de pantalla, lo que garantiza
+    que ComponentItem (QGraphicsSvgItem) tenga el contexto de escena necesario para pintar.
+    """
+    from PySide6.QtWidgets import QGraphicsScene
+
     pix = QPixmap(size, size)
     if bg_color is not None:
         pix.fill(bg_color)
@@ -86,42 +92,48 @@ def render_component_preview(
                     p = QPainter(pix)
                     p.setRenderHint(QPainter.Antialiasing, True)
                     p.setRenderHint(QPainter.SmoothPixmapTransform, True)
-                    pad = 12
+                    # Relleno de fondo antes de renderizar
+                    pad = max(4, size // 12)
                     renderer.render(p, QRectF(pad, pad, size - pad * 2, size - pad * 2))
                     p.end()
                     return pix
 
-        # 2. Componente estándar dibujado por ComponentItem
+        from PySide6.QtWidgets import QGraphicsScene, QGraphicsItem as _QGI
+        scene = QGraphicsScene()
         item = ComponentItem(defn)
+        # Deshabilitar interactividad para el renderizado temporal
+        item.setFlag(_QGI.ItemIsMovable, False)
+        item.setFlag(_QGI.ItemIsSelectable, False)
+        scene.addItem(item)
+
+        br = item.boundingRect()
+        if not br.isValid() or br.width() <= 0 or br.height() <= 0:
+            # Sin geometría válida — devolver pixmap vacío/fondo
+            return pix
+
+        # Margen proporcional al tamaño del icono (mínimo 2px, máximo 12px)
+        pad = max(2, min(12, size // 10))
+        target_rect = QRectF(pad, pad, size - pad * 2, size - pad * 2)
+
         painter = QPainter(pix)
         painter.setRenderHint(QPainter.Antialiasing, True)
         painter.setRenderHint(QPainter.SmoothPixmapTransform, True)
-
-        br = item.boundingRect()
-        if br.width() > 0 and br.height() > 0:
-            padding = 18
-            scale = min((size - padding * 2) / br.width(), (size - padding * 2) / br.height())
-            painter.translate(size / 2.0, size / 2.0)
-            painter.scale(scale, scale)
-            painter.translate(-br.center().x(), -br.center().y())
-
-        opt = QStyleOptionGraphicsItem()
-        item.paint(painter, opt, None)
-
-        if show_terminals:
-            for term in getattr(item, 'terminals', []):
-                painter.save()
-                painter.translate(term.pos())
-                term.paint(painter, opt, None)
-                painter.restore()
-
+        # scene.render mapea source_rect (coordenadas escena) en target_rect (coordenadas pixmap)
+        scene.render(painter, target_rect, br)
         painter.end()
+
+        # Limpiar: eliminar item de la escena antes de que ambos se destruyan
+        scene.removeItem(item)
+
     except Exception as e:
         print(f"Error renderizando vista previa: {e}")
-        painter = QPainter(pix)
-        painter.setPen(QColor("#888888"))
-        painter.drawText(pix.rect(), Qt.AlignCenter, "⚡")
-        painter.end()
+        try:
+            painter = QPainter(pix)
+            painter.setPen(QColor("#888888"))
+            painter.drawText(pix.rect(), Qt.AlignCenter, "⚡")
+            painter.end()
+        except Exception:
+            pass
 
     return pix
 

@@ -55,14 +55,50 @@ class TerminalItem(QGraphicsEllipseItem):
 
         if event.button() == Qt.LeftButton:
             if scene:
-                # Si ya estamos en modo cableado y hay un terminal inicial, finalizar aquí
+                # Si ya estamos en modo cableado y hay un terminal inicial diferente, finalizar aquí
                 if getattr(scene, 'wiring_mode', False) and scene.start_terminal and scene.start_terminal != self:
                     scene.finish_wire(self)
                 elif hasattr(scene, 'start_wire'):
+                    self._drag_start_pos = event.scenePos()
+                    self._is_dragging_wire = True
                     scene.start_wire(self)
             event.accept()
         else:
             super().mousePressEvent(event)
+
+    def mouseMoveEvent(self, event):
+        if getattr(self, '_is_dragging_wire', False):
+            scene = self.scene()
+            if scene and getattr(scene, 'wiring_mode', False):
+                scene.update_wire_routing(event.scenePos())
+                event.accept()
+                return
+        super().mouseMoveEvent(event)
+
+    def mouseReleaseEvent(self, event):
+        if getattr(self, '_is_dragging_wire', False):
+            self._is_dragging_wire = False
+            scene = self.scene()
+            if scene and getattr(scene, 'wiring_mode', False):
+                pos = event.scenePos()
+                drag_dist = (pos - getattr(self, '_drag_start_pos', pos)).manhattanLength()
+                if drag_dist > 10.0:
+                    items = scene.items(pos)
+                    # 1. ¿Soltó sobre otro terminal válido?
+                    for item in items:
+                        if isinstance(item, TerminalItem) and item != self:
+                            scene.finish_wire(item)
+                            event.accept()
+                            return
+                    # 2. ¿Soltó sobre el puntito de empalme activo?
+                    if getattr(scene, '_hovered_join_info', None):
+                        target_wire, j_pt = scene._hovered_join_info
+                        scene.finish_wire_to_wire(target_wire, j_pt)
+                        event.accept()
+                        return
+                event.accept()
+                return
+        super().mouseReleaseEvent(event)
         
     def highlight(self, on: bool = True):
         self.highlighted = on

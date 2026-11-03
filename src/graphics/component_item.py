@@ -427,8 +427,12 @@ class ComponentItem(QGraphicsSvgItem):
         if not poles:
             poles = [0, 24, 48] if self.component_type == 'breaker_3p' else [0]
         
-        p.setPen(QPen(Qt.black, 2))
-        p.setBrush(QBrush(QColor("#FFFACD")))
+        is_tripped = False
+        if self.logic_instance and getattr(self.logic_instance, 'tripped', False):
+            is_tripped = True
+
+        p.setPen(QPen(QColor("#ef4444") if is_tripped else Qt.black, 2))
+        p.setBrush(QBrush(QColor("#fee2e2") if is_tripped else QColor("#FFFACD")))
         # Caja del disyuntor
         left = min(poles) - 8
         right = max(poles) + 8
@@ -443,17 +447,25 @@ class ComponentItem(QGraphicsSvgItem):
             p.drawEllipse(int(px - 2), mid_y - 14, 4, 4)
             p.drawEllipse(int(px - 2), mid_y + 10, 4, 4)
             
-            # Contacto abierto/cerrado tipo disyuntor
+            # Contacto abierto (disparado) o cerrado (armado)
             p.setBrush(Qt.NoBrush)
-            p.setPen(QPen(Qt.black, 2.5))
-            p.drawLine(int(px - 6), mid_y - 10, int(px + 1), mid_y + 10)
+            if is_tripped:
+                p.setPen(QPen(QColor("#dc2626"), 2.5))
+                # Dibujar contacto abierto hacia la izquierda
+                p.drawLine(int(px - 14), mid_y - 12, int(px + 1), mid_y + 10)
+            else:
+                p.setPen(QPen(Qt.black, 2.5))
+                p.drawLine(int(px - 6), mid_y - 10, int(px + 1), mid_y + 10)
             p.drawLine(int(px - 8), mid_y - 2, int(px - 4), mid_y + 2)
             p.drawLine(int(px - 4), mid_y - 2, int(px - 8), mid_y + 2)
         
         # Etiqueta
-        p.setPen(Qt.black)
+        p.setPen(QColor("#dc2626") if is_tripped else Qt.black)
         p.setFont(QFont("Arial", 8, QFont.Bold))
-        p.drawText(left + 2, mid_y - 20, self.tag or "Q")
+        tag_text = self.tag or "Q"
+        if is_tripped:
+            tag_text += " [TRIP]"
+        p.drawText(left + 2, mid_y - 20, tag_text)
         p.setFont(QFont("Arial", 7))
         if self.component_type == 'breaker_3p':
             p.drawText(left + 2, mid_y + 28, "3P")
@@ -609,6 +621,13 @@ class ComponentItem(QGraphicsSvgItem):
                         self.logic_instance.release()
                     else:
                         self.logic_instance.press()
+                    self.update_visual()
+                    event.accept()
+                    return
+            elif self.component_type in ('breaker', 'breaker_3p', 'relay'):
+                if self.logic_instance and hasattr(self.logic_instance, 'tripped') and self.logic_instance.tripped:
+                    # Re-armar el disyuntor al hacer clic
+                    self.logic_instance.reset()
                     self.update_visual()
                     event.accept()
                     return

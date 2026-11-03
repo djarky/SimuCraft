@@ -42,6 +42,9 @@ class MainWindow(QMainWindow):
         self.command_manager = CommandManager(self)
         self.simulator = Simulator(self.scene.circuit_graph, self)
         self.simulator.simulation_step.connect(self.scene.update_simulation_visuals)
+        self.simulator.short_circuit_detected.connect(self._on_short_circuit_detected)
+        self.simulator.short_circuit_cleared.connect(self._on_short_circuit_cleared)
+        self.simulator.protection_tripped.connect(self._on_protection_tripped)
         
         # Conexiones de la escena con la barra de estado
         self.scene.cursor_moved.connect(self._on_cursor_moved)
@@ -675,6 +678,19 @@ class MainWindow(QMainWindow):
         self.scene.circuit_graph.clear_all_potentials()
         self.scene.update_simulation_visuals()
         self.statusBar().showMessage("⏹ Simulación DETENIDA")
+
+    def _on_short_circuit_detected(self, sc_info: dict):
+        desc = sc_info.get("description", "Cortocircuito en el circuito")
+        self.statusBar().showMessage(f"⚠️ ¡CORTOCIRCUITO DETECTADO! {desc}")
+
+    def _on_short_circuit_cleared(self):
+        if self.simulator.running:
+            self.statusBar().showMessage("▶ Simulación EN EJECUCIÓN (Líneas energizadas en rojo)")
+
+    def _on_protection_tripped(self, device_tag: str, reason: str):
+        self.statusBar().showMessage(
+            f"⚡ Disparo de protección: Disyuntor/Relé '{device_tag}' se ha disparado ({reason})."
+        )
 
     def _fit_view(self):
         self.view.fit_in_view()

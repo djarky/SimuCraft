@@ -5,7 +5,7 @@ previsualización interactiva (ghost preview) y sincronización con el grafo rel
 """
 from typing import Optional, List, Set, Tuple
 
-from PySide6.QtWidgets import QGraphicsScene, QGraphicsItem
+from PySide6.QtWidgets import QGraphicsScene, QGraphicsItem, QGraphicsEllipseItem
 from PySide6.QtCore import Qt, QPointF, QRectF, Signal
 from PySide6.QtGui import QPen, QColor, QBrush, QFont, QPainter
 
@@ -51,6 +51,11 @@ class CircuitScene(QGraphicsScene):
         self.margin_top = 30.0    # Margen superior
         self.margin_right = 30.0  # Margen derecho
         self.margin_bottom = 30.0 # Margen inferior
+
+        # Indicador visual interactivo de empalme (join dot) al acercar a un cable existente
+        self._join_indicator_item: Optional[QGraphicsEllipseItem] = None
+        self._hovered_join_info: Optional[Tuple[WireItem, QPointF]] = None
+        self._init_join_indicator()
 
         # Área total de la escena incluyendo el espacio exterior de mesa de trabajo
         self.setSceneRect(0, 0, 2480, 3080)
@@ -359,6 +364,152 @@ class CircuitScene(QGraphicsScene):
         self.wire_type_changed.emit(self.current_wire_type, info["name"], self.current_wire_color.name())
         return len(selected_wires)
 
+    # ── INDICADOR DE EMPALME (JOIN DOT) Y DETECCIÓN ──────────────────────────
+
+    def _init_join_indicator(self):
+        """Inicializa el punto visual indicador de empalme interactivo (join dot)."""
+        self._join_indicator_item = QGraphicsEllipseItem(-4.5, -4.5, 9.0, 9.0)
+        self._join_indicator_item.setZValue(60)
+        self._join_indicator_item.setBrush(QBrush(QColor("#38bdf8")))  # Cyan brillante técnico
+        self._join_indicator_item.setPen(QPen(QColor("#0f172a"), 1.5))
+        self._join_indicator_item.setAcceptedMouseButtons(Qt.NoButton)
+        self._join_indicator_item.setVisible(False)
+        self.addItem(self._join_indicator_item)
+
+    def _show_join_indicator(self, pos: QPointF):
+        """Muestra el punto de join en la posición calculada."""
+        try:
+            if self._join_indicator_item:
+                self._join_indicator_item.setPos(pos)
+                self._join_indicator_item.setVisible(True)
+        except RuntimeError:
+            self._init_join_indicator()
+            self._join_indicator_item.setPos(pos)
+            self._join_indicator_item.setVisible(True)
+
+    def _hide_join_indicator(self):
+        """Oculta el punto de join cuando el usuario pasa de largo."""
+        try:
+            if self._join_indicator_item:
+                self._join_indicator_item.setVisible(False)
+        except RuntimeError:
+            self._join_indicator_item = None
+
+    def find_wire_join_target(self, pos: QPointF, threshold: float = 16.0) -> Optional[Tuple[WireItem, QPointF]]:
+        """
+        Detecta si la posición pos está próxima a algún conductor existente en la escena.
+        Devuelve (cable_objetivo, punto_empalme_snapped) si está dentro del umbral de tolerancia;
+        devuelve None si el usuario pasa de largo para no crear uniones no deseadas.
+        """
+        if not self.wiring_mode or not self.temp_wire:
+            return None
+
+        start_pos = self.temp_wire.get_start_pos()
+        best_wire = None
+        best_pt = None
+        min_dist = float('inf')
+        GRID = 20.0
+
+        for wire in self.wires:
+            if wire == self.temp_wire or not wire.isVisible():
+                continue
+
+            pts = wire.get_path_points()
+            if len(pts) < 2:
+                continue
+
+            for i in range(len(pts) - 1):
+                p1 = pts[i]
+                p2 = pts[i + 1]
+
+                dist, proj = WireItem.project_point_to_segment(pos, p1, p2)
+                if dist > threshold:
+                    continue
+
+                # Snapping del punto proyectado a la cuadrícula de 20px a lo largo del segmento
+                if abs(p1.x() - p2.x()) < 0.5:
+                    snapped_y = round(proj.y() / GRID) * GRID
+                    min_y = min(p1.y(), p2.y())
+                    max_y = max(p1.y(), p2.y())
+                    snapped_y = max(min_y, min(max_y, snapped_y))
+                    candidate_pt = QPointF(p1.x(), snapped_y)
+                elif abs(p1.y() - p2.y()) < 0.5:
+                    snapped_x = round(proj.x() / GRID) * GRID
+                    min_x = min(p1.x(), p2.x())
+                    max_x = max(p1.x(), p2.x())
+                    snapped_x = max(min_x, min(max_x, snapped_x))
+                    candidate_pt = QPointF(snapped_x, p1.y())
+                else:
+                    candidate_pt = proj
+
+                # Evitar empalmar con el propio punto de arranque del cable
+                if (candidate_pt - start_pos).manhattanLength() < 5.0:
+                    continue
+
+                candidate_dist = ((pos.x() - candidate_pt.x()) ** 2 + (pos.y() - candidate_pt.y()) ** 2) ** 0.5
+                if candidate_dist <= threshold and candidate_dist < min_dist:
+                    min_dist = candidate_dist
+                    best_wire = wire
+                    best_pt = candidate_pt
+
+        if best_wire and best_pt:
+            return best_wire, best_pt
+        return None
+
+    def update_wire_routing(self, pos: QPointF):
+        """
+        Actualiza el trazado del cable temporal en tiempo real:
+        - Si está cerca de un cable existente, muestra el puntito de join y hace snap a ese punto.
+        - Si pasa de largo, oculta el puntito y rutea directo al destino sin unir.
+        - Mantiene trazado lineal (generalmente vertical) mientras no haya cambio de dirección.
+        - Si el usuario arrastra o cambia de dirección, activa la octogonalidad / codo ortogonal.
+        """
+        if not self.wiring_mode or not self.temp_wire:
+            return
+
+        GRID = 20.0
+        start = self.temp_wire.get_start_pos()
+
+        # 1. Detección del puntito de empalme (join dot) al acercar a un cable existente
+        join_target = self.find_wire_join_target(pos, threshold=16.0)
+        if join_target:
+            target_wire, join_pt = join_target
+            self._hovered_join_info = (target_wire, join_pt)
+            self._show_join_indicator(join_pt)
+            current_target = join_pt
+        else:
+            self._hovered_join_info = None
+            self._hide_join_indicator()
+            snap_x = round(pos.x() / GRID) * GRID
+            snap_y = round(pos.y() / GRID) * GRID
+            current_target = QPointF(snap_x, snap_y)
+
+        # 2. Ruteo lineal (generalmente vertical) vs activación de octogonalidad al cambiar de dirección
+        if self.temp_wire.waypoints:
+            self.temp_wire.is_orthogonal = True
+            self.temp_wire.set_temp_end(current_target)
+        else:
+            ori = getattr(self.start_terminal, 'orientation', 's') if self.start_terminal else 's'
+            dx = current_target.x() - start.x()
+            dy = current_target.y() - start.y()
+
+            if ori in ('e', 'w'):
+                # Salida horizontal: lineal en X mientras no haya cambio en Y
+                if abs(dy) <= GRID:
+                    self.temp_wire.is_orthogonal = False
+                    self.temp_wire.set_temp_end(QPointF(current_target.x(), start.y()))
+                else:
+                    self.temp_wire.is_orthogonal = True
+                    self.temp_wire.set_temp_end(current_target)
+            else:
+                # Salida vertical o general ("generalmente vertical"): lineal en Y mientras no haya cambio en X
+                if abs(dx) <= GRID:
+                    self.temp_wire.is_orthogonal = False
+                    self.temp_wire.set_temp_end(QPointF(start.x(), current_target.y()))
+                else:
+                    self.temp_wire.is_orthogonal = True
+                    self.temp_wire.set_temp_end(current_target)
+
     def start_wire(self, terminal):
         self.wiring_mode = True
         self.start_terminal = terminal
@@ -367,9 +518,12 @@ class CircuitScene(QGraphicsScene):
             wire_type=self.current_wire_type,
             color=self.current_wire_color,
             width=self.current_wire_width,
-            style=self.current_wire_style
+            style=self.current_wire_style,
+            is_orthogonal=False  # Comienza en modo lineal
         )
         self.addItem(self.temp_wire)
+        self._hide_join_indicator()
+        self._hovered_join_info = None
 
     def cancel_wire(self):
         if self.temp_wire and self.temp_wire.scene() == self:
@@ -377,6 +531,8 @@ class CircuitScene(QGraphicsScene):
         self.temp_wire = None
         self.start_terminal = None
         self.wiring_mode = False
+        self._hide_join_indicator()
+        self._hovered_join_info = None
 
     def finish_wire(self, end_terminal):
         """Finalizar cableado creando nodo y arista en el grafo relacional conservando waypoints"""
@@ -404,6 +560,7 @@ class CircuitScene(QGraphicsScene):
         self.circuit_graph.add_edge(edge)
 
         captured_waypoints = list(self.temp_wire.waypoints) if self.temp_wire else []
+        is_ortho = getattr(self.temp_wire, 'is_orthogonal', True) if self.temp_wire else True
 
         wire = WireItem(
             terminal1=self.start_terminal,
@@ -411,7 +568,8 @@ class CircuitScene(QGraphicsScene):
             wire_type=self.current_wire_type,
             color=self.current_wire_color,
             width=self.current_wire_width,
-            style=self.current_wire_style
+            style=self.current_wire_style,
+            is_orthogonal=is_ortho
         )
         wire.waypoints = captured_waypoints
         wire.update_path()
@@ -420,6 +578,8 @@ class CircuitScene(QGraphicsScene):
         if self.temp_wire and self.temp_wire.scene() == self:
             self.removeItem(self.temp_wire)
         self.temp_wire = None
+        self._hide_join_indicator()
+        self._hovered_join_info = None
 
         self.addItem(wire)
         self.wires.append(wire)
@@ -485,6 +645,8 @@ class CircuitScene(QGraphicsScene):
         self.circuit_graph.add_edge(edge)
 
         captured_waypoints = list(self.temp_wire.waypoints) if self.temp_wire else []
+        is_ortho = getattr(self.temp_wire, 'is_orthogonal', True) if self.temp_wire else True
+
         wire = WireItem(
             terminal1=self.start_terminal,
             terminal2=None,
@@ -492,7 +654,8 @@ class CircuitScene(QGraphicsScene):
             wire_type=self.current_wire_type,
             color=self.current_wire_color,
             width=self.current_wire_width,
-            style=self.current_wire_style
+            style=self.current_wire_style,
+            is_orthogonal=is_ortho
         )
         wire.waypoints = captured_waypoints
         wire.has_end_junction = True  # Punto de empalme normalizado (●)
@@ -502,6 +665,8 @@ class CircuitScene(QGraphicsScene):
         if self.temp_wire and self.temp_wire.scene() == self:
             self.removeItem(self.temp_wire)
         self.temp_wire = None
+        self._hide_join_indicator()
+        self._hovered_join_info = None
 
         self.addItem(wire)
         self.wires.append(wire)
@@ -602,9 +767,9 @@ class CircuitScene(QGraphicsScene):
             snap_y = round(pos.y() / GRID) * GRID
             self.preview_item.setPos(snap_x, snap_y)
 
-        # 2. Modo cablear: actualizar extremo dinámico del cable
+        # 2. Modo cablear: actualizar extremo dinámico del cable, join dot y octogonalidad
         if self.wiring_mode and self.temp_wire and self.start_terminal:
-            self.temp_wire.set_temp_end(pos)
+            self.update_wire_routing(pos)
 
         super().mouseMoveEvent(event)
 
@@ -631,7 +796,7 @@ class CircuitScene(QGraphicsScene):
             if event.button() == Qt.LeftButton:
                 items = self.items(pos)
 
-                # A) Clic sobre un borne / terminal de destino válido
+                # A) Clic sobre un borne / terminal de destino válido (MÁXIMA PRIORIDAD)
                 for item in items:
                     from .terminal_item import TerminalItem
                     if isinstance(item, TerminalItem) and item != self.start_terminal:
@@ -639,23 +804,32 @@ class CircuitScene(QGraphicsScene):
                         event.accept()
                         return
 
-                # B) Clic sobre otro cable existente para crear una bifurcación / derivación en T
-                for item in items:
-                    from .wire_item import WireItem
-                    if isinstance(item, WireItem) and item != self.temp_wire:
-                        self.finish_wire_to_wire(item, snap_pt)
-                        event.accept()
-                        return
+                # B) Clic sobre el puntito de join (join dot activo al acercar la vía a un cable)
+                if self._hovered_join_info:
+                    target_wire, junction_pt = self._hovered_join_info
+                    self.finish_wire_to_wire(target_wire, junction_pt)
+                    event.accept()
+                    return
 
-                # C) Clic en el lienzo libre: AGREGAR NODO / WAYPOINT DE PASO INTERMEDIO
+                # C) Clic en el lienzo libre: si pasó de largo o quiere doblar haciendo click
                 if self.temp_wire:
+                    ori = getattr(self.start_terminal, 'orientation', 's') if self.start_terminal else 's'
+                    start = self.temp_wire.get_start_pos()
+                    # Si venía en modo lineal puro, alinear el punto inicial al eje correspondiente
+                    if not self.temp_wire.waypoints and not self.temp_wire.is_orthogonal:
+                        if ori in ('e', 'w') and abs(snap_pt.y() - start.y()) <= GRID:
+                            snap_pt = QPointF(snap_pt.x(), start.y())
+                        elif abs(snap_pt.x() - start.x()) <= GRID:
+                            snap_pt = QPointF(start.x(), snap_pt.y())
+
                     self.temp_wire.add_waypoint(snap_pt)
+                    self.temp_wire.is_orthogonal = True
                     main_win = self._get_main_window()
                     if main_win and hasattr(main_win, 'statusBar'):
                         wp_count = len(self.temp_wire.waypoints)
                         main_win.statusBar().showMessage(
-                            f"📍 Nodo {wp_count} fijado en ({int(snap_x)}, {int(snap_y)}). "
-                            f"Haga clic en otro punto para continuar la ruta, en un borne o cable para finalizar | ESC/Clic der. para deshacer nodo."
+                            f"📍 Nodo {wp_count} fijado en ({int(snap_pt.x())}, {int(snap_pt.y())}). "
+                            f"Ruteo octogonal activo. Haga clic en un borne o puntito de empalme para finalizar | ESC/Clic der. para deshacer nodo."
                         )
                     event.accept()
                     return
@@ -664,6 +838,8 @@ class CircuitScene(QGraphicsScene):
                 # Clic derecho: Deshacer último waypoint o cancelar cableado
                 if self.temp_wire and self.temp_wire.waypoints:
                     self.temp_wire.pop_waypoint()
+                    if not self.temp_wire.waypoints:
+                        self.temp_wire.is_orthogonal = False
                     main_win = self._get_main_window()
                     if main_win and hasattr(main_win, 'statusBar'):
                         main_win.statusBar().showMessage("↩ Último nodo de cable deshecho.")
@@ -841,8 +1017,14 @@ class CircuitScene(QGraphicsScene):
 
     def update_simulation_visuals(self):
         """Actualizar el color de los cables y el estado de componentes durante la simulación"""
+        sc_edge_ids = set()
+        main_win = self._get_main_window()
+        if main_win and hasattr(main_win, 'simulator') and main_win.simulator and hasattr(main_win.simulator, 'solver'):
+            if main_win.simulator.solver:
+                sc_edge_ids = main_win.simulator.solver.get_short_circuit_edges()
+
         for wire in self.wires:
-            wire.update_simulation_state(self.circuit_graph)
+            wire.update_simulation_state(self.circuit_graph, short_circuit_edge_ids=sc_edge_ids)
         for comp in self.circuit_graph.components.values():
             if hasattr(comp, 'update_visual'):
                 comp.update_visual()
@@ -851,10 +1033,12 @@ class CircuitScene(QGraphicsScene):
         """Limpiar completamente la escena y el grafo"""
         self.cancel_placement()
         self.cancel_wire()
+        self._join_indicator_item = None
         self.clear()
         self.wires.clear()
         self.junction_nodes.clear()
         self.circuit_graph = CircuitGraph()
+        self._init_join_indicator()
 
     def show_component_properties(self, component):
         """Abrir el diálogo de edición de propiedades del componente"""

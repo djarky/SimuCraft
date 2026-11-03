@@ -4,7 +4,7 @@ Soporta ruteo ortogonal flexible con waypoints (nodos intermedios), puntos de bi
 manejadores de control interactivos (handles) para mover y acomodar cables enrutados
 manteniendo sus puntos de anclaje, tipos y colores normalizados y estados de simulación.
 """
-from typing import Optional, Any, List
+from typing import Optional, Any, List, Tuple
 from PySide6.QtWidgets import QGraphicsPathItem, QGraphicsItem, QGraphicsEllipseItem, QStyleOptionGraphicsItem
 from PySide6.QtCore import Qt, QPointF, QRectF
 from PySide6.QtGui import QPen, QPainterPath, QColor, QPainter, QBrush, QCursor, QPainterPathStroker
@@ -93,6 +93,7 @@ class WireItem(QGraphicsPathItem):
         color: Optional[str] = None,
         width: Optional[float] = None,
         style: Optional[Qt.PenStyle] = None,
+        is_orthogonal: bool = True,
         parent=None
     ):
         super().__init__(parent)
@@ -102,6 +103,9 @@ class WireItem(QGraphicsPathItem):
         self.pt2 = pt2
         self.edge_id = None  # ID de arista en CircuitGraph
         self.temp_end = None
+
+        # Ruteo ortogonal vs lineal directo
+        self.is_orthogonal: bool = is_orthogonal
 
         # Ruta flexible mediante waypoints intermedios
         self.waypoints: List[QPointF] = []
@@ -215,40 +219,126 @@ class WireItem(QGraphicsPathItem):
             return self.temp_end
         return self.get_start_pos()
 
+    def get_path_points(self) -> List[QPointF]:
+        """Devuelve la lista secuencial de vértices de la geometría actual del cable."""
+        pts: List[QPointF] = []
+        p = self.path()
+        for i in range(p.elementCount()):
+            el = p.elementAt(i)
+            pts.append(QPointF(el.x, el.y))
+        return pts
+
+    @classmethod
+    def project_point_to_segment(cls, p: QPointF, a: QPointF, b: QPointF) -> Tuple[float, QPointF]:
+        """
+        Calcula la distancia mínima euclidiana desde el punto p al segmento ab
+        y devuelve (distancia, punto_proyectado).
+        """
+        px, py = p.x(), p.y()
+        ax, ay = a.x(), a.y()
+        bx, by = b.x(), b.y()
+        dx, dy = bx - ax, by - ay
+        if dx == 0 and dy == 0:
+            dist = ((px - ax) ** 2 + (py - ay) ** 2) ** 0.5
+            return dist, QPointF(ax, ay)
+        t = max(0.0, min(1.0, ((px - ax) * dx + (py - ay) * dy) / (dx * dx + dy * dy)))
+        proj_x = ax + t * dx
+        proj_y = ay + t * dy
+        dist = ((px - proj_x) ** 2 + (py - proj_y) ** 2) ** 0.5
+        return dist, QPointF(proj_x, proj_y)
+
     def update_path(self):
         """
         Calcula y actualiza la geometría del cable:
-        - Si tiene waypoints manuales: traza ortogonalmente a través de cada vértice.
-        - Si no tiene waypoints: realiza ruteo ortogonal Z con soporte para ajuste de desplazamiento (mid_x).
+        - Si tiene waypoints manuales: traza ortogonalmente a través de cada vértice respetando orientaciones.
+        - Si no tiene waypoints:
+          * Si es lineal (is_orthogonal=False) o los extremos están alineados: línea recta directa (generalmente vertical).
+          * Si es ortogonal: realiza ruteo ortogonal respetando orientaciones de terminales o route_offset_x.
         """
         start = self.get_start_pos()
         end = self.get_end_pos()
 
         path = QPainterPath(start)
 
+        dx = end.x() - start.x()
+        dy = end.y() - start.y()
+
+        if abs(dx) < 0.1 and abs(dy) < 0.1:
+            self.setPath(path)
+            return
+
         if self.waypoints:
             curr = start
-            for wp in self.waypoints:
-                # Si no están alineados ortogonalmente, crear codo ortogonal
-                if abs(curr.x() - wp.x()) > 0.5 and abs(curr.y() - wp.y()) > 0.5:
-                    path.lineTo(wp.x(), curr.y())
-                path.lineTo(wp)
+            for i, wp in enumerate(self.waypoints):
+                if not self.is_orthogonal:
+                    path.lineTo(wp)
+                else:
+                    wp_dx = wp.x() - curr.x()
+                    wp_dy = wp.y() - curr.y()
+                    if abs(wp_dx) > 0.5 and abs(wp_dy) > 0.5:
+                        if i == 0 and self.terminal1:
+                            ori = getattr(self.terminal1, 'orientation', 's')
+                            if ori in ('e', 'w'):
+                                path.lineTo(wp.x(), curr.y())
+                            else:
+                                path.lineTo(curr.x(), wp.y())
+                        else:
+                            if abs(wp_dy) >= abs(wp_dx):
+                                path.lineTo(curr.x(), wp.y())
+                            else:
+                                path.lineTo(wp.x(), curr.y())
+                    path.lineTo(wp)
                 curr = wp
 
-            # Conectar desde el último waypoint hasta el extremo final
-            if abs(curr.x() - end.x()) > 0.5 and abs(curr.y() - end.y()) > 0.5:
-                path.lineTo(end.x(), curr.y())
-            path.lineTo(end)
-        else:
-            # Ruteo ortogonal clásico (inicio -> mid_x -> end)
-            if self.route_offset_x is not None:
-                mid_x = self.route_offset_x
+            final_dx = end.x() - curr.x()
+            final_dy = end.y() - curr.y()
+            if not self.is_orthogonal:
+                path.lineTo(end)
             else:
-                mid_x = (start.x() + end.x()) / 2.0
+                if abs(final_dx) > 0.5 and abs(final_dy) > 0.5:
+                    if self.terminal2:
+                        ori2 = getattr(self.terminal2, 'orientation', 'n')
+                        if ori2 in ('s', 'n'):
+                            path.lineTo(end.x(), curr.y())
+                        else:
+                            path.lineTo(curr.x(), end.y())
+                    else:
+                        if abs(final_dy) >= abs(final_dx):
+                            path.lineTo(curr.x(), end.y())
+                        else:
+                            path.lineTo(end.x(), curr.y())
+                path.lineTo(end)
+        else:
+            # Sin waypoints intermedios
+            if not self.is_orthogonal or abs(dx) < 0.5 or abs(dy) < 0.5:
+                # 100% lineal directo (generalmente vertical si dx < 0.5, o directo si is_orthogonal=False)
+                path.lineTo(end)
+            elif self.route_offset_x is not None:
+                mid_x = self.route_offset_x
+                path.lineTo(mid_x, start.y())
+                path.lineTo(mid_x, end.y())
+                path.lineTo(end)
+            else:
+                ori1 = getattr(self.terminal1, 'orientation', 's') if self.terminal1 else 's'
+                ori2 = getattr(self.terminal2, 'orientation', 'n') if self.terminal2 else 'n'
 
-            path.lineTo(mid_x, start.y())
-            path.lineTo(mid_x, end.y())
-            path.lineTo(end)
+                if ori1 in ('s', 'n') and ori2 in ('s', 'n') and self.terminal1 and self.terminal2:
+                    mid_y = (start.y() + end.y()) / 2.0
+                    path.lineTo(start.x(), mid_y)
+                    path.lineTo(end.x(), mid_y)
+                    path.lineTo(end)
+                elif ori1 in ('s', 'n'):
+                    path.lineTo(start.x(), end.y())
+                    path.lineTo(end)
+                elif ori1 in ('e', 'w'):
+                    path.lineTo(end.x(), start.y())
+                    path.lineTo(end)
+                elif abs(dy) >= abs(dx):
+                    path.lineTo(start.x(), end.y())
+                    path.lineTo(end)
+                else:
+                    path.lineTo(end.x(), start.y())
+                    path.lineTo(end)
 
         self.setPath(path)
 
@@ -435,6 +525,14 @@ class WireItem(QGraphicsPathItem):
     def paint(self, painter: QPainter, option: QStyleOptionGraphicsItem, widget=None):
         painter.setRenderHint(QPainter.Antialiasing, True)
 
+        # 0. Alerta visual de cortocircuito: halo ámbar/amarillo brillante detrás del cable
+        if getattr(self, 'is_short_circuit', False):
+            halo_sc = QPen(QColor(250, 204, 21, 220), self.wire_width + 8.0, Qt.SolidLine)
+            halo_sc.setCapStyle(Qt.RoundCap)
+            halo_sc.setJoinStyle(Qt.RoundJoin)
+            painter.setPen(halo_sc)
+            painter.drawPath(self.path())
+
         # 1. Indicador visual de selección: halo azul claro detrás del cable
         if self.isSelected():
             halo_pen = QPen(QColor(56, 189, 248, 180), self.wire_width + 4.0, Qt.SolidLine)
@@ -478,10 +576,11 @@ class WireItem(QGraphicsPathItem):
                 QPointF(center_x + offset + 4, center_y - 4)
             )
 
-    def update_simulation_state(self, circuit_graph):
-        """Actualizar visualización del cable según potenciales eléctricos en simulación."""
+    def update_simulation_state(self, circuit_graph, short_circuit_edge_ids=None):
+        """Actualizar visualización del cable según potenciales eléctricos en simulación y cortocircuitos."""
         if not self.edge_id or not circuit_graph:
             self.is_simulating = False
+            self.is_short_circuit = False
             self.sim_pen = None
             self.apply_pen()
             return
@@ -489,10 +588,23 @@ class WireItem(QGraphicsPathItem):
         edge = circuit_graph.edges.get(self.edge_id)
         if not edge:
             self.is_simulating = False
+            self.is_short_circuit = False
             self.sim_pen = None
             self.apply_pen()
             return
 
+        # 1. Comprobar si el conductor está implicado en un cortocircuito activo
+        if short_circuit_edge_ids and self.edge_id in short_circuit_edge_ids:
+            self.is_simulating = True
+            self.is_short_circuit = True
+            pen = QPen(QColor(239, 68, 68), max(4.0, self.wire_width + 2.0), Qt.DashLine)
+            pen.setCapStyle(Qt.RoundCap)
+            self.sim_pen = pen
+            self.setPen(pen)
+            self.update()
+            return
+
+        self.is_short_circuit = False
         n1 = circuit_graph.nodes.get(edge.node1_id)
         n2 = circuit_graph.nodes.get(edge.node2_id)
 
