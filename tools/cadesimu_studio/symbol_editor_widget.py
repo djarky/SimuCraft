@@ -9,15 +9,15 @@ from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QSplitter, QGroupBox,
     QComboBox, QPushButton, QLabel, QSpinBox, QFormLayout,
     QLineEdit, QGraphicsView, QMessageBox, QFileDialog, QListWidget,
-    QListWidgetItem
+    QListWidgetItem, QButtonGroup, QColorDialog
 )
 from PySide6.QtCore import Qt, QPointF, QByteArray
-from PySide6.QtGui import QColor, QPainter
-from PySide6.QtSvg import QSvgRenderer
+from PySide6.QtGui import QColor, QPainter, QPen, QBrush
 
 from .config import BASE_PATH, CUSTOM_SYMBOLS_PATH
 from .terminal_handle import TerminalHandleItem
 from .canvas_scene import SymbolCanvasScene
+from .qet_importer import QETVectorImporter
 
 try:
     from src.components.standard_components import STANDARD_COMPONENTS, reload_custom_symbols
@@ -88,8 +88,54 @@ class SymbolEditorWidget(QWidget):
         splitter = QSplitter(Qt.Horizontal)
 
         # Lienzo Gráfico
-        canvas_box = QGroupBox("Lienzo Interactivo (Arrastra los bornes con el ratón)")
+        canvas_box = QGroupBox("Lienzo Interactivo de Símbolo")
         canvas_layout = QVBoxLayout(canvas_box)
+
+        # ---------------- Barra de Herramientas de Dibujo (Estilo Inkscape / Paint) ----------------
+        draw_bar = QHBoxLayout()
+        draw_bar.addWidget(QLabel("<b>Herramienta:</b>"))
+
+        self.tool_group = QButtonGroup(self)
+        self.tool_group.setExclusive(True)
+
+        tools_def = [
+            ("select", "🖱️ Seleccionar"),
+            ("line", "📏 Línea"),
+            ("rect", "⬜ Rectángulo"),
+            ("circle", "⭕ Círculo"),
+            ("text", "🔤 Texto")
+        ]
+        for mode, title in tools_def:
+            btn = QPushButton(title)
+            btn.setCheckable(True)
+            if mode == "select":
+                btn.setChecked(True)
+            btn.clicked.connect(lambda chk, m=mode: self.set_draw_tool(m))
+            self.tool_group.addButton(btn)
+            draw_bar.addWidget(btn)
+
+        draw_bar.addSpacing(10)
+        draw_bar.addWidget(QLabel("Color:"))
+        self.btn_color = QPushButton("■")
+        self.btn_color.setFixedWidth(30)
+        self.btn_color.setStyleSheet("color: #ffffff; font-size: 16px; font-weight: bold; background: #252830;")
+        self.btn_color.clicked.connect(self.choose_stroke_color)
+        draw_bar.addWidget(self.btn_color)
+
+        draw_bar.addWidget(QLabel("Grosor:"))
+        self.width_combo = QComboBox()
+        self.width_combo.addItems(["1.0 px (Fino)", "1.8 px (Normal)", "2.5 px (Grueso)"])
+        self.width_combo.setCurrentIndex(1)
+        self.width_combo.currentIndexChanged.connect(self.on_stroke_width_changed)
+        draw_bar.addWidget(self.width_combo)
+
+        btn_del_primitive = QPushButton("🗑️ Eliminar Elemento")
+        btn_del_primitive.setStyleSheet("background: #c0392b; color: white;")
+        btn_del_primitive.clicked.connect(self.delete_selected_primitives)
+        draw_bar.addWidget(btn_del_primitive)
+
+        draw_bar.addStretch()
+        canvas_layout.addLayout(draw_bar)
         
         self.scene = SymbolCanvasScene(self)
         self.scene.selectionChanged.connect(self.on_scene_selection_changed)
@@ -266,19 +312,18 @@ class SymbolEditorWidget(QWidget):
         self.spin_width.setValue(int(w))
         self.spin_height.setValue(int(h))
 
-        # Cargar SVG si tiene
-        self.svg_renderer = None
-        svg_content = vis.get('svg_content')
-        if not svg_content and vis.get('elmt_path') and os.path.exists(vis.get('elmt_path')) and PARSER:
-            svg_content = PARSER.elmt_to_svg(vis.get('elmt_path'))
-            vis['svg_content'] = svg_content
-        if svg_content:
-            data = QByteArray(svg_content.encode('utf-8'))
-            rend = QSvgRenderer(data)
-            if rend.isValid():
-                self.svg_renderer = rend
+        # Cargar primitivas vectoriales si tiene archivo .elmt
+        if vis.get('elmt_path') and os.path.exists(vis.get('elmt_path')) and vis.get('elmt_path').endswith('.elmt'):
+            importer = QETVectorImporter()
+            result = importer.import_from_elmt(vis.get('elmt_path'))
+            # Limpiar elementos previos que no sean terminales
+            for it in list(self.scene.items()):
+                if not isinstance(it, TerminalHandleItem):
+                    self.scene.removeItem(it)
+            for it in result['items']:
+                self.scene.addItem(it)
 
-        self.scene.set_component_bounds(w, h, ctype, self.svg_renderer)
+        self.scene.set_component_bounds(w, h, ctype)
         self.refresh_terminal_items()
         self.info_status.setText(f"Cargado: {comp_key} ({len(vis.get('terminals', []))} bornes)")
 
@@ -331,15 +376,14 @@ class SymbolEditorWidget(QWidget):
         h = float(self.spin_height.value())
         self.cur_symbol.setdefault('visual', {})['width'] = w
         self.cur_symbol.setdefault('visual', {})['height'] = h
-        self.scene.set_component_bounds(w, h, self.input_sym_type.currentText(), self.svg_renderer)
+        self.scene.set_component_bounds(w, h, self.input_sym_type.currentText())
 
     def on_sym_type_changed(self, text):
         self.cur_symbol['type'] = text
         self.scene.set_component_bounds(
             float(self.spin_width.value()),
             float(self.spin_height.value()),
-            text,
-            self.svg_renderer
+            text
         )
 
     # ---------------- Manipulación de Bornes ----------------
@@ -501,45 +545,73 @@ class SymbolEditorWidget(QWidget):
         self.refresh_terminal_items()
         QMessageBox.information(self, "Alineado", "Todos los bornes han sido ajustados al paso estándar de 18px.")
 
+    def set_draw_tool(self, tool_mode: str):
+        self.scene.set_tool(tool_mode)
+        if tool_mode == "select":
+            self.view.setDragMode(QGraphicsView.RubberBandDrag)
+        else:
+            self.view.setDragMode(QGraphicsView.NoDrag)
+        self.info_status.setText(f"Herramienta activa: {tool_mode.capitalize()}")
+
+    def choose_stroke_color(self):
+        col = QColorDialog.getColor(self.scene.active_pen_color, self, "Seleccionar Color de Trazo")
+        if col.isValid():
+            self.scene.active_pen_color = col
+            self.btn_color.setStyleSheet(f"color: {col.name()}; font-size: 16px; font-weight: bold; background: #252830;")
+
+    def on_stroke_width_changed(self, index: int):
+        widths = [1.0, 1.8, 2.5]
+        if 0 <= index < len(widths):
+            self.scene.active_pen_width = widths[index]
+
+    def delete_selected_primitives(self):
+        for it in self.scene.selectedItems():
+            if not isinstance(it, TerminalHandleItem):
+                self.scene.removeItem(it)
+
     def import_svg_or_elmt(self):
         file_path, _ = QFileDialog.getOpenFileName(
-            self, "Importar Gráfico de Símbolo", str(BASE), "Archivos Símbolo (*.elmt *.svg)"
+            self, "Importar Gráfico de Símbolo", str(BASE_PATH), "Archivos Símbolo (*.elmt *.svg)"
         )
         if not file_path:
             return
-        svg_code = ""
-        if file_path.endswith('.elmt') and PARSER:
-            parsed = PARSER.parse_symbol(file_path)
-            svg_code = parsed.get('svg_content', '')
-            if parsed.get('terminals'):
-                reply = QMessageBox.question(
-                    self, "Importar Bornes",
-                    f"El archivo contiene {len(parsed['terminals'])} bornes definidos.\n¿Deseas reemplazar los bornes actuales por los del archivo?",
-                    QMessageBox.Yes | QMessageBox.No
-                )
-                if reply == QMessageBox.Yes:
-                    self.cur_symbol.setdefault('visual', {})['terminals'] = parsed['terminals']
-            w = parsed.get('width', 90)
-            h = parsed.get('height', 72)
-            self.spin_width.setValue(int(w))
-            self.spin_height.setValue(int(h))
+
+        if file_path.endswith('.elmt'):
+            importer = QETVectorImporter()
+            result = importer.import_from_elmt(file_path)
+
+            # Limpiar elementos vectoriales previos no-terminales
+            for it in list(self.scene.items()):
+                if not isinstance(it, TerminalHandleItem):
+                    self.scene.removeItem(it)
+
+            # Añadir las geometrías desglosadas a la escena
+            for it in result['items']:
+                self.scene.addItem(it)
+
+            # Reemplazar bornes si el archivo contiene
+            if result.get('terminals'):
+                self.cur_symbol.setdefault('visual', {})['terminals'] = result['terminals']
+
+            w = max(40, int(result.get('width', 90)))
+            h = max(40, int(result.get('height', 72)))
+            self.spin_width.setValue(w)
+            self.spin_height.setValue(h)
+            self.cur_symbol.setdefault('visual', {})['elmt_path'] = file_path
+            self.scene.set_component_bounds(w, h, self.input_sym_type.currentText())
+            self.refresh_terminal_items()
+
+            QMessageBox.information(
+                self, "Importado con Éxito",
+                f"Símbolo QET desglosado en {len(result['items'])} elementos vectoriales interactivos y {len(result['terminals'])} bornes."
+            )
         elif file_path.endswith('.svg'):
+            # Fallback para SVG simple
             with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
                 svg_code = f.read()
-
-        if svg_code:
             self.cur_symbol.setdefault('visual', {})['svg_content'] = svg_code
             self.cur_symbol['visual']['elmt_path'] = file_path
-            data = QByteArray(svg_code.encode('utf-8'))
-            self.svg_renderer = QSvgRenderer(data)
-            self.scene.set_component_bounds(
-                float(self.spin_width.value()),
-                float(self.spin_height.value()),
-                self.input_sym_type.currentText(),
-                self.svg_renderer
-            )
-            self.refresh_terminal_items()
-            QMessageBox.information(self, "Importado", f"Gráfico vectorial cargado correctamente desde:\n{file_path}")
+            QMessageBox.information(self, "Importado", f"Archivo SVG cargado: {file_path}")
 
     def new_custom_symbol(self):
         self.cur_symbol = {
@@ -567,7 +639,7 @@ class SymbolEditorWidget(QWidget):
         self.spin_width.setValue(90)
         self.spin_height.setValue(72)
         self.svg_renderer = None
-        self.scene.set_component_bounds(90, 72, "generic", None)
+        self.scene.set_component_bounds(90, 72, "generic")
         self.refresh_terminal_items()
 
     def save_symbol_to_simucraft(self):
@@ -583,6 +655,8 @@ class SymbolEditorWidget(QWidget):
         vis = self.cur_symbol.setdefault('visual', {})
         vis['width'] = float(self.spin_width.value())
         vis['height'] = float(self.spin_height.value())
+        # Exportar las geometrías de la escena a SVG
+        vis['svg_content'] = self.scene.export_primitives_to_svg()
         
         # Archivo de destino en data/
         custom_file = BASE_PATH / "data" / "custom_symbols.json"
