@@ -1,0 +1,611 @@
+"""
+Widget del editor visual interactivo SimuCraft Symbol & Terminal Studio.
+"""
+import os
+import json
+from pathlib import Path
+
+from PySide6.QtWidgets import (
+    QWidget, QVBoxLayout, QHBoxLayout, QSplitter, QGroupBox,
+    QComboBox, QPushButton, QLabel, QSpinBox, QFormLayout,
+    QLineEdit, QGraphicsView, QMessageBox, QFileDialog, QListWidget,
+    QListWidgetItem
+)
+from PySide6.QtCore import Qt, QPointF, QByteArray
+from PySide6.QtGui import QColor, QPainter
+from PySide6.QtSvg import QSvgRenderer
+
+from .config import BASE_PATH, CUSTOM_SYMBOLS_PATH
+from .terminal_handle import TerminalHandleItem
+from .canvas_scene import SymbolCanvasScene
+
+try:
+    from src.components.standard_components import STANDARD_COMPONENTS, reload_custom_symbols
+except Exception:
+    STANDARD_COMPONENTS = {}
+    def reload_custom_symbols():
+        pass
+
+try:
+    from src.qet.parser import QETParser
+    PARSER = QETParser()
+except Exception:
+    PARSER = None
+
+class SymbolEditorWidget(QWidget):
+    """Editor interactivo visual de símbolos y posiciones de bornes."""
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.cur_symbol = {}
+        self.terminal_items = []
+        self.selected_item = None
+        self.svg_renderer = None
+        self.init_ui()
+        self.load_component_list()
+
+    def init_ui(self):
+        main_layout = QVBoxLayout(self)
+        
+        # ---------------- Barra superior de herramientas ----------------
+        toolbar = QHBoxLayout()
+        
+        toolbar.addWidget(QLabel("Componente:"))
+        self.comp_combo = QComboBox()
+        self.comp_combo.setMinimumWidth(260)
+        self.comp_combo.currentIndexChanged.connect(self.on_component_selected)
+        toolbar.addWidget(self.comp_combo)
+        
+        btn_new = QPushButton("➕ Nuevo Símbolo")
+        btn_new.clicked.connect(self.new_custom_symbol)
+        toolbar.addWidget(btn_new)
+        
+        btn_import_svg = QPushButton("📂 Importar SVG / .elmt")
+        btn_import_svg.clicked.connect(self.import_svg_or_elmt)
+        toolbar.addWidget(btn_import_svg)
+
+        toolbar.addSpacing(15)
+        toolbar.addWidget(QLabel("Rejilla:"))
+        self.snap_combo = QComboBox()
+        self.snap_combo.addItems(["18 px (Estándar CADe)", "6 px (Precisa)", "1 px (Libre)"])
+        self.snap_combo.currentIndexChanged.connect(self.on_snap_changed)
+        toolbar.addWidget(self.snap_combo)
+
+        btn_align = QPushButton("📐 Auto-Alinear 18px")
+        btn_align.clicked.connect(self.auto_align_terminals)
+        toolbar.addWidget(btn_align)
+
+        toolbar.addStretch()
+
+        btn_save = QPushButton("💾 Guardar en SimuCraft")
+        btn_save.setStyleSheet("background: #2e7d32; color: white; font-weight: bold; padding: 6px 14px;")
+        btn_save.clicked.connect(self.save_symbol_to_simucraft)
+        toolbar.addWidget(btn_save)
+
+        main_layout.addLayout(toolbar)
+
+        # ---------------- Splitter: Lienzo (Izq) | Inspector (Der) ----------------
+        splitter = QSplitter(Qt.Horizontal)
+
+        # Lienzo Gráfico
+        canvas_box = QGroupBox("Lienzo Interactivo (Arrastra los bornes con el ratón)")
+        canvas_layout = QVBoxLayout(canvas_box)
+        
+        self.scene = SymbolCanvasScene(self)
+        self.scene.selectionChanged.connect(self.on_scene_selection_changed)
+        
+        self.view = QGraphicsView(self.scene)
+        self.view.setRenderHint(QPainter.Antialiasing, True)
+        self.view.setDragMode(QGraphicsView.RubberBandDrag)
+        canvas_layout.addWidget(self.view)
+        
+        # Barra de zoom del lienzo
+        zoom_bar = QHBoxLayout()
+        btn_zin = QPushButton("🔍 Zoom +")
+        btn_zin.clicked.connect(lambda: self.view.scale(1.2, 1.2))
+        btn_zout = QPushButton("🔍 Zoom -")
+        btn_zout.clicked.connect(lambda: self.view.scale(0.833, 0.833))
+        btn_zreset = QPushButton("↺ Centrar Origen")
+        btn_zreset.clicked.connect(lambda: self.view.centerOn(45, 36))
+        zoom_bar.addWidget(btn_zin)
+        zoom_bar.addWidget(btn_zout)
+        zoom_bar.addWidget(btn_zreset)
+        zoom_bar.addStretch()
+        self.info_status = QLabel("Listo.")
+        self.info_status.setStyleSheet("color: #888;")
+        zoom_bar.addWidget(self.info_status)
+        canvas_layout.addLayout(zoom_bar)
+        
+        splitter.addWidget(canvas_box)
+
+        # Panel Inspector Lateral
+        inspector_box = QGroupBox("Inspector de Símbolo y Bornes")
+        inspector_layout = QVBoxLayout(inspector_box)
+        inspector_layout.setSpacing(10)
+
+        # Metadatos del Símbolo
+        sym_form = QFormLayout()
+        self.input_sym_id = QLineEdit()
+        self.input_sym_name = QLineEdit()
+        self.input_sym_type = QComboBox()
+        self.input_sym_type.addItems([
+            'motor', 'contactor_power', 'contactor', 'contact_no', 'contact_nc',
+            'pushbutton', 'breaker', 'breaker_3p', 'lamp', 'relay', 'power', 'neutral', 'generic'
+        ])
+        self.input_sym_type.currentTextChanged.connect(self.on_sym_type_changed)
+        
+        dim_layout = QHBoxLayout()
+        self.spin_width = QSpinBox()
+        self.spin_width.setRange(20, 600)
+        self.spin_width.setSingleStep(18)
+        self.spin_width.valueChanged.connect(self.on_dimensions_changed)
+        self.spin_height = QSpinBox()
+        self.spin_height.setRange(20, 600)
+        self.spin_height.setSingleStep(18)
+        self.spin_height.valueChanged.connect(self.on_dimensions_changed)
+        dim_layout.addWidget(QLabel("Ancho:"))
+        dim_layout.addWidget(self.spin_width)
+        dim_layout.addWidget(QLabel("Alto:"))
+        dim_layout.addWidget(self.spin_height)
+
+        sym_form.addRow("ID Clave:", self.input_sym_id)
+        sym_form.addRow("Nombre:", self.input_sym_name)
+        sym_form.addRow("Tipo Lógico:", self.input_sym_type)
+        sym_form.addRow("Tamaño (px):", dim_layout)
+        inspector_layout.addLayout(sym_form)
+
+        # Lista de Bornes
+        inspector_layout.addWidget(QLabel("<b>Lista de Bornes / Terminales:</b>"))
+        self.term_list_widget = QListWidget()
+        self.term_list_widget.currentRowChanged.connect(self.on_term_list_selected)
+        inspector_layout.addWidget(self.term_list_widget)
+
+        term_btns = QHBoxLayout()
+        btn_add_term = QPushButton("➕ Añadir Borne")
+        btn_add_term.clicked.connect(self.add_new_terminal)
+        btn_del_term = QPushButton("❌ Eliminar Borne")
+        btn_del_term.clicked.connect(self.delete_selected_terminal)
+        term_btns.addWidget(btn_add_term)
+        term_btns.addWidget(btn_del_term)
+        inspector_layout.addLayout(term_btns)
+
+        # Formulario de Borne Seleccionado
+        term_group = QGroupBox("Propiedades del Borne Seleccionado")
+        term_form = QFormLayout(term_group)
+        
+        self.input_term_id = QLineEdit()
+        self.input_term_id.textChanged.connect(self.on_term_field_edited)
+        self.input_term_name = QLineEdit()
+        self.input_term_name.textChanged.connect(self.on_term_field_edited)
+        
+        pos_layout = QHBoxLayout()
+        self.spin_term_x = QSpinBox()
+        self.spin_term_x.setRange(-200, 600)
+        self.spin_term_x.setSingleStep(6)
+        self.spin_term_x.valueChanged.connect(self.on_term_pos_spin_changed)
+        self.spin_term_y = QSpinBox()
+        self.spin_term_y.setRange(-200, 600)
+        self.spin_term_y.setSingleStep(6)
+        self.spin_term_y.valueChanged.connect(self.on_term_pos_spin_changed)
+        pos_layout.addWidget(QLabel("X:"))
+        pos_layout.addWidget(self.spin_term_x)
+        pos_layout.addWidget(QLabel("Y:"))
+        pos_layout.addWidget(self.spin_term_y)
+
+        self.combo_term_orient = QComboBox()
+        self.combo_term_orient.addItem("N (Norte / Arriba)", "n")
+        self.combo_term_orient.addItem("S (Sur / Abajo)", "s")
+        self.combo_term_orient.addItem("E (Este / Derecha)", "e")
+        self.combo_term_orient.addItem("W (Oeste / Izquierda)", "w")
+        self.combo_term_orient.currentIndexChanged.connect(self.on_term_field_edited)
+
+        self.combo_term_type = QComboBox()
+        self.combo_term_type.addItems([
+            'motor_in', 'power_in', 'neutral', 'earth', 'contact',
+            'coil_in', 'coil_out', 'lamp_in', 'lamp_out', 'generic'
+        ])
+        self.combo_term_type.currentIndexChanged.connect(self.on_term_field_edited)
+
+        term_form.addRow("ID Borne:", self.input_term_id)
+        term_form.addRow("Etiqueta:", self.input_term_name)
+        term_form.addRow("Posición:", pos_layout)
+        term_form.addRow("Orientación:", self.combo_term_orient)
+        term_form.addRow("Tipo Borne:", self.combo_term_type)
+        inspector_layout.addWidget(term_group)
+
+        splitter.addWidget(inspector_box)
+        splitter.setSizes([900, 450])
+        main_layout.addWidget(splitter)
+
+    # ---------------- Lógica de Componentes ----------------
+
+    def load_component_list(self):
+        self.comp_combo.blockSignals(True)
+        self.comp_combo.clear()
+        
+        # Cargar componentes estándar
+        reload_custom_symbols()
+        keys = sorted(list(STANDARD_COMPONENTS.keys()))
+        for k in keys:
+            c = STANDARD_COMPONENTS[k]
+            self.comp_combo.addItem(f"{k} ({c.get('name', '')})", k)
+            
+        self.comp_combo.blockSignals(False)
+        if keys:
+            # Seleccionar motor_3p por defecto
+            idx = self.comp_combo.findData('motor_3p')
+            self.comp_combo.setCurrentIndex(idx if idx >= 0 else 0)
+            self.load_component(self.comp_combo.currentData())
+
+    def on_component_selected(self, index):
+        comp_key = self.comp_combo.currentData()
+        if comp_key:
+            self.load_component(comp_key)
+
+    def load_component(self, comp_key: str):
+        if comp_key not in STANDARD_COMPONENTS:
+            return
+            
+        src = STANDARD_COMPONENTS[comp_key]
+        import copy
+        self.cur_symbol = copy.deepcopy(src)
+        
+        vis = self.cur_symbol.get('visual', {})
+        w = float(vis.get('width', 90))
+        h = float(vis.get('height', 72))
+        ctype = self.cur_symbol.get('type', 'generic')
+        
+        # Actualizar campos
+        self.input_sym_id.setText(self.cur_symbol.get('id', comp_key))
+        self.input_sym_name.setText(self.cur_symbol.get('name', ''))
+        
+        t_idx = self.input_sym_type.findText(ctype)
+        if t_idx >= 0:
+            self.input_sym_type.setCurrentIndex(t_idx)
+            
+        self.spin_width.setValue(int(w))
+        self.spin_height.setValue(int(h))
+
+        # Cargar SVG si tiene
+        self.svg_renderer = None
+        svg_content = vis.get('svg_content')
+        if not svg_content and vis.get('elmt_path') and os.path.exists(vis.get('elmt_path')) and PARSER:
+            svg_content = PARSER.elmt_to_svg(vis.get('elmt_path'))
+            vis['svg_content'] = svg_content
+        if svg_content:
+            data = QByteArray(svg_content.encode('utf-8'))
+            rend = QSvgRenderer(data)
+            if rend.isValid():
+                self.svg_renderer = rend
+
+        self.scene.set_component_bounds(w, h, ctype, self.svg_renderer)
+        self.refresh_terminal_items()
+        self.info_status.setText(f"Cargado: {comp_key} ({len(vis.get('terminals', []))} bornes)")
+
+    def refresh_terminal_items(self):
+        # Limpiar escena de bornes anteriores
+        for item in self.terminal_items:
+            self.scene.removeItem(item)
+        self.terminal_items.clear()
+        
+        self.term_list_widget.blockSignals(True)
+        self.term_list_widget.clear()
+
+        vis = self.cur_symbol.setdefault('visual', {})
+        terms = vis.setdefault('terminals', [])
+        
+        snap = self.get_current_snap()
+        for idx, t in enumerate(terms):
+            handle = TerminalHandleItem(t, self.on_handle_moved, grid_snap=snap)
+            self.scene.addItem(handle)
+            self.terminal_items.append(handle)
+            
+            t_id = t.get('name') or t.get('id', f'T{idx}')
+            pos_str = f"({int(t.get('x',0))}, {int(t.get('y',0))})"
+            orient = t.get('orientation', 'n').upper()
+            it = QListWidgetItem(f"[{orient}] {t_id} {pos_str}")
+            it.setData(Qt.UserRole, handle)
+            self.term_list_widget.addItem(it)
+
+        self.term_list_widget.blockSignals(False)
+
+        if self.terminal_items:
+            self.terminal_items[0].setSelected(True)
+            self.on_handle_selected(self.terminal_items[0])
+
+    def get_current_snap(self) -> int:
+        idx = self.snap_combo.currentIndex()
+        if idx == 0:
+            return 18
+        elif idx == 1:
+            return 6
+        return 1
+
+    def on_snap_changed(self):
+        snap = self.get_current_snap()
+        for it in self.terminal_items:
+            it.grid_snap = snap
+
+    def on_dimensions_changed(self):
+        w = float(self.spin_width.value())
+        h = float(self.spin_height.value())
+        self.cur_symbol.setdefault('visual', {})['width'] = w
+        self.cur_symbol.setdefault('visual', {})['height'] = h
+        self.scene.set_component_bounds(w, h, self.input_sym_type.currentText(), self.svg_renderer)
+
+    def on_sym_type_changed(self, text):
+        self.cur_symbol['type'] = text
+        self.scene.set_component_bounds(
+            float(self.spin_width.value()),
+            float(self.spin_height.value()),
+            text,
+            self.svg_renderer
+        )
+
+    # ---------------- Manipulación de Bornes ----------------
+
+    def on_handle_moved(self, handle: TerminalHandleItem):
+        if handle == self.selected_item:
+            self.spin_term_x.blockSignals(True)
+            self.spin_term_y.blockSignals(True)
+            self.spin_term_x.setValue(int(handle.term_data.get('x', 0)))
+            self.spin_term_y.setValue(int(handle.term_data.get('y', 0)))
+            self.spin_term_x.blockSignals(False)
+            self.spin_term_y.blockSignals(False)
+            self.update_terminal_list_item(handle)
+
+    def on_scene_selection_changed(self):
+        if getattr(self, '_is_updating_selection', False):
+            return
+        selected = self.scene.selectedItems()
+        for item in selected:
+            if isinstance(item, TerminalHandleItem):
+                self.on_handle_selected(item)
+                break
+
+    def on_handle_selected(self, handle: TerminalHandleItem):
+        if getattr(self, '_is_updating_selection', False):
+            return
+        self._is_updating_selection = True
+        try:
+            self.selected_item = handle
+            d = handle.term_data
+            
+            self.input_term_id.blockSignals(True)
+            self.input_term_name.blockSignals(True)
+            self.spin_term_x.blockSignals(True)
+            self.spin_term_y.blockSignals(True)
+            self.combo_term_orient.blockSignals(True)
+            self.combo_term_type.blockSignals(True)
+
+            self.input_term_id.setText(d.get('id', ''))
+            self.input_term_name.setText(d.get('name', ''))
+            self.spin_term_x.setValue(int(d.get('x', 0)))
+            self.spin_term_y.setValue(int(d.get('y', 0)))
+
+            orient = d.get('orientation', 'n').lower()
+            idx = self.combo_term_orient.findData(orient)
+            if idx >= 0:
+                self.combo_term_orient.setCurrentIndex(idx)
+
+            ttype = d.get('type', 'generic')
+            idx2 = self.combo_term_type.findText(ttype)
+            if idx2 >= 0:
+                self.combo_term_type.setCurrentIndex(idx2)
+
+            self.input_term_id.blockSignals(False)
+            self.input_term_name.blockSignals(False)
+            self.spin_term_x.blockSignals(False)
+            self.spin_term_y.blockSignals(False)
+            self.combo_term_orient.blockSignals(False)
+            self.combo_term_type.blockSignals(False)
+
+            # Sincronizar selección en la lista bloqueando señales
+            self.term_list_widget.blockSignals(True)
+            for r in range(self.term_list_widget.count()):
+                it = self.term_list_widget.item(r)
+                if it.data(Qt.UserRole) == handle:
+                    self.term_list_widget.setCurrentRow(r)
+                    break
+            self.term_list_widget.blockSignals(False)
+        finally:
+            self._is_updating_selection = False
+
+    def on_term_list_selected(self, row):
+        if getattr(self, '_is_updating_selection', False):
+            return
+        self._is_updating_selection = True
+        try:
+            if row >= 0:
+                it = self.term_list_widget.item(row)
+                if it:
+                    handle = it.data(Qt.UserRole)
+                    if handle and isinstance(handle, TerminalHandleItem):
+                        self.scene.blockSignals(True)
+                        self.scene.clearSelection()
+                        handle.setSelected(True)
+                        self.scene.blockSignals(False)
+                        self._is_updating_selection = False
+                        self.on_handle_selected(handle)
+        finally:
+            self._is_updating_selection = False
+
+    def on_term_field_edited(self):
+        if not self.selected_item:
+            return
+        d = self.selected_item.term_data
+        d['id'] = self.input_term_id.text().strip()
+        d['name'] = self.input_term_name.text().strip()
+        d['orientation'] = self.combo_term_orient.currentData()
+        d['type'] = self.combo_term_type.currentText()
+        self.selected_item.update()
+        self.update_terminal_list_item(self.selected_item)
+
+    def on_term_pos_spin_changed(self):
+        if not self.selected_item:
+            return
+        x = float(self.spin_term_x.value())
+        y = float(self.spin_term_y.value())
+        self.selected_item.term_data['x'] = x
+        self.selected_item.term_data['y'] = y
+        self.selected_item.setPos(x, y)
+        self.update_terminal_list_item(self.selected_item)
+
+    def update_terminal_list_item(self, handle: TerminalHandleItem):
+        for r in range(self.term_list_widget.count()):
+            it = self.term_list_widget.item(r)
+            if it.data(Qt.UserRole) == handle:
+                t = handle.term_data
+                t_id = t.get('name') or t.get('id', '')
+                pos_str = f"({int(t.get('x',0))}, {int(t.get('y',0))})"
+                orient = t.get('orientation', 'n').upper()
+                it.setText(f"[{orient}] {t_id} {pos_str}")
+                break
+
+    def add_new_terminal(self):
+        terms = self.cur_symbol.setdefault('visual', {}).setdefault('terminals', [])
+        idx = len(terms) + 1
+        # Sugerir posición en rejilla de 18px
+        new_x = (len(terms) * 36) % int(max(self.spin_width.value(), 72))
+        new_y = 0.0
+        new_t = {
+            "id": f"T{idx}",
+            "name": f"T{idx}",
+            "x": new_x,
+            "y": new_y,
+            "orientation": "n",
+            "type": "contact"
+        }
+        terms.append(new_t)
+        self.refresh_terminal_items()
+        if self.terminal_items:
+            last = self.terminal_items[-1]
+            last.setSelected(True)
+            self.on_handle_selected(last)
+
+    def delete_selected_terminal(self):
+        if not self.selected_item:
+            QMessageBox.warning(self, "Atención", "Selecciona un borne en el lienzo o la lista para eliminar.")
+            return
+        terms = self.cur_symbol.setdefault('visual', {}).setdefault('terminals', [])
+        if self.selected_item.term_data in terms:
+            terms.remove(self.selected_item.term_data)
+        self.refresh_terminal_items()
+
+    def auto_align_terminals(self):
+        """Alinea los bornes a la rejilla de 18px y distribuye simétricamente."""
+        terms = self.cur_symbol.setdefault('visual', {}).setdefault('terminals', [])
+        for t in terms:
+            t['x'] = round(float(t.get('x', 0)) / 18.0) * 18.0
+            t['y'] = round(float(t.get('y', 0)) / 18.0) * 18.0
+        self.refresh_terminal_items()
+        QMessageBox.information(self, "Alineado", "Todos los bornes han sido ajustados al paso estándar de 18px.")
+
+    def import_svg_or_elmt(self):
+        file_path, _ = QFileDialog.getOpenFileName(
+            self, "Importar Gráfico de Símbolo", str(BASE), "Archivos Símbolo (*.elmt *.svg)"
+        )
+        if not file_path:
+            return
+        svg_code = ""
+        if file_path.endswith('.elmt') and PARSER:
+            parsed = PARSER.parse_symbol(file_path)
+            svg_code = parsed.get('svg_content', '')
+            if parsed.get('terminals'):
+                reply = QMessageBox.question(
+                    self, "Importar Bornes",
+                    f"El archivo contiene {len(parsed['terminals'])} bornes definidos.\n¿Deseas reemplazar los bornes actuales por los del archivo?",
+                    QMessageBox.Yes | QMessageBox.No
+                )
+                if reply == QMessageBox.Yes:
+                    self.cur_symbol.setdefault('visual', {})['terminals'] = parsed['terminals']
+            w = parsed.get('width', 90)
+            h = parsed.get('height', 72)
+            self.spin_width.setValue(int(w))
+            self.spin_height.setValue(int(h))
+        elif file_path.endswith('.svg'):
+            with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+                svg_code = f.read()
+
+        if svg_code:
+            self.cur_symbol.setdefault('visual', {})['svg_content'] = svg_code
+            self.cur_symbol['visual']['elmt_path'] = file_path
+            data = QByteArray(svg_code.encode('utf-8'))
+            self.svg_renderer = QSvgRenderer(data)
+            self.scene.set_component_bounds(
+                float(self.spin_width.value()),
+                float(self.spin_height.value()),
+                self.input_sym_type.currentText(),
+                self.svg_renderer
+            )
+            self.refresh_terminal_items()
+            QMessageBox.information(self, "Importado", f"Gráfico vectorial cargado correctamente desde:\n{file_path}")
+
+    def new_custom_symbol(self):
+        self.cur_symbol = {
+            "id": "nuevo_simbolo",
+            "type": "generic",
+            "name": "Nuevo Símbolo Personalizado",
+            "tag_prefix": "-K",
+            "visual": {
+                "width": 90,
+                "height": 72,
+                "terminals": [
+                    {"id": "1", "name": "1", "x": 0, "y": 0, "orientation": "n", "type": "contact"},
+                    {"id": "2", "name": "2", "x": 0, "y": 72, "orientation": "s", "type": "contact"}
+                ]
+            },
+            "logic": {
+                "class": "AuxiliaryContact",
+                "behavior": "passive",
+                "internal_connections": [("1", "2")]
+            }
+        }
+        self.input_sym_id.setText(self.cur_symbol["id"])
+        self.input_sym_name.setText(self.cur_symbol["name"])
+        self.input_sym_type.setCurrentText("generic")
+        self.spin_width.setValue(90)
+        self.spin_height.setValue(72)
+        self.svg_renderer = None
+        self.scene.set_component_bounds(90, 72, "generic", None)
+        self.refresh_terminal_items()
+
+    def save_symbol_to_simucraft(self):
+        sym_id = self.input_sym_id.text().strip()
+        if not sym_id:
+            QMessageBox.warning(self, "Error", "El símbolo debe tener un ID válido.")
+            return
+
+        # Actualizar diccionario
+        self.cur_symbol['id'] = sym_id
+        self.cur_symbol['name'] = self.input_sym_name.text().strip()
+        self.cur_symbol['type'] = self.input_sym_type.currentText()
+        vis = self.cur_symbol.setdefault('visual', {})
+        vis['width'] = float(self.spin_width.value())
+        vis['height'] = float(self.spin_height.value())
+        
+        # Archivo de destino en data/
+        custom_file = BASE_PATH / "data" / "custom_symbols.json"
+        custom_file.parent.mkdir(parents=True, exist_ok=True)
+        existing = {}
+        if custom_file.exists():
+            try:
+                with open(custom_file, 'r', encoding='utf-8') as f:
+                    existing = json.load(f)
+            except Exception:
+                existing = {}
+
+        existing[sym_id] = self.cur_symbol
+        with open(custom_file, 'w', encoding='utf-8') as f:
+            json.dump(existing, f, indent=2, ensure_ascii=False)
+
+        # Actualizar en memoria viva
+        STANDARD_COMPONENTS[sym_id] = self.cur_symbol
+        
+        QMessageBox.information(
+            self, "Guardado con Éxito",
+            f"El símbolo '{sym_id}' se ha guardado en custom_symbols.json y está disponible de inmediato en SimuCraft."
+        )
+        self.load_component_list()
+
+
