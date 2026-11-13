@@ -11,13 +11,14 @@ from PySide6.QtWidgets import (
     QLineEdit, QGraphicsView, QMessageBox, QFileDialog, QListWidget,
     QListWidgetItem, QButtonGroup, QColorDialog
 )
-from PySide6.QtCore import Qt, QPointF, QByteArray
+from PySide6.QtCore import Qt, QPointF, QByteArray, QRectF
 from PySide6.QtGui import QColor, QPainter, QPen, QBrush
 
 from .config import BASE_PATH, CUSTOM_SYMBOLS_PATH
 from .terminal_handle import TerminalHandleItem
 from .canvas_scene import SymbolCanvasScene
 from .qet_importer import QETVectorImporter
+from .standard_primitive_factory import create_standard_primitives
 
 try:
     from src.components.standard_components import STANDARD_COMPONENTS, reload_custom_symbols
@@ -314,17 +315,20 @@ class SymbolEditorWidget(QWidget):
 
         # Cargar primitivas vectoriales si tiene archivo .elmt
         if vis.get('elmt_path') and os.path.exists(vis.get('elmt_path')) and vis.get('elmt_path').endswith('.elmt'):
-            importer = QETVectorImporter()
-            result = importer.import_from_elmt(vis.get('elmt_path'))
-            # Limpiar elementos previos que no sean terminales
+            self._load_elmt_into_scene(vis['elmt_path'])
+        else:
+            # Sin .elmt: limpiar primitivas no-terminales previas
             for it in list(self.scene.items()):
                 if not isinstance(it, TerminalHandleItem):
                     self.scene.removeItem(it)
-            for it in result['items']:
+            # Descomposición vectorial interactiva de elementos estándar
+            std_items = create_standard_primitives(comp_key, self.cur_symbol)
+            for it in std_items:
                 self.scene.addItem(it)
 
         self.scene.set_component_bounds(w, h, ctype)
         self.refresh_terminal_items()
+        self._fit_view_to_symbol(w, h)
         self.info_status.setText(f"Cargado: {comp_key} ({len(vis.get('terminals', []))} bornes)")
 
     def refresh_terminal_items(self):
@@ -569,6 +573,81 @@ class SymbolEditorWidget(QWidget):
             if not isinstance(it, TerminalHandleItem):
                 self.scene.removeItem(it)
 
+    def _load_elmt_into_scene(self, elmt_path: str):
+        """
+        Parsea un archivo .elmt con QETVectorImporter y carga TODAS las primitivas
+        vectoriales en la escena, eliminando primero las no-terminales anteriores.
+        Devuelve el dict resultado del importer o None si falla.
+        """
+        try:
+            importer = QETVectorImporter()
+            result = importer.import_from_elmt(elmt_path)
+        except Exception as e:
+            self.info_status.setText(f"⚠ Error al leer .elmt: {e}")
+            return None
+
+        # Limpiar primitivas previas que no sean terminales
+        for it in list(self.scene.items()):
+            if not isinstance(it, TerminalHandleItem):
+                self.scene.removeItem(it)
+
+        # Añadir todos los items desglosados
+        for it in result['items']:
+            self.scene.addItem(it)
+
+        return result
+
+    def load_elmt_file(self, elmt_path: str, sym_id: str = '', sym_name: str = ''):
+        """
+        Carga un archivo .elmt directamente en el editor:
+        - Desglosa todas las primitivas vectoriales en el lienzo.
+        - Reemplaza los bornes con los del archivo .elmt.
+        - Ajusta dimensiones y centra la vista.
+        Usado desde el mapper al hacer "Abrir en Symbol Studio".
+        """
+        result = self._load_elmt_into_scene(elmt_path)
+        if result is None:
+            return
+
+        # Actualizar metadatos del símbolo
+        self.cur_symbol = {
+            'id':   sym_id or Path(elmt_path).stem,
+            'name': sym_name or Path(elmt_path).stem,
+            'type': 'generic',
+            'visual': {
+                'width':     result['width'],
+                'height':    result['height'],
+                'elmt_path': elmt_path,
+                'terminals': result['terminals'],
+            }
+        }
+        w = max(40, int(result['width']))
+        h = max(40, int(result['height']))
+        self.input_sym_id.setText(self.cur_symbol['id'])
+        self.input_sym_name.setText(self.cur_symbol['name'])
+        self.spin_width.setValue(w)
+        self.spin_height.setValue(h)
+        self.cur_symbol.setdefault('visual', {})['elmt_path'] = elmt_path
+        self.scene.set_component_bounds(w, h, 'generic')
+        self.refresh_terminal_items()
+        self._fit_view_to_symbol(w, h)
+        n_items = len(result['items'])
+        n_terms = len(result['terminals'])
+        self.info_status.setText(
+            f"✔ .elmt cargado: {n_items} elementos vectoriales + {n_terms} bornes  —  {Path(elmt_path).name}"
+        )
+
+    def _fit_view_to_symbol(self, w: float, h: float):
+        """Centra y ajusta el zoom de la vista para encuadrar el símbolo completo."""
+        from PySide6.QtCore import QRectF
+        margin = 60
+        rect = self.scene.itemsBoundingRect()
+        if rect.isNull():
+            rect = QRectF(-margin, -margin, w + margin * 2, h + margin * 2)
+        else:
+            rect = rect.adjusted(-margin, -margin, margin, margin)
+        self.view.fitInView(rect, Qt.KeepAspectRatio)
+
     def import_svg_or_elmt(self):
         file_path, _ = QFileDialog.getOpenFileName(
             self, "Importar Gráfico de Símbolo", str(BASE_PATH), "Archivos Símbolo (*.elmt *.svg)"
@@ -577,19 +656,12 @@ class SymbolEditorWidget(QWidget):
             return
 
         if file_path.endswith('.elmt'):
-            importer = QETVectorImporter()
-            result = importer.import_from_elmt(file_path)
+            # Usar el método centralizado de carga vectorial
+            result = self._load_elmt_into_scene(file_path)
+            if result is None:
+                return
 
-            # Limpiar elementos vectoriales previos no-terminales
-            for it in list(self.scene.items()):
-                if not isinstance(it, TerminalHandleItem):
-                    self.scene.removeItem(it)
-
-            # Añadir las geometrías desglosadas a la escena
-            for it in result['items']:
-                self.scene.addItem(it)
-
-            # Reemplazar bornes si el archivo contiene
+            # Reemplazar bornes con los del archivo
             if result.get('terminals'):
                 self.cur_symbol.setdefault('visual', {})['terminals'] = result['terminals']
 
@@ -600,10 +672,13 @@ class SymbolEditorWidget(QWidget):
             self.cur_symbol.setdefault('visual', {})['elmt_path'] = file_path
             self.scene.set_component_bounds(w, h, self.input_sym_type.currentText())
             self.refresh_terminal_items()
+            self._fit_view_to_symbol(w, h)
 
             QMessageBox.information(
                 self, "Importado con Éxito",
-                f"Símbolo QET desglosado en {len(result['items'])} elementos vectoriales interactivos y {len(result['terminals'])} bornes."
+                f"Símbolo QET desglosado en {len(result['items'])} elementos vectoriales interactivos "
+                f"y {len(result['terminals'])} bornes.\n\n"
+                f"Tipos: líneas, rectángulos, círculos, arcos, polígonos, textos."
             )
         elif file_path.endswith('.svg'):
             # Fallback para SVG simple

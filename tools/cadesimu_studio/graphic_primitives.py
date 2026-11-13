@@ -1,14 +1,29 @@
 """
 Primitivas gráficas vectoriales interactivas para el editor de símbolos.
-Cada elemento (línea, rectángulo, círculo, texto) es un QGraphicsItem seleccionable,
-arrastrable y modificable con exportación a SVG.
+Cada elemento (línea, rectángulo, círculo, arco, polígono, texto) es un
+QGraphicsItem seleccionable, arrastrable y modificable con exportación a SVG.
 """
 from PySide6.QtWidgets import (
     QGraphicsItem, QGraphicsLineItem, QGraphicsRectItem,
-    QGraphicsEllipseItem, QGraphicsTextItem
+    QGraphicsEllipseItem, QGraphicsTextItem, QGraphicsPathItem,
+    QGraphicsPolygonItem
 )
 from PySide6.QtCore import Qt, QPointF, QRectF, QLineF
-from PySide6.QtGui import QPen, QBrush, QColor, QFont, QPainter
+from PySide6.QtGui import (
+    QPen, QBrush, QColor, QFont, QPainter,
+    QPainterPath, QPolygonF
+)
+
+
+# ─── Flags comunes ─────────────────────────────────────────────────────────────
+_EDITABLE_FLAGS = (
+    QGraphicsItem.ItemIsMovable |
+    QGraphicsItem.ItemIsSelectable |
+    QGraphicsItem.ItemSendsGeometryChanges
+)
+
+_SEL_PEN = QPen(QColor("#00e5ff"), 1.2, Qt.DashLine)
+_DEFAULT_PEN = QPen(QColor("#ffffff"), 1.8, Qt.SolidLine, Qt.RoundCap)
 
 
 class GraphicLineItem(QGraphicsLineItem):
@@ -16,21 +31,16 @@ class GraphicLineItem(QGraphicsLineItem):
 
     def __init__(self, x1=0, y1=0, x2=20, y2=20, parent=None):
         super().__init__(x1, y1, x2, y2, parent)
-        self.setFlags(
-            QGraphicsItem.ItemIsMovable |
-            QGraphicsItem.ItemIsSelectable |
-            QGraphicsItem.ItemSendsGeometryChanges
-        )
+        self.setFlags(_EDITABLE_FLAGS)
         self.setPen(QPen(QColor("#ffffff"), 1.8, Qt.SolidLine, Qt.RoundCap))
         self.setZValue(20)
 
     def paint(self, painter: QPainter, option, widget=None):
         super().paint(painter, option, widget)
         if self.isSelected():
-            painter.setPen(QPen(QColor("#00e5ff"), 1.2, Qt.DashLine))
+            painter.setPen(_SEL_PEN)
             painter.setBrush(Qt.NoBrush)
             line = self.line()
-            # Puntos de control en extremos
             painter.setBrush(QBrush(QColor("#00e5ff")))
             painter.drawEllipse(line.p1(), 3, 3)
             painter.drawEllipse(line.p2(), 3, 3)
@@ -41,7 +51,9 @@ class GraphicLineItem(QGraphicsLineItem):
         c = p.color().name()
         w = p.widthF()
         dash = ' stroke-dasharray="4,3"' if p.style() == Qt.DashLine else ''
-        return f'<line x1="{line.x1()}" y1="{line.y1()}" x2="{line.x2()}" y2="{line.y2()}" stroke="{c}" stroke-width="{w}"{dash} />'
+        return (f'<line x1="{line.x1():.2f}" y1="{line.y1():.2f}" '
+                f'x2="{line.x2():.2f}" y2="{line.y2():.2f}" '
+                f'stroke="{c}" stroke-width="{w}"{dash} />')
 
 
 class GraphicRectItem(QGraphicsRectItem):
@@ -51,11 +63,7 @@ class GraphicRectItem(QGraphicsRectItem):
         super().__init__(x, y, w, h, parent)
         self.rx = rx
         self.ry = ry
-        self.setFlags(
-            QGraphicsItem.ItemIsMovable |
-            QGraphicsItem.ItemIsSelectable |
-            QGraphicsItem.ItemSendsGeometryChanges
-        )
+        self.setFlags(_EDITABLE_FLAGS)
         self.setPen(QPen(QColor("#ffffff"), 1.8, Qt.SolidLine))
         self.setBrush(Qt.NoBrush)
         self.setZValue(15)
@@ -69,7 +77,6 @@ class GraphicRectItem(QGraphicsRectItem):
             painter.drawRoundedRect(r, self.rx, self.ry)
         else:
             painter.drawRect(r)
-
         if self.isSelected():
             painter.setPen(QPen(QColor("#00e5ff"), 1.5, Qt.DashLine))
             painter.setBrush(Qt.NoBrush)
@@ -84,7 +91,9 @@ class GraphicRectItem(QGraphicsRectItem):
         fill = b.color().name() if b.style() != Qt.NoBrush else "none"
         rx_attr = f' rx="{self.rx}"' if self.rx > 0 else ''
         ry_attr = f' ry="{self.ry}"' if self.ry > 0 else ''
-        return f'<rect x="{r.x()}" y="{r.y()}" width="{r.width()}" height="{r.height()}"{rx_attr}{ry_attr} stroke="{c}" stroke-width="{w}" fill="{fill}" />'
+        return (f'<rect x="{r.x():.2f}" y="{r.y():.2f}" '
+                f'width="{r.width():.2f}" height="{r.height():.2f}"'
+                f'{rx_attr}{ry_attr} stroke="{c}" stroke-width="{w}" fill="{fill}" />')
 
 
 class GraphicCircleItem(QGraphicsEllipseItem):
@@ -92,11 +101,7 @@ class GraphicCircleItem(QGraphicsEllipseItem):
 
     def __init__(self, x=0, y=0, w=30, h=30, parent=None):
         super().__init__(x, y, w, h, parent)
-        self.setFlags(
-            QGraphicsItem.ItemIsMovable |
-            QGraphicsItem.ItemIsSelectable |
-            QGraphicsItem.ItemSendsGeometryChanges
-        )
+        self.setFlags(_EDITABLE_FLAGS)
         self.setPen(QPen(QColor("#ffffff"), 1.8, Qt.SolidLine))
         self.setBrush(Qt.NoBrush)
         self.setZValue(15)
@@ -106,7 +111,6 @@ class GraphicCircleItem(QGraphicsEllipseItem):
         painter.setPen(self.pen())
         painter.setBrush(self.brush())
         painter.drawEllipse(self.rect())
-
         if self.isSelected():
             painter.setPen(QPen(QColor("#00e5ff"), 1.5, Qt.DashLine))
             painter.setBrush(Qt.NoBrush)
@@ -124,8 +128,97 @@ class GraphicCircleItem(QGraphicsEllipseItem):
         rx = r.width() / 2.0
         ry = r.height() / 2.0
         if abs(rx - ry) < 0.1:
-            return f'<circle cx="{cx}" cy="{cy}" r="{rx}" stroke="{c}" stroke-width="{w}" fill="{fill}" />'
-        return f'<ellipse cx="{cx}" cy="{cy}" rx="{rx}" ry="{ry}" stroke="{c}" stroke-width="{w}" fill="{fill}" />'
+            return f'<circle cx="{cx:.2f}" cy="{cy:.2f}" r="{rx:.2f}" stroke="{c}" stroke-width="{w}" fill="{fill}" />'
+        return f'<ellipse cx="{cx:.2f}" cy="{cy:.2f}" rx="{rx:.2f}" ry="{ry:.2f}" stroke="{c}" stroke-width="{w}" fill="{fill}" />'
+
+
+class GraphicArcItem(QGraphicsPathItem):
+    """Arco de elipse vectorial interactivo (sub-arco de un círculo/elipse)."""
+
+    def __init__(self, x=0, y=0, w=30, h=30, start_angle=0, span_angle=90, parent=None):
+        super().__init__(parent)
+        self._x = x
+        self._y = y
+        self._w = w
+        self._h = h
+        self._start = start_angle   # grados, 0 = este (3 h del reloj)
+        self._span = span_angle     # positivo = anti-horario
+        self.setFlags(_EDITABLE_FLAGS)
+        self.setPen(QPen(QColor("#ffffff"), 1.8, Qt.SolidLine))
+        self.setBrush(Qt.NoBrush)
+        self.setZValue(15)
+        self._rebuild_path()
+
+    def _rebuild_path(self):
+        path = QPainterPath()
+        path.arcMoveTo(self._x, self._y, self._w, self._h, self._start)
+        path.arcTo(self._x, self._y, self._w, self._h, self._start, self._span)
+        self.setPath(path)
+
+    def paint(self, painter: QPainter, option, widget=None):
+        painter.setRenderHint(QPainter.Antialiasing, True)
+        painter.setPen(self.pen())
+        painter.setBrush(Qt.NoBrush)
+        painter.drawPath(self.path())
+        if self.isSelected():
+            painter.setPen(QPen(QColor("#00e5ff"), 1.5, Qt.DashLine))
+            painter.drawRect(self.boundingRect().adjusted(-2, -2, 2, 2))
+
+    def to_svg(self) -> str:
+        import math
+        # Convertir a path SVG arc
+        cx = self._x + self._w / 2.0
+        cy = self._y + self._h / 2.0
+        rx = self._w / 2.0
+        ry = self._h / 2.0
+        a1 = math.radians(-self._start)
+        a2 = math.radians(-(self._start + self._span))
+        x1 = cx + rx * math.cos(a1)
+        y1 = cy + ry * math.sin(a1)
+        x2 = cx + rx * math.cos(a2)
+        y2 = cy + ry * math.sin(a2)
+        large = 1 if abs(self._span) > 180 else 0
+        sweep = 0 if self._span > 0 else 1
+        p = self.pen()
+        c = p.color().name()
+        w = p.widthF()
+        return (f'<path d="M {x1:.2f},{y1:.2f} A {rx:.2f},{ry:.2f} 0 {large},{sweep} {x2:.2f},{y2:.2f}" '
+                f'stroke="{c}" stroke-width="{w}" fill="none" />')
+
+
+class GraphicPolygonItem(QGraphicsPolygonItem):
+    """Polígono vectorial interactivo (triángulos, flechas, formas libres)."""
+
+    def __init__(self, points: list, parent=None):
+        """
+        points: lista de (x, y) tuplas o QPointF
+        """
+        polygon = QPolygonF([QPointF(p[0], p[1]) if not isinstance(p, QPointF) else p
+                             for p in points])
+        super().__init__(polygon, parent)
+        self.setFlags(_EDITABLE_FLAGS)
+        self.setPen(QPen(QColor("#ffffff"), 1.8, Qt.SolidLine))
+        self.setBrush(Qt.NoBrush)
+        self.setZValue(15)
+
+    def paint(self, painter: QPainter, option, widget=None):
+        painter.setRenderHint(QPainter.Antialiasing, True)
+        painter.setPen(self.pen())
+        painter.setBrush(self.brush())
+        painter.drawPolygon(self.polygon())
+        if self.isSelected():
+            painter.setPen(QPen(QColor("#00e5ff"), 1.5, Qt.DashLine))
+            painter.setBrush(Qt.NoBrush)
+            painter.drawRect(self.boundingRect().adjusted(-2, -2, 2, 2))
+
+    def to_svg(self) -> str:
+        pts = " ".join(f"{p.x():.2f},{p.y():.2f}" for p in self.polygon())
+        p = self.pen()
+        b = self.brush()
+        c = p.color().name()
+        w = p.widthF()
+        fill = b.color().name() if b.style() != Qt.NoBrush else "none"
+        return f'<polygon points="{pts}" stroke="{c}" stroke-width="{w}" fill="{fill}" />'
 
 
 class GraphicTextItem(QGraphicsTextItem):
@@ -133,11 +226,7 @@ class GraphicTextItem(QGraphicsTextItem):
 
     def __init__(self, text="Texto", x=0, y=0, parent=None):
         super().__init__(text, parent)
-        self.setFlags(
-            QGraphicsItem.ItemIsMovable |
-            QGraphicsItem.ItemIsSelectable |
-            QGraphicsItem.ItemSendsGeometryChanges
-        )
+        self.setFlags(_EDITABLE_FLAGS)
         self.setDefaultTextColor(QColor("#ffffff"))
         self.setFont(QFont("Sans Serif", 9, QFont.Bold))
         self.setPos(x, y)
@@ -155,5 +244,6 @@ class GraphicTextItem(QGraphicsTextItem):
         txt = self.toPlainText()
         color = self.defaultTextColor().name()
         size = self.font().pointSize()
-        return f'<text x="{pos.x()}" y="{pos.y() + size}" font-size="{size}" font-family="sans-serif" font-weight="bold" fill="{color}">{txt}</text>'
-
+        return (f'<text x="{pos.x():.2f}" y="{pos.y() + size:.2f}" '
+                f'font-size="{size}" font-family="sans-serif" font-weight="bold" '
+                f'fill="{color}">{txt}</text>')

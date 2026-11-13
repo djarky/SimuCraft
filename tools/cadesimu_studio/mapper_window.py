@@ -953,46 +953,36 @@ class CADeSimuMapperWindow(QMainWindow):
                 break
 
     def open_current_in_studio(self):
-        """Abre el símbolo seleccionado actualmente en la pestaña Symbol Studio."""
+        """Abre el símbolo QET seleccionado en Symbol Studio con todas sus primitivas vectoriales."""
         current_qet = self.qet_list.currentItem()
         qet_path = None
         if current_qet:
             data = current_qet.data(Qt.UserRole)
-            qet_path = data.get('Full_Path')
-            
+            if isinstance(data, dict):
+                qet_path = self._resolve_qet_path(data)
+
         cad_name = self.cur_item.get('Nombre_Original_EXE', 'simbolo_cad') if self.cur_item else "nuevo_simbolo"
         cad_id = str(self.cur_item['CAD_ID']) if self.cur_item else "0"
-        
-        # Desactivar temporalmente sync para permitir carga específica
+
         self._skip_next_tab_sync = True
         try:
             self.main_tabs.setCurrentIndex(1)
-            
-            if qet_path and os.path.exists(qet_path) and PARSER:
-                comp_def = PARSER.create_component_definition(qet_path)
-                comp_def['id'] = f"cad_{cad_id}"
-                comp_def['name'] = cad_name
-                self.studio_tab.cur_symbol = comp_def
-                self.studio_tab.input_sym_id.setText(comp_def['id'])
-                self.studio_tab.input_sym_name.setText(comp_def['name'])
-                self.studio_tab.input_sym_type.setCurrentText(comp_def.get('type', 'generic'))
-                vis = comp_def.get('visual', {})
-                self.studio_tab.spin_width.setValue(int(vis.get('width', 90)))
-                self.studio_tab.spin_height.setValue(int(vis.get('height', 72)))
-                if vis.get('svg_content'):
-                    self.studio_tab.svg_renderer = QSvgRenderer(QByteArray(vis['svg_content'].encode('utf-8')))
-                self.studio_tab.scene.set_component_bounds(
-                    vis.get('width', 90), vis.get('height', 72), comp_def.get('type', 'generic'), self.studio_tab.svg_renderer
+
+            if qet_path and os.path.exists(qet_path):
+                # ── Importar directamente con el importador vectorial ──────
+                self.studio_tab.load_elmt_file(qet_path, sym_id=f"cad_{cad_id}", sym_name=cad_name)
+                self.studio_tab.info_status.setText(
+                    f"🎨 QET desglosado vectorialmente para CAD {cad_id}: {Path(qet_path).name}"
                 )
-                self.studio_tab.refresh_terminal_items()
-                self.studio_tab.info_status.setText(f"🎨 Importado QET para CAD {cad_id} ({cad_name}): {Path(qet_path).name}")
             elif self.cur_item:
                 simu_key = self.get_simucraft_equivalent(cad_id)
                 if simu_key and simu_key in STANDARD_COMPONENTS:
                     self.studio_tab.load_component(simu_key)
                     self.studio_tab.input_sym_id.setText(f"cad_{cad_id}")
                     self.studio_tab.input_sym_name.setText(cad_name)
-                    self.studio_tab.info_status.setText(f"🎨 Cargada base SimuCraft para CAD {cad_id}: {simu_key}")
+                    self.studio_tab.info_status.setText(
+                        f"🎨 Base SimuCraft cargada para CAD {cad_id}: {simu_key}"
+                    )
                 else:
                     self.studio_tab.load_component('motor_3p')
                     self.studio_tab.input_sym_id.setText(f"cad_{cad_id}")

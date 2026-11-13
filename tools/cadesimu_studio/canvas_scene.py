@@ -9,7 +9,8 @@ from PySide6.QtGui import QPainter, QColor, QPen, QBrush, QFont
 
 from .graphic_primitives import (
     GraphicLineItem, GraphicRectItem,
-    GraphicCircleItem, GraphicTextItem
+    GraphicCircleItem, GraphicTextItem,
+    GraphicArcItem, GraphicPolygonItem,
 )
 
 
