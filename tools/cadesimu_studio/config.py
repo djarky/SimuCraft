@@ -14,6 +14,7 @@ BMP_RESOURCE_DIR = BASE_PATH / 'cadesimu' / 'bmp_extract' / 'cadesimu_resources'
 CATALOG_COMPLETE_PATH = BASE_PATH / 'data' / 'catalogs' / 'cadesimu_symbols_complete.json'
 QET_CATALOG_CSV_PATH = BASE_PATH / 'data' / 'catalogs' / 'qet_symbols_catalog.csv'
 MANUAL_MAPPING_PATH = BASE_PATH / 'data' / 'mappings' / 'symbol_mapping_manual.json'
+CAD_QET_MAPPING_PATH = BASE_PATH / 'data' / 'mappings' / 'cad_qet_mapping.json'
 TILE_TO_CAD_PATH = BASE_PATH / 'data' / 'mappings' / 'tile_to_cad_id.json'
 DISPATCH_TABLE_PATH = BASE_PATH / 'data' / 'mappings' / 'cad_id_to_component.json'
 CUSTOM_SYMBOLS_PATH = BASE_PATH / 'data' / 'catalogs' / 'custom_symbols.json'
@@ -63,4 +64,33 @@ SPLASH_FILES = {
 # Configuración de tiles
 DEFAULT_TILE_SIZE = 24
 DEFAULT_SCALE = 2
+
+# Mapeo de equivalencias entre nombres de componentes en dispatch table y SimuCraft
+CAD_TO_SIMUCRAFT_ALIASES = {
+    'contact_no': 'contactor_contact_no',
+    'contact_nc': 'contactor_contact_nc',
+    'relay_coil': 'contactor_coil',
+    'emergency_stop': 'pushbutton_mushroom_nc',
+    'selector_2pos': 'selector_switch',
+    'motor_star_delta': 'motor_3p_yd',
+    'fuse': 'breaker_1p',
+}
+
+SIMUCRAFT_TO_CAD_ALIASES = {
+    'contactor_contact_no': 'contact_no',
+    'contactor_contact_nc': 'contact_nc',
+    'contactor_coil': 'relay_coil',
+    'contactor_coil_ac230': 'relay_coil',
+    'pushbutton_mushroom_nc': 'emergency_stop',
+    'pushbutton_mushroom_na': 'pushbutton_no',
+    'selector_switch': 'selector_2pos',
+    'motor_3p_yd': 'motor_star_delta',
+    'breaker_1p': 'fuse',
+    'breaker_1p_n': 'fuse',
+    'breaker_2p': 'fuse',
+    'breaker_3p': 'breaker_3p',
+    'breaker_3p_n': 'breaker_3p',
+    'thermal_relay': 'thermal_relay_3p',
+}
+
 
