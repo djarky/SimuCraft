@@ -1,11 +1,15 @@
 """
 Configuraciones, rutas base y constantes para CADe SIMU Studio & Mapper.
 """
+import os
 from pathlib import Path
+
 from PySide6.QtGui import QColor
 
-# Ruta raíz del proyecto SimuCraft
-BASE_PATH = Path('/home/vibecode/DevS/SimuCraft')
+# Ruta raíz del proyecto SimuCraft (derivada del propio paquete, no hardcodeada).
+BASE_PATH = Path(
+    os.environ.get("SIMUCRAFT_ROOT", Path(__file__).resolve().parents[2])
+).resolve()
 
 # Directorio de recursos BMP de CADe SIMU
 BMP_RESOURCE_DIR = BASE_PATH / 'cadesimu' / 'bmp_extract' / 'cadesimu_resources'
@@ -17,9 +21,21 @@ MANUAL_MAPPING_PATH = BASE_PATH / 'data' / 'mappings' / 'symbol_mapping_manual.j
 CAD_QET_MAPPING_PATH = BASE_PATH / 'data' / 'mappings' / 'cad_qet_mapping.json'
 TILE_TO_CAD_PATH = BASE_PATH / 'data' / 'mappings' / 'tile_to_cad_id.json'
 DISPATCH_TABLE_PATH = BASE_PATH / 'data' / 'mappings' / 'cad_id_to_component.json'
+BITMAP_NAMES_PATH = BASE_PATH / 'data' / 'mappings' / 'bitmap_names.json'
+TILESET_LAYOUTS_PATH = BASE_PATH / 'data' / 'mappings' / 'tileset_layouts.json'
+EXPORT_CSV_PATH = BASE_PATH / 'data' / 'mappings' / 'mapeo_simbolos_export.csv'
 SYMBOL_REGISTRY_DIR = BASE_PATH / 'data' / 'symbols'
 STANDARD_SYMBOLS_PATH = SYMBOL_REGISTRY_DIR / 'standard_symbols.json'
 CUSTOM_SYMBOLS_PATH = SYMBOL_REGISTRY_DIR / 'custom_symbols.json'
+
+# Biblioteca externa de QElectroTech. Se puede sobrescribir con QET_ELEMENTS_DIR.
+QET_ELEMENTS_DIR = Path(
+    os.environ.get(
+        "QET_ELEMENTS_DIR",
+        BASE_PATH.parent / 'qelectrotech-elements' / 'elements',
+    )
+).resolve()
+QET_ELEMENTS_DIRS = [QET_ELEMENTS_DIR, BASE_PATH / 'elements']
 
 # Colores según el tipo de borne/terminal eléctrico
 TERMINAL_TYPE_COLORS = {

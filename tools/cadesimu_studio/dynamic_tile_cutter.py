@@ -24,10 +24,10 @@ from PySide6.QtGui import (
 )
 from PIL import Image as _PILImage
 
-from .config import BASE_PATH, DEFAULT_SCALE, DEFAULT_TILE_SIZE
+from .config import DEFAULT_SCALE, DEFAULT_TILE_SIZE, TILESET_LAYOUTS_PATH
 
 
-LAYOUTS_PATH = BASE_PATH / 'data' / 'mappings' / 'tileset_layouts.json'
+LAYOUTS_PATH = TILESET_LAYOUTS_PATH
 
 
 class DynamicTileCanvas(QWidget):

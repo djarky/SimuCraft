@@ -23,7 +23,11 @@ from .terminal_handle import TerminalHandleItem
 from .canvas_scene import SymbolCanvasScene, SymbolGraphicsView
 from .qet_importer import QETVectorImporter
 from .standard_primitive_factory import create_standard_primitives
-from .graphic_primitives import clone_graphic_item
+from .graphic_primitives import (
+    clone_graphic_item,
+    primitive_from_dict,
+    serialize_primitives,
+)
 from .svg_importer import SvgVectorImporter
 
 try:
@@ -70,12 +74,6 @@ def _is_custom_symbol(symbol: dict) -> bool:
     tags = [str(tag).upper() for tag in symbol.get("tags", [])]
     return bool(symbol.get("custom")) or symbol.get("origin") == "custom" or CUSTOM_TAG in tags
 
-try:
-    from src.qet.parser import QETParser
-    PARSER = QETParser()
-except Exception:
-    PARSER = None
-
 class SymbolEditorWidget(QWidget):
     """Editor interactivo visual de símbolos y posiciones de bornes."""
 
@@ -112,11 +110,13 @@ class SymbolEditorWidget(QWidget):
         toolbar.addWidget(btn_duplicate)
         
         btn_import_svg = QPushButton("📂 Importar SVG / .elmt")
+        btn_import_svg.setToolTip("Crea un símbolo CUSTOM nuevo a partir de un SVG o .elmt")
         btn_import_svg.clicked.connect(self.import_svg_or_elmt)
         toolbar.addWidget(btn_import_svg)
 
-        btn_browse_qet = QPushButton("📦 Explorar Librería QET")
-        btn_browse_qet.clicked.connect(self.import_from_qet_browser)
+        btn_browse_qet = QPushButton("📦 IMPORTAR QET")
+        btn_browse_qet.setToolTip("Carga el .elmt seleccionado en el lienzo actual sin crear un CUSTOM")
+        btn_browse_qet.clicked.connect(self.import_qet_into_current_canvas)
         toolbar.addWidget(btn_browse_qet)
 
         toolbar.addSpacing(15)
@@ -207,6 +207,7 @@ class SymbolEditorWidget(QWidget):
         self.scene = SymbolCanvasScene(self)
         self.scene.selectionChanged.connect(self.on_scene_selection_changed)
         self.scene.undo_stack = self.undo_stack
+        self.scene.on_bounds_changed_callback = self.on_scene_bounds_changed
         
         self.view = SymbolGraphicsView(self.scene)
         canvas_layout.addWidget(self.view)
@@ -396,8 +397,25 @@ class SymbolEditorWidget(QWidget):
 
     def _clear_scene_primitives(self):
         for item in list(self.scene.items()):
+            if item is getattr(self.scene, "bounds_item", None):
+                continue
             if not isinstance(item, TerminalHandleItem):
                 self.scene.removeItem(item)
+
+    def _load_primitives_into_scene(self, primitives) -> int:
+        """Reconstruye la geometría editable guardada en ``visual.primitives``."""
+        if not isinstance(primitives, list):
+            return 0
+        loaded = 0
+        for data in primitives:
+            try:
+                item = primitive_from_dict(data)
+            except Exception:
+                item = None
+            if item is not None:
+                self.scene.addItem(item)
+                loaded += 1
+        return loaded
 
     def _load_svg_into_scene(self, svg_content: str) -> int:
         try:
@@ -408,6 +426,19 @@ class SymbolEditorWidget(QWidget):
         for item in result.get('items', []):
             self.scene.addItem(item)
         return len(result.get('items', []))
+
+    def _scene_primitives(self) -> list:
+        """Serializa la geometría editable actual en orden de apilado estable."""
+        return serialize_primitives(self.scene.items(Qt.AscendingOrder))
+
+    def on_scene_bounds_changed(self, width: float, height: float):
+        """Sincroniza los campos de tamaño cuando se arrastra el marco."""
+        self.cur_symbol.setdefault("visual", {})["width"] = float(width)
+        self.cur_symbol.setdefault("visual", {})["height"] = float(height)
+        for spin, value in ((self.spin_width, width), (self.spin_height, height)):
+            spin.blockSignals(True)
+            spin.setValue(max(20, int(round(value))))
+            spin.blockSignals(False)
 
     def load_component(self, comp_key: str):
         if comp_key not in STANDARD_COMPONENTS:
@@ -444,11 +475,13 @@ class SymbolEditorWidget(QWidget):
         self._clear_scene_primitives()
         loaded_items = 0
 
-        # El SVG es la geometría canónica que dibuja SimuCraft. Solo si no
-        # existe (o no se puede descomponer) se usan .elmt y la factoría.
-        svg_content = vis.get('svg_content')
-        if svg_content:
-            loaded_items = self._load_svg_into_scene(svg_content)
+        # Orden de carga: primitivas editables guardadas -> SVG canónico ->
+        # .elmt -> factoría (solo builtins sin geometría registrada).
+        loaded_items = self._load_primitives_into_scene(vis.get('primitives'))
+        if not loaded_items:
+            svg_content = vis.get('svg_content')
+            if svg_content:
+                loaded_items = self._load_svg_into_scene(svg_content)
 
         if not loaded_items:
             elmt_path = vis.get('elmt_path')
@@ -456,7 +489,7 @@ class SymbolEditorWidget(QWidget):
                 result = self._load_elmt_into_scene(elmt_path)
                 loaded_items = len(result.get('items', [])) if result else 0
 
-        if not loaded_items:
+        if not loaded_items and self._loaded_origin == "builtin":
             for item in create_standard_primitives(comp_key, self.cur_symbol):
                 self.scene.addItem(item)
 
@@ -729,8 +762,10 @@ class SymbolEditorWidget(QWidget):
             self.info_status.setText(f"⚠ Error al leer .elmt: {e}")
             return None
 
-        # Limpiar primitivas previas que no sean terminales
+        # Limpiar primitivas previas que no sean terminales ni el marco
         for it in list(self.scene.items()):
+            if it is getattr(self.scene, "bounds_item", None):
+                continue
             if not isinstance(it, TerminalHandleItem):
                 self.scene.removeItem(it)
 
@@ -766,6 +801,7 @@ class SymbolEditorWidget(QWidget):
         symbol_type: str = "generic",
         tag_prefix: str = "-K",
         logic: dict = None,
+        primitives: list = None,
     ) -> dict:
         slug = _slugify(base_id or name)
         base = slug if slug.startswith("custom_") else f"custom_{slug}"
@@ -785,7 +821,7 @@ class SymbolEditorWidget(QWidget):
                 "terminals": copy.deepcopy(terminals or []),
                 "svg_content": svg_content or "",
                 "elmt_path": elmt_path,
-                "primitives": [],
+                "primitives": copy.deepcopy(primitives or []),
             },
             "logic": copy.deepcopy(logic) if logic else {
                 "class": "AuxiliaryContact",
@@ -822,8 +858,8 @@ class SymbolEditorWidget(QWidget):
 
         if load_geometry:
             self._clear_scene_primitives()
-            loaded_items = 0
-            if vis.get("svg_content"):
+            loaded_items = self._load_primitives_into_scene(vis.get("primitives"))
+            if not loaded_items and vis.get("svg_content"):
                 loaded_items = self._load_svg_into_scene(vis["svg_content"])
             if not loaded_items:
                 elmt_path = vis.get("elmt_path")
@@ -870,6 +906,7 @@ class SymbolEditorWidget(QWidget):
             terminals=result.get("terminals", []),
             svg_content=svg_content,
             elmt_path=elmt_path,
+            primitives=self._scene_primitives(),
         )
         self._apply_symbol_to_editor(new_symbol, load_geometry=False)
         self.refresh_terminal_items()
@@ -944,6 +981,7 @@ class SymbolEditorWidget(QWidget):
             terminals=[],
             svg_content=svg_code,
             elmt_path=file_path,
+            primitives=self._scene_primitives(),
         )
         self._apply_symbol_to_editor(new_symbol, load_geometry=False)
         self.refresh_terminal_items()
@@ -955,23 +993,37 @@ class SymbolEditorWidget(QWidget):
                 "El símbolo que estaba editando no se ha modificado.",
             )
 
-    def new_custom_symbol(self, checked=False, base_id: str = None, name: str = None):
+    def new_custom_symbol(
+        self,
+        checked=False,
+        base_id: str = None,
+        name: str = None,
+        width: float = 90.0,
+        height: float = 72.0,
+        terminals: list = None,
+        symbol_type: str = "generic",
+    ):
         self._clear_scene_primitives()
+        width = max(20.0, float(width))
+        height = max(20.0, float(height))
+        if terminals is None:
+            terminals = [
+                {"id": "1", "name": "1", "x": 0, "y": 0, "orientation": "n", "type": "contact"},
+                {"id": "2", "name": "2", "x": 0, "y": height, "orientation": "s", "type": "contact"},
+            ]
         new_symbol = self._make_custom_symbol(
             name=name or "Nuevo Símbolo Personalizado",
-            width=90,
-            height=72,
-            terminals=[
-                {"id": "1", "name": "1", "x": 0, "y": 0, "orientation": "n", "type": "contact"},
-                {"id": "2", "name": "2", "x": 0, "y": 72, "orientation": "s", "type": "contact"},
-            ],
+            width=width,
+            height=height,
+            terminals=terminals,
             svg_content="",
             base_id=base_id,
+            symbol_type=symbol_type,
         )
         self._apply_symbol_to_editor(new_symbol, load_geometry=False)
-        self.scene.set_component_bounds(90, 72, "generic")
+        self.scene.set_component_bounds(width, height, symbol_type)
         self.refresh_terminal_items()
-        self._fit_view_to_symbol(90, 72)
+        self._fit_view_to_symbol(width, height)
         self.info_status.setText(
             f"Nuevo CUSTOM '{new_symbol['id']}' sin guardar. Pulsa 'Guardar en SimuCraft'."
         )
@@ -993,6 +1045,7 @@ class SymbolEditorWidget(QWidget):
             symbol_type=duplicate.get("type", "generic"),
             tag_prefix=duplicate.get("tag_prefix", "-K"),
             logic=duplicate.get("logic"),
+            primitives=self._scene_primitives(),
         )
         # La escena actual ya contiene la geometría que se está duplicando.
         self._apply_symbol_to_editor(duplicate, load_geometry=False)
@@ -1042,7 +1095,17 @@ class SymbolEditorWidget(QWidget):
             else:
                 symbol.pop("tags", None)
         else:
-            if not sym_id.startswith("custom_"):
+            # Un CUSTOM existente (incluidos los legados tipo ``cad_0``) se
+            # sobrescribe con su ID real. Solo se genera ``custom_*`` cuando
+            # el usuario cambia el ID o crea un símbolo nuevo.
+            loaded_id = getattr(self, "_loaded_symbol_id", None)
+            keep_loaded_id = (
+                loaded_id
+                and sym_id == loaded_id
+                and loaded_id in STANDARD_COMPONENTS
+                and _is_custom_symbol(STANDARD_COMPONENTS[loaded_id])
+            )
+            if not keep_loaded_id and not sym_id.startswith("custom_"):
                 sym_id = self._unique_custom_id(f"custom_{_slugify(sym_id)}")
                 self.input_sym_id.setText(sym_id)
             symbol["id"] = sym_id
@@ -1058,6 +1121,7 @@ class SymbolEditorWidget(QWidget):
         visual = symbol.setdefault("visual", {})
         visual["width"] = float(self.spin_width.value())
         visual["height"] = float(self.spin_height.value())
+        visual["primitives"] = self._scene_primitives()
         visual["svg_content"] = self.scene.export_primitives_to_svg()
 
         meta = symbol.setdefault("meta", {})
@@ -1128,8 +1192,44 @@ class SymbolEditorWidget(QWidget):
     # Explorador de Librería QET                                           #
     # ------------------------------------------------------------------ #
 
-    def import_from_qet_browser(self):
-        """Abre el diálogo de exploración de la librería QET y carga el .elmt seleccionado."""
+    def load_elmt_into_current(self, elmt_path: str):
+        """Carga un .elmt en el lienzo del símbolo actual sin crear un CUSTOM.
+
+        Se conserva el ID/nombre/tipo del símbolo abierto; solo se sustituyen
+        la geometría, los bornes y el tamaño del canvas.
+        """
+        result = self._load_elmt_into_scene(elmt_path)
+        if result is None:
+            return None
+
+        width = max(20.0, float(result.get('width', 90)))
+        height = max(20.0, float(result.get('height', 72)))
+        terminals = copy.deepcopy(result.get('terminals', []))
+
+        visual = self.cur_symbol.setdefault('visual', {})
+        visual['width'] = width
+        visual['height'] = height
+        visual['terminals'] = terminals
+        visual['elmt_path'] = elmt_path
+
+        for spin, value in ((self.spin_width, width), (self.spin_height, height)):
+            spin.blockSignals(True)
+            spin.setValue(max(20, int(round(value))))
+            spin.blockSignals(False)
+
+        self.scene.set_component_bounds(
+            width, height, self.cur_symbol.get('type', 'generic')
+        )
+        self.refresh_terminal_items()
+        self._fit_view_to_symbol(width, height)
+        self.info_status.setText(
+            f"✔ QET importado al lienzo actual: {len(result.get('items', []))} elementos + "
+            f"{len(terminals)} bornes ({int(width)}x{int(height)} px)"
+        )
+        return result
+
+    def import_qet_into_current_canvas(self):
+        """Abre el explorador QET y carga el .elmt en el lienzo actual."""
         try:
             from .qet_browser_dialog import QETLibraryBrowserDialog
         except Exception as e:
@@ -1139,6 +1239,10 @@ class SymbolEditorWidget(QWidget):
         if dlg.exec():
             path = dlg.get_selected_qet_path()
             if path:
-                self.load_elmt_file(path)
+                self.load_elmt_into_current(path)
+
+    def import_from_qet_browser(self):
+        """Alias compatible: el QET se importa en el lienzo actual."""
+        self.import_qet_into_current_canvas()
 
 

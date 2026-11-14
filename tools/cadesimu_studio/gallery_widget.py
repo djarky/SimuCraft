@@ -8,9 +8,9 @@ from PySide6.QtCore import Qt, QSize
 from PySide6.QtGui import QPixmap, QPainter, QColor, QPen, QIcon
 from PIL import Image as _PILImage
 
-from .config import BMP_RESOURCE_DIR, KNOWN_BMP_IDS, SPLASH_FILES, BASE_PATH
+from .config import BMP_RESOURCE_DIR, KNOWN_BMP_IDS, SPLASH_FILES, BITMAP_NAMES_PATH
 
-BITMAP_NAMES_FILE = BASE_PATH / 'data' / 'mappings' / 'bitmap_names.json'
+BITMAP_NAMES_FILE = BITMAP_NAMES_PATH
 
 
 class GalleryListWidget(QListWidget):

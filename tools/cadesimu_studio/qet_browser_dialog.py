@@ -22,18 +22,12 @@ from PySide6.QtCore import Qt, QSize, QByteArray, QRectF
 from PySide6.QtGui import QColor, QIcon, QPixmap, QPainter
 from PySide6.QtSvg import QSvgRenderer
 
-from .config import BASE_PATH, QET_CATALOG_CSV_PATH
+from .config import QET_CATALOG_CSV_PATH, QET_ELEMENTS_DIRS
 try:
     from src.qet.parser import QETParser
     PARSER = QETParser()
 except Exception:
     PARSER = None
-
-
-QET_ELEMENTS_DIRS = [
-    Path('/home/vibecode/DevS/qelectrotech-elements/elements'),
-    BASE_PATH / 'elements'
-]
 
 
 class QETLibraryBrowserDialog(QDialog):
@@ -65,8 +59,6 @@ class QETLibraryBrowserDialog(QDialog):
     def _load_catalog_csv(self):
         """Carga el catálogo CSV si existe para búsquedas rápidas."""
         csv_path = QET_CATALOG_CSV_PATH
-        if not csv_path.exists():
-            csv_path = BASE_PATH / 'qet_symbols_catalog.csv'
         if csv_path.exists():
             try:
                 with open(csv_path, encoding='utf-8-sig') as f:

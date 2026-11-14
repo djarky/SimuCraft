@@ -11,7 +11,7 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import Qt, QPointF, QRectF, QLineF
 from PySide6.QtGui import (
     QPen, QBrush, QColor, QFont, QPainter,
-    QPainterPath, QPolygonF
+    QPainterPath, QPolygonF, QTransform
 )
 
 
@@ -284,6 +284,7 @@ class GraphicArcItem(QGraphicsPathItem):
         self.setPen(QPen(QColor("#ffffff"), 1.8, Qt.SolidLine))
         self.setBrush(Qt.NoBrush)
         self.setZValue(15)
+        self._resizing_corner = False
         self._rebuild_path()
 
     def _rebuild_path(self):
@@ -292,14 +293,58 @@ class GraphicArcItem(QGraphicsPathItem):
         path.arcTo(self._x, self._y, self._w, self._h, self._start, self._span)
         self.setPath(path)
 
+    def boundingRect(self) -> QRectF:
+        extra = self.pen().widthF() / 2.0 + 6.0
+        return super().boundingRect().adjusted(-extra, -extra, extra, extra)
+
+    def _handle_rect(self) -> QRectF:
+        r = self.path().boundingRect()
+        return QRectF(r.right() - 4, r.bottom() - 4, 8, 8)
+
     def paint(self, painter: QPainter, option, widget=None):
         painter.setRenderHint(QPainter.Antialiasing, True)
         painter.setPen(self.pen())
         painter.setBrush(Qt.NoBrush)
         painter.drawPath(self.path())
         if self.isSelected():
+            r = self.path().boundingRect()
             painter.setPen(QPen(QColor("#00e5ff"), 1.5, Qt.DashLine))
-            painter.drawRect(self.boundingRect().adjusted(-2, -2, 2, 2))
+            painter.setBrush(Qt.NoBrush)
+            painter.drawRect(r.adjusted(-2, -2, 2, 2))
+            painter.fillRect(self._handle_rect(), QColor("#00e5ff"))
+
+    def mousePressEvent(self, event):
+        if self._handle_rect().contains(event.pos()):
+            self._resizing_corner = True
+            event.accept()
+            return
+        self._resizing_corner = False
+        super().mousePressEvent(event)
+
+    def mouseMoveEvent(self, event):
+        if getattr(self, '_resizing_corner', False):
+            self.prepareGeometryChange()
+            pos = event.pos()
+            if self.scene() and hasattr(self.scene(), 'snap_point'):
+                pos = self.mapFromScene(
+                    self.scene().snap_point(self.mapToScene(pos))
+                )
+            self._w = max(6.0, pos.x() - self._x)
+            self._h = max(6.0, pos.y() - self._y)
+            self._rebuild_path()
+            self.update()
+            event.accept()
+            return
+        super().mouseMoveEvent(event)
+
+    def mouseReleaseEvent(self, event):
+        if getattr(self, '_resizing_corner', False):
+            self._resizing_corner = False
+            if self.scene() and hasattr(self.scene(), 'on_item_changed_callback') and self.scene().on_item_changed_callback:
+                self.scene().on_item_changed_callback()
+            event.accept()
+            return
+        super().mouseReleaseEvent(event)
 
     def to_svg(self) -> str:
         import math
@@ -337,6 +382,20 @@ class GraphicPolygonItem(QGraphicsPolygonItem):
         self.setPen(QPen(QColor("#ffffff"), 1.8, Qt.SolidLine))
         self.setBrush(Qt.NoBrush)
         self.setZValue(15)
+        self._resizing_corner = False
+        self._resize_origin_rect = QRectF()
+        self._resize_origin_points = QPolygonF()
+
+    def boundingRect(self) -> QRectF:
+        extra = self.pen().widthF() / 2.0 + 6.0
+        return super().boundingRect().adjusted(-extra, -extra, extra, extra)
+
+    def _shape_rect(self) -> QRectF:
+        return self.polygon().boundingRect()
+
+    def _handle_rect(self) -> QRectF:
+        r = self._shape_rect()
+        return QRectF(r.right() - 4, r.bottom() - 4, 8, 8)
 
     def paint(self, painter: QPainter, option, widget=None):
         painter.setRenderHint(QPainter.Antialiasing, True)
@@ -344,9 +403,58 @@ class GraphicPolygonItem(QGraphicsPolygonItem):
         painter.setBrush(self.brush())
         painter.drawPolygon(self.polygon())
         if self.isSelected():
+            r = self._shape_rect()
             painter.setPen(QPen(QColor("#00e5ff"), 1.5, Qt.DashLine))
             painter.setBrush(Qt.NoBrush)
-            painter.drawRect(self.boundingRect().adjusted(-2, -2, 2, 2))
+            painter.drawRect(r.adjusted(-2, -2, 2, 2))
+            painter.fillRect(self._handle_rect(), QColor("#00e5ff"))
+
+    def mousePressEvent(self, event):
+        if self._handle_rect().contains(event.pos()):
+            self._resizing_corner = True
+            self._resize_origin_rect = QRectF(self._shape_rect())
+            self._resize_origin_points = QPolygonF(self.polygon())
+            event.accept()
+            return
+        self._resizing_corner = False
+        super().mousePressEvent(event)
+
+    def mouseMoveEvent(self, event):
+        if getattr(self, '_resizing_corner', False):
+            self.prepareGeometryChange()
+            pos = event.pos()
+            if self.scene() and hasattr(self.scene(), 'snap_point'):
+                pos = self.mapFromScene(
+                    self.scene().snap_point(self.mapToScene(pos))
+                )
+            origin = self._resize_origin_rect
+            if origin.width() <= 0 or origin.height() <= 0:
+                event.accept()
+                return
+            new_w = max(6.0, pos.x() - origin.left())
+            new_h = max(6.0, pos.y() - origin.top())
+            sx = new_w / origin.width()
+            sy = new_h / origin.height()
+            points = QPolygonF()
+            for point in self._resize_origin_points:
+                points.append(QPointF(
+                    origin.left() + (point.x() - origin.left()) * sx,
+                    origin.top() + (point.y() - origin.top()) * sy,
+                ))
+            self.setPolygon(points)
+            self.update()
+            event.accept()
+            return
+        super().mouseMoveEvent(event)
+
+    def mouseReleaseEvent(self, event):
+        if getattr(self, '_resizing_corner', False):
+            self._resizing_corner = False
+            if self.scene() and hasattr(self.scene(), 'on_item_changed_callback') and self.scene().on_item_changed_callback:
+                self.scene().on_item_changed_callback()
+            event.accept()
+            return
+        super().mouseReleaseEvent(event)
 
     def to_svg(self) -> str:
         pts = " ".join(f"{p.x():.2f},{p.y():.2f}" for p in self.polygon())
@@ -429,21 +537,80 @@ class GraphicTextItem(QGraphicsTextItem):
         self.setFont(QFont("Sans Serif", 9, QFont.Bold))
         self.setPos(x, y)
         self.setZValue(30)
+        self._resizing_corner = False
+        self._resize_origin_rect = QRectF()
+        self._resize_origin_font_size = 9.0
+
+    def boundingRect(self) -> QRectF:
+        return super().boundingRect().adjusted(-6, -6, 6, 6)
+
+    def _handle_rect(self) -> QRectF:
+        r = super().boundingRect()
+        return QRectF(r.right() - 4, r.bottom() - 4, 8, 8)
 
     def paint(self, painter: QPainter, option, widget=None):
         super().paint(painter, option, widget)
         if self.isSelected():
             painter.setPen(QPen(QColor("#00e5ff"), 1.2, Qt.DashLine))
             painter.setBrush(Qt.NoBrush)
-            painter.drawRect(self.boundingRect())
+            painter.drawRect(super().boundingRect())
+            painter.fillRect(self._handle_rect(), QColor("#00e5ff"))
+
+    def mousePressEvent(self, event):
+        if self._handle_rect().contains(event.pos()):
+            self._resizing_corner = True
+            self._resize_origin_rect = QRectF(super().boundingRect())
+            size = self.font().pointSizeF()
+            if size <= 0:
+                size = float(self.font().pointSize() or 9)
+            self._resize_origin_font_size = max(4.0, size)
+            event.accept()
+            return
+        self._resizing_corner = False
+        super().mousePressEvent(event)
+
+    def mouseMoveEvent(self, event):
+        if getattr(self, '_resizing_corner', False):
+            pos = event.pos()
+            if self.scene() and hasattr(self.scene(), 'snap_point'):
+                pos = self.mapFromScene(
+                    self.scene().snap_point(self.mapToScene(pos))
+                )
+            origin = self._resize_origin_rect
+            if origin.height() <= 0:
+                event.accept()
+                return
+            new_h = max(6.0, pos.y() - origin.top())
+            factor = new_h / origin.height()
+            new_size = max(4.0, self._resize_origin_font_size * factor)
+            font = self.font()
+            font.setPointSizeF(new_size)
+            self.setFont(font)
+            self.update()
+            event.accept()
+            return
+        super().mouseMoveEvent(event)
+
+    def mouseReleaseEvent(self, event):
+        if getattr(self, '_resizing_corner', False):
+            self._resizing_corner = False
+            if self.scene() and hasattr(self.scene(), 'on_item_changed_callback') and self.scene().on_item_changed_callback:
+                self.scene().on_item_changed_callback()
+            event.accept()
+            return
+        super().mouseReleaseEvent(event)
 
     def to_svg(self) -> str:
         pos = self.pos()
         txt = self.toPlainText()
         color = self.defaultTextColor().name()
-        size = self.font().pointSize()
+        size = self.font().pointSizeF()
+        if size <= 0:
+            size = float(self.font().pointSize() or 9)
+        weight = "bold" if self.font().bold() else "normal"
+        family = self.font().family() or "sans-serif"
         return (f'<text x="{pos.x():.2f}" y="{pos.y() + size:.2f}" '
-                f'font-size="{size}" font-family="sans-serif" font-weight="bold" '
+                f'font-size="{size:.2f}" font-family="{family}" font-weight="{weight}" '
                 f'fill="{color}">{txt}</text>')
 
 
@@ -500,3 +667,329 @@ def clone_graphic_item(item, offset=(0.0, 0.0)):
     clone.setOpacity(item.opacity())
     clone.setVisible(item.isVisible())
     return clone
+
+
+# ─── Serialización de primitivas ───────────────────────────────────────────────
+# ``visual["primitives"]`` guarda la geometría editable del Studio. Es la
+# fuente de verdad para recargar el editor; ``svg_content`` sigue siendo el
+# formato que consume SimuCraft para renderizar el símbolo.
+
+_PEN_STYLES = {
+    Qt.SolidLine: "solid",
+    Qt.DashLine: "dash",
+    Qt.DotLine: "dot",
+    Qt.DashDotLine: "dashdot",
+    Qt.DashDotDotLine: "dashdotdot",
+    Qt.CustomDashLine: "custom",
+}
+_PEN_STYLES_REVERSE = {value: key for key, value in _PEN_STYLES.items()}
+
+
+def _color_to_dict(color: QColor) -> dict:
+    return {"color": color.name(), "alpha": int(color.alpha())}
+
+
+def _color_from_dict(data, default: QColor = None) -> QColor:
+    if not isinstance(data, dict):
+        return QColor(default or "#ffffff")
+    color = QColor(str(data.get("color") or "#ffffff"))
+    if not color.isValid():
+        color = QColor(default or "#ffffff")
+    try:
+        color.setAlpha(int(data.get("alpha", 255)))
+    except (TypeError, ValueError):
+        pass
+    return color
+
+
+def _pen_to_dict(pen: QPen) -> dict:
+    return {
+        "style": _PEN_STYLES.get(pen.style(), "solid"),
+        "width": float(pen.widthF()),
+        "color": _color_to_dict(pen.color()),
+    }
+
+
+def _pen_from_dict(data) -> QPen:
+    if not isinstance(data, dict):
+        return QPen(QPen(QColor("#ffffff"), 1.8, Qt.SolidLine, Qt.RoundCap))
+    style = _PEN_STYLES_REVERSE.get(str(data.get("style")), Qt.SolidLine)
+    try:
+        width = float(data.get("width", 1.8))
+    except (TypeError, ValueError):
+        width = 1.8
+    if width <= 0:
+        width = 1.0
+    return QPen(_color_from_dict(data.get("color")), width, style, Qt.RoundCap, Qt.RoundJoin)
+
+
+def _brush_to_dict(brush: QBrush):
+    if brush.style() == Qt.NoBrush:
+        return None
+    return _color_to_dict(brush.color())
+
+
+def _brush_from_dict(data):
+    if not isinstance(data, dict):
+        return QBrush(Qt.NoBrush)
+    return QBrush(_color_from_dict(data))
+
+
+def _element_type_value(kind) -> int:
+    """Normaliza ``QPainterPath.ElementType`` a entero (PySide6 usa enums)."""
+    return int(getattr(kind, "value", kind))
+
+
+def _path_to_elements(path: QPainterPath) -> list:
+    elements = []
+    for index in range(path.elementCount()):
+        element = path.elementAt(index)
+        elements.append([
+            _element_type_value(element.type),
+            float(element.x),
+            float(element.y),
+        ])
+    return elements
+
+
+def _path_from_elements(elements) -> QPainterPath:
+    path = QPainterPath()
+    if not isinstance(elements, list):
+        return path
+    index = 0
+    while index < len(elements):
+        try:
+            kind, x, y = elements[index]
+            kind = int(kind)
+            x = float(x)
+            y = float(y)
+        except (TypeError, ValueError):
+            index += 1
+            continue
+        if kind == _element_type_value(QPainterPath.MoveToElement):
+            path.moveTo(x, y)
+            index += 1
+        elif kind == _element_type_value(QPainterPath.LineToElement):
+            path.lineTo(x, y)
+            index += 1
+        elif kind == _element_type_value(QPainterPath.CurveToElement) and index + 2 < len(elements):
+            try:
+                _, x2, y2 = elements[index + 1]
+                _, x3, y3 = elements[index + 2]
+            except (TypeError, ValueError):
+                index += 1
+                continue
+            path.cubicTo(x, y, float(x2), float(y2), float(x3), float(y3))
+            index += 3
+        else:
+            index += 1
+    return path
+
+
+def _base_to_dict(item: QGraphicsItem, kind: str) -> dict:
+    transform = item.transform()
+    return {
+        "kind": kind,
+        "pos": [float(item.pos().x()), float(item.pos().y())],
+        "transform": [
+            float(transform.m11()), float(transform.m12()),
+            float(transform.m21()), float(transform.m22()),
+            float(transform.dx()), float(transform.dy()),
+        ],
+        "z": float(item.zValue()),
+        "opacity": float(item.opacity()),
+        "visible": bool(item.isVisible()),
+        "pen": _pen_to_dict(item.pen()) if hasattr(item, "pen") else None,
+        "brush": _brush_to_dict(item.brush()) if hasattr(item, "brush") else None,
+    }
+
+
+def primitive_to_dict(item) -> dict:
+    """Convierte una primitiva editable en un diccionario JSON serializable."""
+    if isinstance(item, GraphicLineItem):
+        line = item.line()
+        data = _base_to_dict(item, "line")
+        data["line"] = [float(line.x1()), float(line.y1()), float(line.x2()), float(line.y2())]
+        return data
+    if isinstance(item, GraphicRectItem):
+        rect = item.rect()
+        data = _base_to_dict(item, "rect")
+        data["rect"] = [float(rect.x()), float(rect.y()), float(rect.width()), float(rect.height())]
+        data["rx"] = float(item.rx)
+        data["ry"] = float(item.ry)
+        return data
+    if isinstance(item, GraphicCircleItem):
+        rect = item.rect()
+        data = _base_to_dict(item, "circle")
+        data["rect"] = [float(rect.x()), float(rect.y()), float(rect.width()), float(rect.height())]
+        return data
+    if isinstance(item, GraphicArcItem):
+        data = _base_to_dict(item, "arc")
+        data.update({
+            "x": float(item._x), "y": float(item._y),
+            "w": float(item._w), "h": float(item._h),
+            "start": float(item._start), "span": float(item._span),
+        })
+        return data
+    if isinstance(item, GraphicPolygonItem):
+        data = _base_to_dict(item, "polygon")
+        data["points"] = [
+            [float(point.x()), float(point.y())] for point in item.polygon()
+        ]
+        return data
+    if isinstance(item, GraphicPathItem):
+        data = _base_to_dict(item, "path")
+        data["elements"] = _path_to_elements(item.path())
+        return data
+    if isinstance(item, GraphicTextItem):
+        data = _base_to_dict(item, "text")
+        font = item.font()
+        size = font.pointSizeF()
+        if size <= 0:
+            size = float(font.pointSize() or 9)
+        data.update({
+            "text": item.toPlainText(),
+            "color": _color_to_dict(item.defaultTextColor()),
+            "font": {
+                "family": font.family(),
+                "size": float(size),
+                "bold": bool(font.bold()),
+                "italic": bool(font.italic()),
+                "underline": bool(font.underline()),
+            },
+        })
+        return data
+    return None
+
+
+def serialize_primitives(items) -> list:
+    """Serializa una colección de ítems, ignorando bornes y elementos ajenos."""
+    result = []
+    for item in items:
+        data = primitive_to_dict(item)
+        if data is not None:
+            result.append(data)
+    return result
+
+
+def apply_primitive_state(item, data: dict) -> None:
+    """Aplica un estado serializado sobre una primitiva ya existente."""
+    if not isinstance(data, dict):
+        return
+
+    if isinstance(item, GraphicLineItem) and "line" in data:
+        try:
+            x1, y1, x2, y2 = data["line"]
+            item.setLine(QLineF(float(x1), float(y1), float(x2), float(y2)))
+        except (TypeError, ValueError):
+            pass
+    elif isinstance(item, GraphicRectItem) and "rect" in data:
+        try:
+            x, y, w, h = data["rect"]
+            item.setRect(QRectF(float(x), float(y), float(w), float(h)))
+            item.rx = float(data.get("rx", 0))
+            item.ry = float(data.get("ry", 0))
+        except (TypeError, ValueError):
+            pass
+    elif isinstance(item, GraphicCircleItem) and "rect" in data:
+        try:
+            x, y, w, h = data["rect"]
+            item.setRect(QRectF(float(x), float(y), float(w), float(h)))
+        except (TypeError, ValueError):
+            pass
+    elif isinstance(item, GraphicArcItem):
+        try:
+            item.prepareGeometryChange()
+            item._x = float(data.get("x", item._x))
+            item._y = float(data.get("y", item._y))
+            item._w = float(data.get("w", item._w))
+            item._h = float(data.get("h", item._h))
+            item._start = float(data.get("start", item._start))
+            item._span = float(data.get("span", item._span))
+            item._rebuild_path()
+        except (TypeError, ValueError):
+            pass
+    elif isinstance(item, GraphicPolygonItem) and "points" in data:
+        points = []
+        for point in data.get("points") or []:
+            try:
+                points.append((float(point[0]), float(point[1])))
+            except (TypeError, ValueError, IndexError):
+                continue
+        if points:
+            item.setPolygon(QPolygonF([QPointF(x, y) for x, y in points]))
+    elif isinstance(item, GraphicPathItem) and "elements" in data:
+        item.setPath(_path_from_elements(data.get("elements")))
+    elif isinstance(item, GraphicTextItem):
+        if "text" in data:
+            item.setPlainText(str(data.get("text", "")))
+        if "color" in data:
+            item.setDefaultTextColor(_color_from_dict(data.get("color")))
+        font_data = data.get("font")
+        if isinstance(font_data, dict):
+            font = QFont(str(font_data.get("family") or "Sans Serif"))
+            try:
+                font.setPointSizeF(max(1.0, float(font_data.get("size", 9))))
+            except (TypeError, ValueError):
+                font.setPointSizeF(9.0)
+            font.setBold(bool(font_data.get("bold")))
+            font.setItalic(bool(font_data.get("italic")))
+            font.setUnderline(bool(font_data.get("underline")))
+            item.setFont(font)
+
+    if "pen" in data and hasattr(item, "setPen"):
+        item.setPen(_pen_from_dict(data.get("pen")))
+    if "brush" in data and hasattr(item, "setBrush"):
+        item.setBrush(_brush_from_dict(data.get("brush")))
+    if "z" in data:
+        try:
+            item.setZValue(float(data["z"]))
+        except (TypeError, ValueError):
+            pass
+    if "opacity" in data:
+        try:
+            item.setOpacity(float(data["opacity"]))
+        except (TypeError, ValueError):
+            pass
+    if "visible" in data:
+        item.setVisible(bool(data["visible"]))
+    if "transform" in data:
+        try:
+            m11, m12, m21, m22, dx, dy = data["transform"]
+            item.setTransform(QTransform(
+                float(m11), float(m12), float(m21), float(m22), float(dx), float(dy)
+            ))
+        except (TypeError, ValueError):
+            pass
+    if "pos" in data:
+        try:
+            x, y = data["pos"]
+            item.setPos(float(x), float(y))
+        except (TypeError, ValueError):
+            pass
+
+
+def primitive_from_dict(data: dict):
+    """Reconstruye una primitiva editable desde su diccionario serializado."""
+    if not isinstance(data, dict):
+        return None
+    kind = data.get("kind")
+    item = None
+    if kind == "line":
+        item = GraphicLineItem()
+    elif kind == "rect":
+        item = GraphicRectItem()
+    elif kind == "circle":
+        item = GraphicCircleItem()
+    elif kind == "arc":
+        item = GraphicArcItem()
+    elif kind == "polygon":
+        item = GraphicPolygonItem([])
+    elif kind == "path":
+        item = GraphicPathItem()
+    elif kind == "text":
+        item = GraphicTextItem("")
+    if item is None:
+        return None
+    apply_primitive_state(item, data)
+    return item

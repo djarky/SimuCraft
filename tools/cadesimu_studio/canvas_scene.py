@@ -5,13 +5,132 @@ y rejilla eléctrica de snapping CADe SIMU.
 from typing import Optional, List
 from PySide6.QtWidgets import QGraphicsScene, QGraphicsItem
 from PySide6.QtCore import Qt, QPointF, QRectF, QLineF
-from PySide6.QtGui import QPainter, QColor, QPen, QBrush, QFont
+from PySide6.QtGui import QPainter, QColor, QPen, QBrush, QFont, QPainterPath
 
 from .graphic_primitives import (
     GraphicLineItem, GraphicRectItem,
     GraphicCircleItem, GraphicTextItem,
     GraphicArcItem, GraphicPolygonItem,
+    primitive_to_dict, apply_primitive_state,
 )
+
+
+class SymbolBoundsItem(QGraphicsItem):
+    """Marco del símbolo con tiradores para redimensionar su bounds.
+
+    El origen (0,0) queda fijo: los tiradores derecho, inferior y de la
+    esquina inferior derecha cambian el ancho y/o alto del componente.
+    """
+
+    HANDLE_SIZE = 10.0
+
+    def __init__(self, scene: "SymbolCanvasScene"):
+        super().__init__()
+        self._scene = scene
+        self._width = float(scene.comp_width)
+        self._height = float(scene.comp_height)
+        self._active_handle = None
+        self.setZValue(10000)
+        self.setAcceptHoverEvents(True)
+
+    def set_bounds(self, width: float, height: float):
+        width = max(20.0, float(width))
+        height = max(20.0, float(height))
+        if width == self._width and height == self._height:
+            return
+        self.prepareGeometryChange()
+        self._width = width
+        self._height = height
+        self.update()
+
+    def boundingRect(self) -> QRectF:
+        margin = self.HANDLE_SIZE
+        return QRectF(-margin, -margin, self._width + margin * 2, self._height + margin * 2)
+
+    def shape(self) -> QPainterPath:
+        path = QPainterPath()
+        for rect in self._handle_rects().values():
+            path.addRect(rect)
+        return path
+
+    def _handle_rects(self):
+        size = self.HANDLE_SIZE
+        half = size / 2.0
+        return {
+            "right": QRectF(self._width - half, self._height / 2.0 - half, size, size),
+            "bottom": QRectF(self._width / 2.0 - half, self._height - half, size, size),
+            "corner": QRectF(self._width - half, self._height - half, size, size),
+        }
+
+    def paint(self, painter: QPainter, option, widget=None):
+        painter.setRenderHint(QPainter.Antialiasing, True)
+        painter.setPen(QPen(QColor("#4a90e2"), 1.5, Qt.DashLine))
+        painter.setBrush(Qt.NoBrush)
+        painter.drawRect(QRectF(0, 0, self._width, self._height))
+        painter.setPen(QPen(QColor("#4a90e2"), 1.0))
+        painter.setBrush(QBrush(QColor("#4a90e2")))
+        for rect in self._handle_rects().values():
+            painter.drawRect(rect)
+
+    def _handle_at(self, pos: QPointF):
+        for name, rect in self._handle_rects().items():
+            if rect.contains(pos):
+                return name
+        return None
+
+    def hoverMoveEvent(self, event):
+        handle = self._handle_at(event.pos())
+        if handle in {"right", "corner"}:
+            self.setCursor(Qt.SizeHorCursor if handle == "right" else Qt.SizeFDiagCursor)
+        elif handle == "bottom":
+            self.setCursor(Qt.SizeVerCursor)
+        else:
+            self.unsetCursor()
+        super().hoverMoveEvent(event)
+
+    def mousePressEvent(self, event):
+        handle = self._handle_at(event.pos())
+        if event.button() == Qt.LeftButton and handle:
+            self._active_handle = handle
+            event.accept()
+            return
+        self._active_handle = None
+        event.ignore()
+
+    def resize_to(self, width: float, height: float):
+        """Redimensiona el bounds del símbolo (usado por tests y API interna)."""
+        self._scene.set_bounds_from_interaction(
+            max(20.0, float(width)), max(20.0, float(height))
+        )
+
+    def resize_to_scene_point(self, point: QPointF):
+        """Aplica el redimensionado a partir de un punto en coordenadas de escena."""
+        if self._active_handle in {"right", "corner"}:
+            width = max(20.0, float(point.x()))
+        else:
+            width = self._width
+        if self._active_handle in {"bottom", "corner"}:
+            height = max(20.0, float(point.y()))
+        else:
+            height = self._height
+        self._scene.set_bounds_from_interaction(width, height)
+
+    def mouseMoveEvent(self, event):
+        if not self._active_handle:
+            event.ignore()
+            return
+        point = event.scenePos()
+        if hasattr(self._scene, "snap_point"):
+            point = self._scene.snap_point(point)
+        self.resize_to_scene_point(point)
+        event.accept()
+
+    def mouseReleaseEvent(self, event):
+        if self._active_handle:
+            self._active_handle = None
+            event.accept()
+            return
+        event.ignore()
 
 
 class SymbolCanvasScene(QGraphicsScene):
@@ -44,9 +163,15 @@ class SymbolCanvasScene(QGraphicsScene):
         self._start_point = QPointF()
         self._temp_item: Optional[QGraphicsItem] = None
         self.undo_stack = None
+        self._pending_state = None
 
-        # Callback cuando cambia algún item
+        # Callback cuando cambia algún item o el bounds del símbolo
         self.on_item_changed_callback = None
+        self.on_bounds_changed_callback = None
+
+        # Marco interactivo del símbolo (tiradores de redimensionado)
+        self.bounds_item = SymbolBoundsItem(self)
+        self.addItem(self.bounds_item)
 
     def set_tool(self, tool_name: str):
         self.active_tool = tool_name
@@ -63,10 +188,62 @@ class SymbolCanvasScene(QGraphicsScene):
         return QPointF(sx, sy)
 
     def set_component_bounds(self, width: float, height: float, comp_type: str = 'generic'):
-        self.comp_width = width
-        self.comp_height = height
+        self.comp_width = max(20.0, float(width))
+        self.comp_height = max(20.0, float(height))
         self.comp_type = comp_type
+        if hasattr(self, "bounds_item"):
+            self.bounds_item.set_bounds(self.comp_width, self.comp_height)
         self.update()
+
+    def set_bounds_from_interaction(self, width: float, height: float):
+        """Actualiza el bounds tras arrastrar un tirador del marco."""
+        self.set_component_bounds(width, height, self.comp_type)
+        if self.on_bounds_changed_callback:
+            self.on_bounds_changed_callback(self.comp_width, self.comp_height)
+
+    # ---------------- Estado para undo/redo geométrico ----------------
+
+    def capture_state(self) -> dict:
+        """Captura geometría y estilo de las primitivas y el tamaño del símbolo."""
+        primitives = []
+        for item in self.items():
+            if item is getattr(self, "bounds_item", None):
+                continue
+            data = primitive_to_dict(item)
+            if data is not None:
+                primitives.append((item, data))
+        return {
+            "width": float(self.comp_width),
+            "height": float(self.comp_height),
+            "primitives": primitives,
+        }
+
+    def apply_state(self, state: dict) -> None:
+        """Restaura un estado capturado por :meth:`capture_state`."""
+        if not isinstance(state, dict):
+            return
+        self.set_component_bounds(
+            float(state.get("width", self.comp_width)),
+            float(state.get("height", self.comp_height)),
+            self.comp_type,
+        )
+        for item, data in state.get("primitives", []):
+            if item.scene() is self:
+                apply_primitive_state(item, data)
+        if self.on_bounds_changed_callback:
+            self.on_bounds_changed_callback(self.comp_width, self.comp_height)
+        self.update()
+
+    def push_state_change(self, before: dict, text: str = "Editar símbolo") -> bool:
+        """Registra un cambio de geometría si el estado difiere del capturado."""
+        if self.undo_stack is None or before is None:
+            return False
+        after = self.capture_state()
+        if before == after:
+            return False
+        from .undo_commands import SceneStateCommand
+        self.undo_stack.push(SceneStateCommand(self, before, after, text))
+        return True
 
     def drawBackground(self, painter: QPainter, rect: QRectF):
         # Fondo oscuro de estación de trabajo
@@ -110,16 +287,13 @@ class SymbolCanvasScene(QGraphicsScene):
         painter.setFont(QFont("Sans Serif", 7, QFont.Bold))
         painter.drawText(4, -4, "(0,0) Origen")
 
-        # Delimitador del componente
-        comp_rect = QRectF(0, 0, self.comp_width, self.comp_height)
-        painter.setPen(QPen(QColor("#4a90e2"), 1.5, Qt.DashLine))
-        painter.setBrush(QBrush(QColor(74, 144, 226, 15)))
-        painter.drawRect(comp_rect)
-
     def mousePressEvent(self, event):
         pos = self.snap_point(event.scenePos())
 
         if self.active_tool == self.TOOL_SELECT:
+            # Captura antes de que el ítem aplique mover/redimensionar. El
+            # comando se crea en mouseReleaseEvent si la geometría cambió.
+            self._pending_state = self.capture_state()
             super().mousePressEvent(event)
             return
 
@@ -193,6 +367,10 @@ class SymbolCanvasScene(QGraphicsScene):
             if self.on_item_changed_callback:
                 self.on_item_changed_callback()
         super().mouseReleaseEvent(event)
+        if self._pending_state is not None:
+            before = self._pending_state
+            self._pending_state = None
+            self.push_state_change(before)
 
     def keyPressEvent(self, event):
         # Eliminar items seleccionados con Delete o Backspace

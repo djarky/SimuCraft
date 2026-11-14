@@ -13,33 +13,24 @@ from PySide6.QtWidgets import (
     QTextEdit, QLabel, QPushButton, QScrollArea, QTabWidget,
     QMessageBox, QFileDialog, QGraphicsScene, QInputDialog
 )
-from PySide6.QtCore import Qt, QSize, QByteArray, QRectF
+from PySide6.QtCore import Qt, QSize, QRectF
 from PySide6.QtGui import QColor, QIcon, QPixmap, QPainter, QPen, QBrush, QFont
-from PySide6.QtSvg import QSvgRenderer
 from PIL import Image as _PILImage
 
 from .config import (
-    BASE_PATH, CATALOG_COMPLETE_PATH, QET_CATALOG_CSV_PATH,
+    CATALOG_COMPLETE_PATH,
     MANUAL_MAPPING_PATH, CAD_QET_MAPPING_PATH, TILE_TO_CAD_PATH, DISPATCH_TABLE_PATH,
-    CAD_TO_SIMUCRAFT_ALIASES, SIMUCRAFT_TO_CAD_ALIASES, BMP_RESOURCE_DIR
+    CAD_TO_SIMUCRAFT_ALIASES, SIMUCRAFT_TO_CAD_ALIASES, BMP_RESOURCE_DIR,
+    EXPORT_CSV_PATH,
 )
 try:
     from src.components.standard_components import STANDARD_COMPONENTS
 except Exception:
     STANDARD_COMPONENTS = {}
-from .tile_sheet_label import TileSheetLabel
 from .gallery_widget import GalleryListWidget, BITMAP_NAMES_FILE
 from .symbol_editor_widget import SymbolEditorWidget
 from .dynamic_tile_cutter import DynamicTileCutterWidget
 from .standard_primitive_factory import create_standard_primitives
-
-try:
-    from src.qet.parser import QETParser
-    PARSER = QETParser()
-    USE_P = True
-except Exception:
-    PARSER = None
-    USE_P = False
 
 class CADeSimuMapperWindow(QMainWindow):
     def __init__(self):
@@ -63,49 +54,34 @@ class CADeSimuMapperWindow(QMainWindow):
         self.cad_symbols = []
         self.cad_symbols_by_id = {}
         catalog_path = CATALOG_COMPLETE_PATH
-        if not catalog_path.exists():
-            catalog_path = BASE_PATH / 'cadesimu_symbols_complete.json'
         if catalog_path.exists():
             with open(catalog_path, 'r', encoding='utf-8') as f:
                 self.cad_symbols = json.load(f)
                 for s in self.cad_symbols:
                     self.cad_symbols_by_id[str(s['CAD_ID'])] = s
 
-        # 2. Catálogo QET
-        self.qet = []
-        qet_catalog = QET_CATALOG_CSV_PATH
-        if not qet_catalog.exists():
-            qet_catalog = BASE_PATH / 'qet_symbols_catalog.csv'
-        if qet_catalog.exists():
-            with open(qet_catalog, encoding='utf-8-sig') as f:
-                for r in csv.DictReader(f):
-                    if r.get('Filename'):
-                        self.qet.append(r)
-
-        # 3. Mapeos existentes: cargar mapa maestro pre-mapeado y sobreescribir con manual
+        # 2. Mapeos existentes: cargar mapa maestro pre-mapeado y sobreescribir con manual
         self.map = {}
         if CAD_QET_MAPPING_PATH.exists():
             try:
                 with open(CAD_QET_MAPPING_PATH, 'r', encoding='utf-8') as f:
                     master_data = json.load(f)
                     for k, v in master_data.get('mappings', {}).items():
-                        if v.get('qet_file') or v.get('simucraft_component'):
-                            cad_key = f"CAD:{k}"
-                            self.map[cad_key] = {
-                                'cad_key': cad_key,
-                                'cad_id': v.get('cad_id', int(k) if k.isdigit() else k),
-                                'cad_name': v.get('name', ''),
-                                'category': v.get('category', ''),
-                                'subtype': v.get('subtype', ''),
-                                'qet_file': v.get('qet_file') or '',
-                                'component_key': v.get('simucraft_component') or ''
-                            }
+                        if not v.get('simucraft_component'):
+                            continue
+                        cad_key = f"CAD:{k}"
+                        self.map[cad_key] = {
+                            'cad_key': cad_key,
+                            'cad_id': v.get('cad_id', int(k) if k.isdigit() else k),
+                            'cad_name': v.get('name', ''),
+                            'category': v.get('category', ''),
+                            'subtype': v.get('subtype', ''),
+                            'component_key': v.get('simucraft_component') or '',
+                        }
             except Exception as e:
                 print(f"Error cargando cad_qet_mapping.json: {e}")
 
         mapping_path = MANUAL_MAPPING_PATH
-        if not mapping_path.exists():
-            mapping_path = BASE_PATH / 'symbol_mapping_manual.json'
         if mapping_path.exists():
             try:
                 with open(mapping_path, 'r', encoding='utf-8') as f:
@@ -113,7 +89,7 @@ class CADeSimuMapperWindow(QMainWindow):
             except Exception:
                 pass
 
-        # 4. Mapa tile → CAD_ID (generado por build_tile_map.py)
+        # 3. Mapa tile → CAD_ID (generado por build_tile_map.py)
         self.tile_to_cad = {}
         tile_map_path = TILE_TO_CAD_PATH
         if tile_map_path.exists():
@@ -229,21 +205,65 @@ class CADeSimuMapperWindow(QMainWindow):
             return None
 
         return base_pix.copy(x, y, w, h)
-                
+
+    def _tile_info_for_cad(self, cad_id: str) -> dict:
+        """Devuelve el tile asociado a un CAD_ID, si existe.
+
+        Combina el tile del mapeo manual (puede traer solo ``size``) con el de
+        ``tile_to_cad_id.json`` (trae ``w``/``h`` exactos del recorte).
+        """
+        cad_id = str(cad_id)
+        tile = {}
+        entry = self.map.get(f"CAD:{cad_id}") or self.map.get(cad_id)
+        if isinstance(entry, dict) and isinstance(entry.get('tile'), dict):
+            tile.update(entry['tile'])
+        if cad_id in self.cad_to_tile:
+            cad_tile = self.cad_to_tile[cad_id][1]
+            if isinstance(cad_tile, dict):
+                tile.update(cad_tile)
+        return tile
+
+    def _sprite_canvas_size(self, cad_id: str) -> tuple:
+        """Tamaño del canvas para un sprite sin componente nativo.
+
+        Usa las dimensiones del tile asignado (el recorte real del bitmap).
+        Si el CAD no tiene tile, conserva el tamaño por defecto 90x72.
+        """
+        tile = self._tile_info_for_cad(cad_id)
+        try:
+            w = float(tile.get('w') or tile.get('size') or 0)
+            h = float(tile.get('h') or tile.get('size') or 0)
+        except (TypeError, ValueError):
+            w = h = 0.0
+        if w <= 0 or h <= 0:
+            return 90.0, 72.0
+        return max(20.0, w), max(20.0, h)
+
+    def _create_sprite_canvas(self, cad_id: str, cad_name: str = ""):
+        """Crea un CUSTOM nuevo en el Studio con el tamaño del bitmap."""
+        width, height = self._sprite_canvas_size(cad_id)
+        self.studio_tab.new_custom_symbol(
+            base_id=f"cad_{cad_id}",
+            name=cad_name or f"CAD {cad_id}",
+            width=width,
+            height=height,
+        )
+        return width, height
+
     def init_ui(self):
         central = QWidget()
         self.setCentralWidget(central)
         main_layout = QVBoxLayout(central)
         
         # Header banner
-        header = QLabel(f"⚡ CADe SIMU Mapper & Symbol Studio 2.0 | Catálogo REA: {len(self.cad_symbols)} símbolos | QET: {len(self.qet)} elementos | SimuCraft Native")
+        header = QLabel(f"⚡ CADe SIMU Mapper & Symbol Studio 2.0 | Catálogo REA: {len(self.cad_symbols)} símbolos | SimuCraft Native")
         header.setStyleSheet("font-size: 14px; font-weight: bold; padding: 10px; background: #1a1e24; color: #4af626; border-radius: 4px;")
         main_layout.addWidget(header)
         
         # Tabs de Navegación
         self.main_tabs = QTabWidget()
         
-        # ----------------- TAB 1: MAPPER (CATÁLOGO REA <-> QET) -----------------
+        # ----------------- TAB 1: MAPPER (CATÁLOGO REA <-> SIMUCRAFT) -----------------
         mapper_tab = QWidget()
         mapper_layout = QVBoxLayout(mapper_tab)
         
@@ -458,14 +478,9 @@ class CADeSimuMapperWindow(QMainWindow):
         btn_export = QPushButton("📤 Exportar CSV")
         btn_export.clicked.connect(self.export_csv)
 
-        btn_browse_qet = QPushButton("📦 Biblioteca QET...")
-        btn_browse_qet.setToolTip("Explorar catálogo QElectroTech para importar .elmt")
-        btn_browse_qet.clicked.connect(self.open_qet_browser_dialog)
-
         btn_bar.addWidget(btn_edit_studio)
         btn_bar.addWidget(btn_save)
         btn_bar.addWidget(btn_export)
-        btn_bar.addWidget(btn_browse_qet)
         right_layout.addLayout(btn_bar)
 
         splitter.addWidget(right_box)
@@ -510,8 +525,6 @@ class CADeSimuMapperWindow(QMainWindow):
         match_str = f" | ⚡ {len(cad_matches)} tiles vinculados a CADe SIMU" if cad_matches else ""
         if "Toolbars" in cat:
             cat_desc = "Botones barra GUI (interfaz)"
-        elif "Hojas" in cat:
-            cat_desc = "Lámina de Tiles / Catálogo de símbolos y PLC"
         elif "Vistas" in cat:
             cat_desc = "Vista de hardware 2D/3D (Laboratorio Virtual)"
         else:
@@ -669,9 +682,6 @@ class CADeSimuMapperWindow(QMainWindow):
         simu_key = self.get_simucraft_equivalent(tid)
         simu_str = f"✔ {simu_key} (Vinculado a SimuCraft)" if simu_key else "⚠ Sin componente nativo directo"
 
-        map_entry = self.map.get(self.cur_key) or self.map.get(tid)
-        qet_str = f"✔ {map_entry.get('qet_file')}" if (map_entry and map_entry.get('qet_file')) else "Sin archivo QET (.elmt) asignado"
-        
         info_lines = [
             f"ID CAD: [{tid:>5}] | Categoria: {cat}",
             f"Nombre Oficial: {name}"
@@ -679,10 +689,9 @@ class CADeSimuMapperWindow(QMainWindow):
 
         if cat == 'Virtual_2D' or 'bitmap' in name.lower():
             info_lines.append("ℹ TIPO: Sprite Gráfico de Laboratorio Virtual 2D (Entorno Físico)")
-            info_lines.append("ℹ CORRELACIÓN: No aplica a esquemáticos QET (es un elemento visual de CADe SIMU)")
+            info_lines.append("ℹ CORRELACIÓN: No aplica a símbolos nativos de SimuCraft")
         else:
             info_lines.append(f"SimuCraft Nativo: {simu_str}")
-            info_lines.append(f"Mapeo QET: {qet_str}")
 
         info_lines.append(f"Subtipo: {subtipo} | Terminales: {term}")
         info_lines.append(f"Descripción: {item.get('Descripcion', '-')}")
@@ -984,169 +993,6 @@ class CADeSimuMapperWindow(QMainWindow):
         else:
             QMessageBox.information(self, "Sin coincidencia", "No se encontró un componente SimuCraft directo.")
 
-    def open_qet_browser_dialog(self):
-        """Abre el diálogo modal de exploración e importación del catálogo QET."""
-        try:
-            from .qet_browser_dialog import QETLibraryBrowserDialog
-            dlg = QETLibraryBrowserDialog(self)
-            if dlg.exec():
-                sel_path = dlg.get_selected_qet_path()
-                if sel_path and self.cur_item:
-                    cad_id = str(self.cur_item['CAD_ID'])
-                    self.map[self.cur_key]['qet_file'] = Path(sel_path).name
-                    self.map[self.cur_key]['qet_path'] = sel_path
-                    self.save_mapping()
-                    QMessageBox.information(self, "QET Asignado", f"Archivo QET asignado a CAD [{cad_id}]: {Path(sel_path).name}")
-        except Exception as e:
-            QMessageBox.information(self, "Biblioteca QET", f"Explorador QET: {e}")
-
-    # Compatibilidad con código antiguo
-    def on_sheet_clicked(self, event, path, name):
-        pos = event.position() if hasattr(event, 'position') else event.pos()
-        raw_x = int(pos.x() / 2)
-        raw_y = int(pos.y() / 2)
-        ts = 24
-        row, col = raw_y // ts, raw_x // ts
-        bmp_id = int(Path(path).stem.replace('bitmap_', ''))
-        key = f"{bmp_id}_{row:02d}_{col:02d}"
-        tile_info = self.tile_to_cad.get(key, {})
-        self.on_tile_selected_from_sheet(path, bmp_id, row, col, tile_info)
-
-    # Tabla de sustitución para archivos .elmt mencionados en cad_qet_mapping.json
-    # que no existen en la biblioteca qelectrotech-elements con ese nombre exacto.
-    _QET_FALLBACK_SUBSTITUTIONS = {
-        'moteur_tri.elmt': 'moteur.elmt',
-        'moteur_mono.elmt': '71007210_moteur.elmt',
-        'moteur_1p.elmt': '71007210_moteur.elmt',
-        'contacteur_2p.elmt': 'km_tri.elmt',
-        'contacteur_4p.elmt': 'km_tri.elmt',
-        'contacteur_1p.elmt': 'km_tri.elmt',
-        'contacteur_3p.elmt': 'km_tri.elmt',
-        'fusible.elmt': '71104001_cc_fusible.elmt',
-        'disjoncteur_1p.elmt': 'disjoncteur-uni-dclic.elmt',
-        'disjoncteur_3p.elmt': 'disjoncteur-tetra-dt40.elmt',
-        'bobine_relais.elmt': '71105013_bouton_poussoir.elmt',
-        'bobine_coil.elmt': '71105013_bouton_poussoir.elmt',
-        'bobine_contacteur.elmt': '71105013_bouton_poussoir.elmt',
-        'detecteur_inductif.elmt': 'detector-gas.elmt',
-        'detecteur_capacitif.elmt': 'detector-gas.elmt',
-        'detecteur_optico.elmt': 'detector-gas.elmt',
-    }
-    _QET_BASE = Path('/home/vibecode/DevS/qelectrotech-elements/elements')
-
-    def _resolve_qet_path(self, data: dict) -> str:
-        """Resuelve la ruta física de un .elmt usando múltiples estrategias de búsqueda."""
-        # 1. Full_Path directo
-        path = data.get('Full_Path', '')
-        if path and os.path.exists(path):
-            return path
-
-        # 2. Rel_Path relativo a la raíz QET
-        rel = data.get('Rel_Path') or data.get('qet_path')
-        if rel:
-            for base in [BASE_PATH / 'elements', self._QET_BASE]:
-                cand = base / rel
-                if cand.exists():
-                    return str(cand)
-
-        # 3. Nombre de archivo solamente
-        fname = data.get('Filename') or data.get('qet_file') or ''
-        base_fname = Path(fname).name if fname else ''
-        if not base_fname:
-            return ''
-
-        # 3a. Sustitución directa si es un alias conocido
-        sub = self._QET_FALLBACK_SUBSTITUTIONS.get(base_fname.lower())
-        if sub:
-            matches = list(self._QET_BASE.rglob(sub))
-            if matches:
-                return str(matches[0])
-
-        # 3b. Búsqueda glob en la biblioteca QET
-        matches = list(self._QET_BASE.rglob(base_fname))
-        if matches:
-            return str(matches[0])
-
-        return ''
-
-    def preview_qet(self, list_item):
-        if not list_item:
-            return
-        data = list_item.data(Qt.UserRole)
-        if not data or not isinstance(data, dict):
-            self.preview_label.clear()
-            self.preview_label.setText(list_item.text().lstrip('✔ ').strip())
-            return
-
-        path = self._resolve_qet_path(data)
-
-        if not path or not os.path.exists(path):
-            self.preview_label.clear()
-            fname = data.get('Filename') or data.get('qet_file') or list_item.text()
-            self.preview_label.setText(f"Sin archivo físico:\n{Path(fname).name}")
-            return
-
-        try:
-            if USE_P and PARSER:
-                svg = PARSER.elmt_to_svg(path)
-                if svg:
-                    if '<svg' not in svg:
-                        svg = f'<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240">{svg}</svg>'
-                    renderer = QSvgRenderer(QByteArray(svg.encode('utf-8')))
-                    if renderer.isValid():
-                        pix = QPixmap(240, 240)
-                        pix.fill(Qt.white)
-                        painter = QPainter(pix)
-
-                        sz = renderer.defaultSize()
-                        w = float(sz.width()) if sz.width() > 0 else 40.0
-                        h = float(sz.height()) if sz.height() > 0 else 40.0
-                        scale = min(200.0 / w, 200.0 / h)
-                        tw, th = w * scale, h * scale
-                        tx = (240.0 - tw) / 2.0
-                        ty = (240.0 - th) / 2.0
-                        target_rect = QRectF(tx, ty, tw, th)
-
-                        renderer.render(painter, target_rect)
-                        painter.end()
-                        self.preview_label.setPixmap(pix)
-                        return
-        except Exception as e:
-            print(f"Error previewing QET: {e}")
-
-        self.preview_label.clear()
-        self.preview_label.setText(data.get('Filename', 'Sin vista previa'))
-
-    def assign_current_mapping(self):
-        if not self.cur_key:
-            QMessageBox.warning(self, "Atención", "Por favor selecciona un símbolo CAD en la lista izquierda.")
-            return
-        current_qet = self.qet_list.currentItem()
-        if not current_qet:
-            QMessageBox.warning(self, "Atención", "Por favor selecciona un elemento QET en la lista derecha.")
-            return
-        self.assign_mapping(current_qet)
-
-    def assign_mapping(self, list_item):
-        if not self.cur_key or not self.cur_item:
-            QMessageBox.warning(self, "Atención", "Selecciona un símbolo CAD primero.")
-            return
-            
-        qet_data = list_item.data(Qt.UserRole)
-        self.map[self.cur_key] = {
-            'cad_key': self.cur_key,
-            'cad_id': self.cur_item['CAD_ID'],
-            'cad_name': self.cur_item.get('Nombre_Original_EXE', ''),
-            'category': self.cur_item.get('Categoria', ''),
-            'subtype': self.cur_item.get('Subtipo', ''),
-            'tile': self.sel_tile,
-            'qet_file': qet_data['Filename'],
-            'qet_path': qet_data.get('Rel_Path', '')
-        }
-        self.save_mapping()
-        self.populate_cad_list()
-        QMessageBox.information(self, "Asignado", f"Mapeo guardado para {self.cur_item.get('Nombre_Original_EXE')} ({self.cur_key}) -> {qet_data['Filename']}")
-
     def _on_main_tab_changed(self, index: int):
         """Gestiona el cambio de pestaña y realiza la sincronización bidireccional."""
         if getattr(self, '_skip_next_tab_sync', False) or getattr(self, '_is_syncing_tabs', False):
@@ -1253,7 +1099,7 @@ class CADeSimuMapperWindow(QMainWindow):
         # 3. Búsqueda en mapeo manual (self.map)
         for k, v in self.map.items():
             if isinstance(v, dict):
-                if v.get('cad_id') and (v.get('component_key') == comp_key or comp_key in v.get('qet_file', '').lower()):
+                if v.get('cad_id') and v.get('component_key') == comp_key:
                     return str(v['cad_id'])
 
         # 4. Heurística inversa por nombre de componente
@@ -1315,12 +1161,12 @@ class CADeSimuMapperWindow(QMainWindow):
                 return
 
         # Si no hay componente estándar coincidente, preparar un CUSTOM nuevo
-        # sin reutilizar un id cad_<id> que pudiera pisar un builtin.
-        self.studio_tab.new_custom_symbol(
-            base_id=f"cad_{cad_id}", name=cad_name or f"CAD {cad_id}"
-        )
+        # sin reutilizar un id cad_<id> que pudiera pisar un builtin. Para
+        # sprites sin componente nativo el canvas adopta el tamaño del bitmap.
+        width, height = self._create_sprite_canvas(cad_id, cad_name)
         self.studio_tab.info_status.setText(
-            f"🔗 CAD [{cad_id}] '{cad_name}' preparado como CUSTOM sin guardar"
+            f"🔗 CAD [{cad_id}] '{cad_name}' preparado como CUSTOM sin guardar "
+            f"({int(width)}x{int(height)} px)"
         )
 
     def sync_studio_to_mapper(self):
@@ -1391,12 +1237,12 @@ class CADeSimuMapperWindow(QMainWindow):
                 )
             else:
                 # CAD sin equivalente: crear una variante CUSTOM sin pisar
-                # ningún builtin ni el símbolo que estuviera abierto.
-                self.studio_tab.new_custom_symbol(
-                    base_id=f"cad_{cad_id}", name=cad_name or f"CAD {cad_id}"
-                )
+                # ningún builtin ni el símbolo que estuviera abierto. Si es un
+                # sprite, el canvas se dimensiona al bitmap/tile asociado.
+                width, height = self._create_sprite_canvas(cad_id, cad_name)
                 self.studio_tab.info_status.setText(
-                    f"🎨 CAD [{cad_id}] '{cad_name}' preparado como CUSTOM sin guardar"
+                    f"🎨 CAD [{cad_id}] '{cad_name}' preparado como CUSTOM sin guardar "
+                    f"({int(width)}x{int(height)} px)"
                 )
         finally:
             self._skip_next_tab_sync = False
@@ -1424,7 +1270,7 @@ class CADeSimuMapperWindow(QMainWindow):
         QMessageBox.information(self, "Mapeo Guardado", "Mapeos guardados correctamente en symbol_mapping_manual.json")
 
     def export_csv(self):
-        default_export = BASE_PATH / 'data' / 'mappings' / 'mapeo_simbolos_export.csv'
+        default_export = EXPORT_CSV_PATH
         out_path, _ = QFileDialog.getSaveFileName(self, "Exportar Mapeo CSV", str(default_export), "CSV (*.csv)")
         if out_path:
             with open(out_path, 'w', newline='', encoding='utf-8-sig') as f:

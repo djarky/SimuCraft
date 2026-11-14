@@ -5,13 +5,14 @@ Permite que el Symbol Studio cargue automáticamente las primitivas gráficas
 vectoriales de cada componente estándar cuando no existe `elmt_path` en
 STANDARD_COMPONENTS.
 
-Rutas relativas a la raíz de la librería QET:
-  /home/vibecode/DevS/qelectrotech-elements/elements/
+Rutas relativas a la raíz de la librería QET (configurable con QET_ELEMENTS_DIR).
 """
 from pathlib import Path
 
-# Raíz de la librería QET instalada
-_QET_BASE = Path('/home/vibecode/DevS/qelectrotech-elements/elements')
+from .config import QET_ELEMENTS_DIR
+
+# Raíz de la librería QET instalada (configurable con QET_ELEMENTS_DIR)
+_QET_BASE = QET_ELEMENTS_DIR
 
 _WEG = _QET_BASE / '10_electric/biblioteca_qeletrotech_WEG/comandos_eletricos'
 _ALLPOLE = _QET_BASE / '10_electric/10_allpole'

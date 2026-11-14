@@ -53,6 +53,22 @@ class DeleteItemsCommand(QUndoCommand):
             self.scene.on_item_changed_callback()
 
 
+class SceneStateCommand(QUndoCommand):
+    """Comando genérico para mover/redimensionar primitivas y el bounds."""
+
+    def __init__(self, scene, before: dict, after: dict, text: str = "Editar símbolo"):
+        super().__init__(text)
+        self.scene = scene
+        self.before = before
+        self.after = after
+
+    def undo(self):
+        self.scene.apply_state(self.before)
+
+    def redo(self):
+        self.scene.apply_state(self.after)
+
+
 class MoveItemsCommand(QUndoCommand):
     """Comando para registrar el desplazamiento de elementos."""
 
