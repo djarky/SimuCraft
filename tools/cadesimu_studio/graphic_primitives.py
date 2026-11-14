@@ -358,6 +358,67 @@ class GraphicPolygonItem(QGraphicsPolygonItem):
         return f'<polygon points="{pts}" stroke="{c}" stroke-width="{w}" fill="{fill}" />'
 
 
+class GraphicPathItem(QGraphicsPathItem):
+    """Trayectoria SVG genérica (curvas, arcos y subrutas) editable."""
+
+    def __init__(self, path=None, parent=None):
+        super().__init__(path if isinstance(path, QPainterPath) else QPainterPath(), parent)
+        self.setFlags(_EDITABLE_FLAGS)
+        self.setPen(QPen(QColor("#ffffff"), 1.8, Qt.SolidLine, Qt.RoundCap))
+        self.setBrush(Qt.NoBrush)
+        self.setZValue(15)
+
+    def paint(self, painter: QPainter, option, widget=None):
+        painter.setRenderHint(QPainter.Antialiasing, True)
+        painter.setPen(self.pen())
+        painter.setBrush(self.brush())
+        painter.drawPath(self.path())
+        if self.isSelected():
+            painter.setPen(QPen(QColor("#00e5ff"), 1.5, Qt.DashLine))
+            painter.setBrush(Qt.NoBrush)
+            painter.drawRect(self.boundingRect().adjusted(-2, -2, 2, 2))
+
+    def to_svg(self) -> str:
+        p = self.pen()
+        b = self.brush()
+        c = p.color().name()
+        w = p.widthF()
+        fill = b.color().name() if b.style() != Qt.NoBrush else "none"
+        return (
+            f'<path d="{_qpainterpath_to_svg_d(self.path())}" '
+            f'stroke="{c}" stroke-width="{w}" fill="{fill}" />'
+        )
+
+
+def _qpainterpath_to_svg_d(path: QPainterPath) -> str:
+    """Convierte una ``QPainterPath`` en un atributo SVG ``d``."""
+    parts = []
+    index = 0
+    count = path.elementCount()
+    while index < count:
+        element = path.elementAt(index)
+        kind = element.type
+        if kind == QPainterPath.MoveToElement:
+            parts.append(f"M {element.x:.2f} {element.y:.2f}")
+            index += 1
+        elif kind == QPainterPath.LineToElement:
+            parts.append(f"L {element.x:.2f} {element.y:.2f}")
+            index += 1
+        elif kind == QPainterPath.CurveToElement and index + 2 < count:
+            control1 = element
+            control2 = path.elementAt(index + 1)
+            end = path.elementAt(index + 2)
+            parts.append(
+                f"C {control1.x:.2f} {control1.y:.2f} "
+                f"{control2.x:.2f} {control2.y:.2f} "
+                f"{end.x:.2f} {end.y:.2f}"
+            )
+            index += 3
+        else:
+            index += 1
+    return " ".join(parts)
+
+
 class GraphicTextItem(QGraphicsTextItem):
     """Texto o rótulo interactivo editable en el símbolo."""
 
@@ -384,3 +445,58 @@ class GraphicTextItem(QGraphicsTextItem):
         return (f'<text x="{pos.x():.2f}" y="{pos.y() + size:.2f}" '
                 f'font-size="{size}" font-family="sans-serif" font-weight="bold" '
                 f'fill="{color}">{txt}</text>')
+
+
+def clone_graphic_item(item, offset=(0.0, 0.0)):
+    """Clona una primitiva editable sin compartir estado con el original.
+
+    Se usa para copy/paste y para duplicar símbolos. Devuelve ``None`` si el
+    ítem no es una primitiva conocida (por ejemplo, un borne).
+    """
+    clone = None
+    if isinstance(item, GraphicLineItem):
+        line = item.line()
+        clone = GraphicLineItem(line.x1(), line.y1(), line.x2(), line.y2())
+        clone.setPen(QPen(item.pen()))
+    elif isinstance(item, GraphicRectItem):
+        rect = item.rect()
+        clone = GraphicRectItem(
+            rect.x(), rect.y(), rect.width(), rect.height(), item.rx, item.ry
+        )
+        clone.setPen(QPen(item.pen()))
+        clone.setBrush(QBrush(item.brush()))
+    elif isinstance(item, GraphicCircleItem):
+        rect = item.rect()
+        clone = GraphicCircleItem(rect.x(), rect.y(), rect.width(), rect.height())
+        clone.setPen(QPen(item.pen()))
+        clone.setBrush(QBrush(item.brush()))
+    elif isinstance(item, GraphicArcItem):
+        clone = GraphicArcItem(
+            item._x, item._y, item._w, item._h, item._start, item._span
+        )
+        clone.setPen(QPen(item.pen()))
+    elif isinstance(item, GraphicPolygonItem):
+        clone = GraphicPolygonItem(
+            [(point.x(), point.y()) for point in item.polygon()]
+        )
+        clone.setPen(QPen(item.pen()))
+        clone.setBrush(QBrush(item.brush()))
+    elif isinstance(item, GraphicPathItem):
+        clone = GraphicPathItem(QPainterPath(item.path()))
+        clone.setPen(QPen(item.pen()))
+        clone.setBrush(QBrush(item.brush()))
+    elif isinstance(item, GraphicTextItem):
+        pos = item.pos()
+        clone = GraphicTextItem(item.toPlainText(), pos.x(), pos.y())
+        clone.setDefaultTextColor(QColor(item.defaultTextColor()))
+        clone.setFont(QFont(item.font()))
+    else:
+        return None
+
+    base_pos = item.pos()
+    clone.setPos(base_pos.x() + offset[0], base_pos.y() + offset[1])
+    clone.setTransform(item.transform())
+    clone.setZValue(item.zValue())
+    clone.setOpacity(item.opacity())
+    clone.setVisible(item.isVisible())
+    return clone

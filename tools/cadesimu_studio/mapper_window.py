@@ -4,6 +4,7 @@ Ventana Principal de CADe SIMU Mapper & Symbol Studio.
 import os
 import json
 import csv
+from datetime import datetime
 from pathlib import Path
 
 from PySide6.QtWidgets import (
@@ -840,7 +841,7 @@ class CADeSimuMapperWindow(QMainWindow):
         cat = self.cur_item.get('Categoria', '')
         subtipo = self.cur_item.get('Subtipo', '')
 
-        bmp_id = self.sel_tile.get('bmp_id')
+        bmp_id = self.sel_tile.get('bitmap', self.sel_tile.get('bmp_id'))
         row = self.sel_tile.get('row', 0)
         col = self.sel_tile.get('col', 0)
         sheet = self.sel_tile.get('sheet', '')
@@ -947,6 +948,8 @@ class CADeSimuMapperWindow(QMainWindow):
         comp_key = self.simu_comp_combo.currentData() or ""
         self.update_simucraft_preview(comp_key)
         if self.cur_item and comp_key:
+            if comp_key not in STANDARD_COMPONENTS:
+                return
             cad_id = str(self.cur_item['CAD_ID'])
             if self.cur_key not in self.map:
                 self.map[self.cur_key] = {
@@ -959,8 +962,11 @@ class CADeSimuMapperWindow(QMainWindow):
             self.map[self.cur_key]['component_key'] = comp_key
             self.dispatch_table[cad_id] = {
                 'component_key': comp_key,
-                'name': self.cur_item.get('Nombre_Original_EXE', '')
+                'name': self.cur_item.get('Nombre_Original_EXE', ''),
+                'origin': 'mapper',
+                'updated_at': datetime.now().isoformat(timespec='seconds'),
             }
+            self._persist_dispatch_table()
 
     def _auto_detect_simu_component(self):
         """Auto-detecta el componente SimuCraft correspondiente."""
@@ -1159,12 +1165,7 @@ class CADeSimuMapperWindow(QMainWindow):
     def get_simucraft_equivalent(self, cad_id: str) -> str:
         """Determina la clave de componente SimuCraft correspondiente a un CAD_ID."""
         cad_id = str(cad_id)
-        # 1. ¿Existe como símbolo personalizado propio? (ej: cad_1000)
-        custom_key = f"cad_{cad_id}"
-        if custom_key in STANDARD_COMPONENTS:
-            return custom_key
-            
-        # 2. Buscar en tabla de despacho CAD_ID -> Componente SimuCraft
+        # 1. La dispatch table del mapper es la fuente de verdad para CAD_ID.
         if cad_id in self.dispatch_table:
             entry = self.dispatch_table[cad_id]
             raw_key = entry.get('component_key') if isinstance(entry, dict) else str(entry)
@@ -1177,6 +1178,11 @@ class CADeSimuMapperWindow(QMainWindow):
                         return alias_key
                     return alias_key
                 return raw_key
+
+        # 2. Compatibilidad con customs legados cad_<id> sin dispatch manual.
+        custom_key = f"cad_{cad_id}"
+        if custom_key in STANDARD_COMPONENTS:
+            return custom_key
 
         # 3. Buscar en el mapeo manual (self.map)
         cur_key = f"CAD:{cad_id}"
@@ -1308,11 +1314,13 @@ class CADeSimuMapperWindow(QMainWindow):
                 )
                 return
 
-        # Si no hay componente estándar coincidente en el combo, actualizar campos del studio
-        self.studio_tab.input_sym_id.setText(f"cad_{cad_id}")
-        self.studio_tab.input_sym_name.setText(cad_name)
+        # Si no hay componente estándar coincidente, preparar un CUSTOM nuevo
+        # sin reutilizar un id cad_<id> que pudiera pisar un builtin.
+        self.studio_tab.new_custom_symbol(
+            base_id=f"cad_{cad_id}", name=cad_name or f"CAD {cad_id}"
+        )
         self.studio_tab.info_status.setText(
-            f"🔗 Contexto activo: CAD [{cad_id}] '{cad_name}' (Listo para diseñar o asignar)"
+            f"🔗 CAD [{cad_id}] '{cad_name}' preparado como CUSTOM sin guardar"
         )
 
     def sync_studio_to_mapper(self):
@@ -1376,18 +1384,33 @@ class CADeSimuMapperWindow(QMainWindow):
         try:
             self.main_tabs.setCurrentIndex(1)
             if comp_key and comp_key in STANDARD_COMPONENTS:
+                # Editar el símbolo real: no se inventa un cad_<id> paralelo.
                 self.studio_tab.load_component(comp_key)
-                self.studio_tab.input_sym_id.setText(f"cad_{cad_id}")
-                self.studio_tab.input_sym_name.setText(cad_name)
                 self.studio_tab.info_status.setText(
-                    f"🎨 Componente SimuCraft '{comp_key}' cargado con sus primitivas vectoriales para CAD [{cad_id}]"
+                    f"🎨 Símbolo SimuCraft real '{comp_key}' cargado para CAD [{cad_id}]"
                 )
             else:
-                self.studio_tab.load_component('motor_3p')
-                self.studio_tab.input_sym_id.setText(f"cad_{cad_id}")
-                self.studio_tab.input_sym_name.setText(cad_name)
+                # CAD sin equivalente: crear una variante CUSTOM sin pisar
+                # ningún builtin ni el símbolo que estuviera abierto.
+                self.studio_tab.new_custom_symbol(
+                    base_id=f"cad_{cad_id}", name=cad_name or f"CAD {cad_id}"
+                )
+                self.studio_tab.info_status.setText(
+                    f"🎨 CAD [{cad_id}] '{cad_name}' preparado como CUSTOM sin guardar"
+                )
         finally:
             self._skip_next_tab_sync = False
+
+    def _persist_dispatch_table(self):
+        """Escribe la dispatch table sin diálogos (la usa el combo del mapper)."""
+        if not getattr(self, 'dispatch_table', None):
+            return
+        try:
+            DISPATCH_TABLE_PATH.parent.mkdir(parents=True, exist_ok=True)
+            with open(DISPATCH_TABLE_PATH, 'w', encoding='utf-8') as f:
+                json.dump(self.dispatch_table, f, indent=2, ensure_ascii=False)
+        except Exception as exc:
+            print(f"Error guardando cad_id_to_component.json: {exc}")
 
     def save_mapping(self):
         """Persiste los mapeos manuales y la tabla de despacho."""
@@ -1396,10 +1419,7 @@ class CADeSimuMapperWindow(QMainWindow):
         with open(mapping_path, 'w', encoding='utf-8') as f:
             json.dump(self.map, f, indent=2, ensure_ascii=False)
 
-        if hasattr(self, 'dispatch_table') and self.dispatch_table:
-            DISPATCH_TABLE_PATH.parent.mkdir(parents=True, exist_ok=True)
-            with open(DISPATCH_TABLE_PATH, 'w', encoding='utf-8') as f:
-                json.dump(self.dispatch_table, f, indent=2, ensure_ascii=False)
+        self._persist_dispatch_table()
 
         QMessageBox.information(self, "Mapeo Guardado", "Mapeos guardados correctamente en symbol_mapping_manual.json")
 

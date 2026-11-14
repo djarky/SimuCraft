@@ -17,7 +17,9 @@ MANUAL_MAPPING_PATH = BASE_PATH / 'data' / 'mappings' / 'symbol_mapping_manual.j
 CAD_QET_MAPPING_PATH = BASE_PATH / 'data' / 'mappings' / 'cad_qet_mapping.json'
 TILE_TO_CAD_PATH = BASE_PATH / 'data' / 'mappings' / 'tile_to_cad_id.json'
 DISPATCH_TABLE_PATH = BASE_PATH / 'data' / 'mappings' / 'cad_id_to_component.json'
-CUSTOM_SYMBOLS_PATH = BASE_PATH / 'data' / 'catalogs' / 'custom_symbols.json'
+SYMBOL_REGISTRY_DIR = BASE_PATH / 'data' / 'symbols'
+STANDARD_SYMBOLS_PATH = SYMBOL_REGISTRY_DIR / 'standard_symbols.json'
+CUSTOM_SYMBOLS_PATH = SYMBOL_REGISTRY_DIR / 'custom_symbols.json'
 
 # Colores según el tipo de borne/terminal eléctrico
 TERMINAL_TYPE_COLORS = {

@@ -1,8 +1,11 @@
 """
 Widget del editor visual interactivo SimuCraft Symbol & Terminal Studio.
 """
+import copy
 import os
-import json
+import re
+import unicodedata
+from datetime import datetime, timezone
 from pathlib import Path
 
 from PySide6.QtWidgets import (
@@ -15,18 +18,57 @@ from PySide6.QtCore import Qt, QPointF, QByteArray, QRectF
 from PySide6.QtGui import QColor, QPainter, QPen, QBrush, QKeySequence, QUndoStack
 from PySide6.QtGui import QShortcut
 
-from .config import BASE_PATH, CUSTOM_SYMBOLS_PATH
+from .config import BASE_PATH
 from .terminal_handle import TerminalHandleItem
 from .canvas_scene import SymbolCanvasScene, SymbolGraphicsView
 from .qet_importer import QETVectorImporter
 from .standard_primitive_factory import create_standard_primitives
+from .graphic_primitives import clone_graphic_item
+from .svg_importer import SvgVectorImporter
 
 try:
-    from src.components.standard_components import STANDARD_COMPONENTS, reload_custom_symbols
+    from src.components import symbol_registry
+    from src.components.standard_components import (
+        STANDARD_COMPONENTS,
+        _BUILTIN_COMPONENTS,
+        reload_custom_symbols,
+    )
 except Exception:
+    symbol_registry = None
     STANDARD_COMPONENTS = {}
+    _BUILTIN_COMPONENTS = set()
+
     def reload_custom_symbols():
         pass
+
+
+CUSTOM_TAG = "CUSTOM"
+
+
+def _utc_now() -> str:
+    return (
+        datetime.now(timezone.utc)
+        .replace(microsecond=0)
+        .isoformat()
+        .replace("+00:00", "Z")
+    )
+
+
+def _slugify(value: str) -> str:
+    text = unicodedata.normalize("NFKD", str(value or ""))
+    text = text.encode("ascii", "ignore").decode("ascii")
+    text = re.sub(r"[^a-zA-Z0-9]+", "_", text).strip("_").lower()
+    return text or "simbolo"
+
+
+def _is_custom_symbol(symbol: dict) -> bool:
+    if symbol_registry is not None:
+        try:
+            return symbol_registry.is_custom(symbol)
+        except Exception:
+            pass
+    tags = [str(tag).upper() for tag in symbol.get("tags", [])]
+    return bool(symbol.get("custom")) or symbol.get("origin") == "custom" or CUSTOM_TAG in tags
 
 try:
     from src.qet.parser import QETParser
@@ -63,6 +105,11 @@ class SymbolEditorWidget(QWidget):
         btn_new = QPushButton("➕ Nuevo Símbolo")
         btn_new.clicked.connect(self.new_custom_symbol)
         toolbar.addWidget(btn_new)
+
+        btn_duplicate = QPushButton("📄 Duplicar como CUSTOM")
+        btn_duplicate.setToolTip("Crea una variante CUSTOM sin modificar el símbolo actual")
+        btn_duplicate.clicked.connect(self.duplicate_as_custom)
+        toolbar.addWidget(btn_duplicate)
         
         btn_import_svg = QPushButton("📂 Importar SVG / .elmt")
         btn_import_svg.clicked.connect(self.import_svg_or_elmt)
@@ -290,70 +337,136 @@ class SymbolEditorWidget(QWidget):
 
     # ---------------- Lógica de Componentes ----------------
 
-    def load_component_list(self):
+    def load_component_list(self, select_id: str = None):
+        previous = select_id or self.comp_combo.currentData()
         self.comp_combo.blockSignals(True)
         self.comp_combo.clear()
-        
-        # Cargar componentes estándar
+
         reload_custom_symbols()
-        keys = sorted(list(STANDARD_COMPONENTS.keys()))
-        for k in keys:
-            c = STANDARD_COMPONENTS[k]
-            self.comp_combo.addItem(f"{k} ({c.get('name', '')})", k)
-            
+        standard_keys = []
+        custom_keys = []
+        for key in sorted(STANDARD_COMPONENTS.keys()):
+            symbol = STANDARD_COMPONENTS[key]
+            if _is_custom_symbol(symbol):
+                custom_keys.append(key)
+            else:
+                standard_keys.append(key)
+
+        def add_header(text: str):
+            self.comp_combo.addItem(text, None)
+            index = self.comp_combo.count() - 1
+            item = self.comp_combo.model().item(index)
+            if item is not None:
+                item.setEnabled(False)
+
+        def add_symbol(key: str):
+            symbol = STANDARD_COMPONENTS[key]
+            name = symbol.get('name', '')
+            if _is_custom_symbol(symbol):
+                self.comp_combo.addItem(f"★ CUSTOM · {key} ({name})", key)
+            else:
+                self.comp_combo.addItem(f"{key} ({name})", key)
+
+        if standard_keys:
+            add_header("── Estándar ──")
+            for key in standard_keys:
+                add_symbol(key)
+        if custom_keys:
+            add_header("── CUSTOM ──")
+            for key in custom_keys:
+                add_symbol(key)
+
+        keys = standard_keys + custom_keys
+        target = previous if previous in keys else None
+        if target is None:
+            target = "motor_3p" if "motor_3p" in keys else (keys[0] if keys else None)
+        if target is not None:
+            index = self.comp_combo.findData(target)
+            if index >= 0:
+                self.comp_combo.setCurrentIndex(index)
         self.comp_combo.blockSignals(False)
-        if keys:
-            # Seleccionar motor_3p por defecto
-            idx = self.comp_combo.findData('motor_3p')
-            self.comp_combo.setCurrentIndex(idx if idx >= 0 else 0)
-            self.load_component(self.comp_combo.currentData())
+
+        if target is not None:
+            self.load_component(target)
 
     def on_component_selected(self, index):
         comp_key = self.comp_combo.currentData()
         if comp_key:
             self.load_component(comp_key)
 
+    def _clear_scene_primitives(self):
+        for item in list(self.scene.items()):
+            if not isinstance(item, TerminalHandleItem):
+                self.scene.removeItem(item)
+
+    def _load_svg_into_scene(self, svg_content: str) -> int:
+        try:
+            result = SvgVectorImporter().import_from_svg(svg_content)
+        except Exception as exc:
+            self.info_status.setText(f"⚠ SVG no editable: {exc}")
+            return 0
+        for item in result.get('items', []):
+            self.scene.addItem(item)
+        return len(result.get('items', []))
+
     def load_component(self, comp_key: str):
         if comp_key not in STANDARD_COMPONENTS:
             return
-            
+
         src = STANDARD_COMPONENTS[comp_key]
-        import copy
         self.cur_symbol = copy.deepcopy(src)
-        
+        self._loaded_symbol_id = comp_key
+        self._loaded_origin = "custom" if _is_custom_symbol(src) else "builtin"
+
         vis = self.cur_symbol.get('visual', {})
         w = float(vis.get('width', 90))
         h = float(vis.get('height', 72))
         ctype = self.cur_symbol.get('type', 'generic')
-        
-        # Actualizar campos
+
+        # Actualizar campos. El ID de un builtin es canónico y no se renombra
+        # desde el editor: para una variante se usa "Duplicar como CUSTOM".
+        is_builtin = self._loaded_origin == "builtin"
+        self.input_sym_id.setReadOnly(is_builtin)
+        self.input_sym_id.setToolTip(
+            "ID canónico del símbolo estándar. Usa 'Duplicar como CUSTOM' para una variante."
+            if is_builtin else "ID del símbolo CUSTOM."
+        )
         self.input_sym_id.setText(self.cur_symbol.get('id', comp_key))
         self.input_sym_name.setText(self.cur_symbol.get('name', ''))
-        
+
         t_idx = self.input_sym_type.findText(ctype)
         if t_idx >= 0:
             self.input_sym_type.setCurrentIndex(t_idx)
-            
+
         self.spin_width.setValue(int(w))
         self.spin_height.setValue(int(h))
 
-        # Cargar primitivas vectoriales si tiene archivo .elmt
-        if vis.get('elmt_path') and os.path.exists(vis.get('elmt_path')) and vis.get('elmt_path').endswith('.elmt'):
-            self._load_elmt_into_scene(vis['elmt_path'])
-        else:
-            # Sin .elmt: limpiar primitivas no-terminales previas
-            for it in list(self.scene.items()):
-                if not isinstance(it, TerminalHandleItem):
-                    self.scene.removeItem(it)
-            # Descomposición vectorial interactiva de elementos estándar
-            std_items = create_standard_primitives(comp_key, self.cur_symbol)
-            for it in std_items:
-                self.scene.addItem(it)
+        self._clear_scene_primitives()
+        loaded_items = 0
+
+        # El SVG es la geometría canónica que dibuja SimuCraft. Solo si no
+        # existe (o no se puede descomponer) se usan .elmt y la factoría.
+        svg_content = vis.get('svg_content')
+        if svg_content:
+            loaded_items = self._load_svg_into_scene(svg_content)
+
+        if not loaded_items:
+            elmt_path = vis.get('elmt_path')
+            if elmt_path and os.path.exists(elmt_path) and elmt_path.endswith('.elmt'):
+                result = self._load_elmt_into_scene(elmt_path)
+                loaded_items = len(result.get('items', [])) if result else 0
+
+        if not loaded_items:
+            for item in create_standard_primitives(comp_key, self.cur_symbol):
+                self.scene.addItem(item)
 
         self.scene.set_component_bounds(w, h, ctype)
         self.refresh_terminal_items()
         self._fit_view_to_symbol(w, h)
-        self.info_status.setText(f"Cargado: {comp_key} ({len(vis.get('terminals', []))} bornes)")
+        label = "CUSTOM" if self._loaded_origin == "custom" else "Estándar"
+        self.info_status.setText(
+            f"Cargado: {comp_key} · {label} ({len(vis.get('terminals', []))} bornes)"
+        )
 
     def refresh_terminal_items(self):
         # Limpiar escena de bornes anteriores
@@ -627,45 +740,154 @@ class SymbolEditorWidget(QWidget):
 
         return result
 
-    def load_elmt_file(self, elmt_path: str, sym_id: str = '', sym_name: str = ''):
-        """
-        Carga un archivo .elmt directamente en el editor:
-        - Desglosa todas las primitivas vectoriales en el lienzo.
-        - Reemplaza los bornes con los del archivo .elmt.
-        - Ajusta dimensiones y centra la vista.
-        Usado desde el mapper al hacer "Abrir en Symbol Studio".
-        """
-        result = self._load_elmt_into_scene(elmt_path)
-        if result is None:
-            return
+    def _unique_custom_id(self, base: str) -> str:
+        existing = set(STANDARD_COMPONENTS.keys())
+        if symbol_registry is not None:
+            try:
+                existing.update(symbol_registry.load_custom_symbols().keys())
+            except Exception:
+                pass
+        candidate = base
+        suffix = 2
+        while candidate in existing or candidate in _BUILTIN_COMPONENTS:
+            candidate = f"{base}_{suffix}"
+            suffix += 1
+        return candidate
 
-        # Actualizar metadatos del símbolo
-        self.cur_symbol = {
-            'id':   sym_id or Path(elmt_path).stem,
-            'name': sym_name or Path(elmt_path).stem,
-            'type': 'generic',
-            'visual': {
-                'width':     result['width'],
-                'height':    result['height'],
-                'elmt_path': elmt_path,
-                'terminals': result['terminals'],
-            }
+    def _make_custom_symbol(
+        self,
+        name: str,
+        width: float,
+        height: float,
+        terminals: list = None,
+        svg_content: str = "",
+        elmt_path: str = None,
+        base_id: str = None,
+        symbol_type: str = "generic",
+        tag_prefix: str = "-K",
+        logic: dict = None,
+    ) -> dict:
+        slug = _slugify(base_id or name)
+        base = slug if slug.startswith("custom_") else f"custom_{slug}"
+        symbol_id = self._unique_custom_id(base)
+        now = _utc_now()
+        return {
+            "id": symbol_id,
+            "origin": "custom",
+            "custom": True,
+            "tags": [CUSTOM_TAG],
+            "type": symbol_type or "generic",
+            "name": name or "Nuevo Símbolo Personalizado",
+            "tag_prefix": tag_prefix or "-K",
+            "visual": {
+                "width": float(width),
+                "height": float(height),
+                "terminals": copy.deepcopy(terminals or []),
+                "svg_content": svg_content or "",
+                "elmt_path": elmt_path,
+                "primitives": [],
+            },
+            "logic": copy.deepcopy(logic) if logic else {
+                "class": "AuxiliaryContact",
+                "behavior": "passive",
+                "internal_connections": [],
+            },
+            "meta": {
+                "created_at": now,
+                "updated_at": now,
+                "schema_version": 1,
+            },
         }
-        w = max(40, int(result['width']))
-        h = max(40, int(result['height']))
-        self.input_sym_id.setText(self.cur_symbol['id'])
-        self.input_sym_name.setText(self.cur_symbol['name'])
-        self.spin_width.setValue(w)
-        self.spin_height.setValue(h)
-        self.cur_symbol.setdefault('visual', {})['elmt_path'] = elmt_path
-        self.scene.set_component_bounds(w, h, 'generic')
+
+    def _apply_symbol_to_editor(self, symbol: dict, load_geometry: bool = True):
+        self.cur_symbol = copy.deepcopy(symbol)
+        self._loaded_symbol_id = self.cur_symbol.get("id")
+        self._loaded_origin = "custom" if _is_custom_symbol(self.cur_symbol) else "builtin"
+
+        vis = self.cur_symbol.setdefault("visual", {})
+        w = float(vis.get("width", 90))
+        h = float(vis.get("height", 72))
+        ctype = self.cur_symbol.get("type", "generic")
+
+        self.input_sym_id.setReadOnly(self._loaded_origin == "builtin")
+        self.input_sym_id.setText(self.cur_symbol.get("id", ""))
+        self.input_sym_name.setText(self.cur_symbol.get("name", ""))
+        type_index = self.input_sym_type.findText(ctype)
+        if type_index >= 0:
+            self.input_sym_type.setCurrentIndex(type_index)
+        else:
+            self.input_sym_type.setCurrentText("generic")
+        self.spin_width.setValue(max(20, int(w)))
+        self.spin_height.setValue(max(20, int(h)))
+
+        if load_geometry:
+            self._clear_scene_primitives()
+            loaded_items = 0
+            if vis.get("svg_content"):
+                loaded_items = self._load_svg_into_scene(vis["svg_content"])
+            if not loaded_items:
+                elmt_path = vis.get("elmt_path")
+                if elmt_path and os.path.exists(elmt_path) and elmt_path.endswith(".elmt"):
+                    result = self._load_elmt_into_scene(elmt_path)
+                    loaded_items = len(result.get("items", [])) if result else 0
+            if not loaded_items and self._loaded_origin == "builtin":
+                for item in create_standard_primitives(self.cur_symbol["id"], self.cur_symbol):
+                    self.scene.addItem(item)
+
+        self.scene.set_component_bounds(w, h, ctype)
         self.refresh_terminal_items()
         self._fit_view_to_symbol(w, h)
-        n_items = len(result['items'])
-        n_terms = len(result['terminals'])
-        self.info_status.setText(
-            f"✔ .elmt cargado: {n_items} elementos vectoriales + {n_terms} bornes  —  {Path(elmt_path).name}"
+
+    def _persist_custom_and_select(self, symbol: dict) -> bool:
+        if symbol_registry is None:
+            QMessageBox.warning(
+                self, "Error", "El registro de símbolos de SimuCraft no está disponible."
+            )
+            return False
+        try:
+            symbol_registry.save_custom_symbol(symbol)
+        except Exception as exc:
+            QMessageBox.warning(self, "No se pudo guardar", str(exc))
+            self.info_status.setText(f"⚠ No se pudo guardar el CUSTOM: {exc}")
+            return False
+        reload_custom_symbols()
+        self.load_component_list(select_id=symbol["id"])
+        return True
+
+    def _import_elmt_as_custom(self, elmt_path: str, name: str = None) -> dict:
+        result = self._load_elmt_into_scene(elmt_path)
+        if result is None:
+            return None
+
+        w = max(40.0, float(result.get("width", 90)))
+        h = max(40.0, float(result.get("height", 72)))
+        self.scene.set_component_bounds(w, h, "generic")
+        svg_content = self.scene.export_primitives_to_svg()
+        new_symbol = self._make_custom_symbol(
+            name=name or Path(elmt_path).stem,
+            width=w,
+            height=h,
+            terminals=result.get("terminals", []),
+            svg_content=svg_content,
+            elmt_path=elmt_path,
         )
+        self._apply_symbol_to_editor(new_symbol, load_geometry=False)
+        self.refresh_terminal_items()
+        self._fit_view_to_symbol(w, h)
+        self.info_status.setText(
+            f"✔ .elmt importado como CUSTOM: {len(result.get('items', []))} elementos + "
+            f"{len(result.get('terminals', []))} bornes"
+        )
+        return new_symbol
+
+    def load_elmt_file(self, elmt_path: str, sym_id: str = '', sym_name: str = ''):
+        """Importa un .elmt como un símbolo CUSTOM nuevo, sin pisar el actual."""
+        new_symbol = self._import_elmt_as_custom(
+            elmt_path, name=sym_name or Path(elmt_path).stem
+        )
+        if new_symbol is None:
+            return
+        self._persist_custom_and_select(new_symbol)
 
     def _fit_view_to_symbol(self, w: float, h: float):
         """Centra y ajusta el zoom de la vista para encuadrar el símbolo completo."""
@@ -686,106 +908,195 @@ class SymbolEditorWidget(QWidget):
             return
 
         if file_path.endswith('.elmt'):
-            # Usar el método centralizado de carga vectorial
-            result = self._load_elmt_into_scene(file_path)
-            if result is None:
+            new_symbol = self._import_elmt_as_custom(file_path)
+            if new_symbol is None:
                 return
+            if self._persist_custom_and_select(new_symbol):
+                QMessageBox.information(
+                    self, "Importado con Éxito",
+                    f"El archivo QET se ha añadido como CUSTOM '{new_symbol['id']}'.\n"
+                    "El símbolo que estaba editando no se ha modificado.",
+                )
+            return
 
-            # Reemplazar bornes con los del archivo
-            if result.get('terminals'):
-                self.cur_symbol.setdefault('visual', {})['terminals'] = result['terminals']
+        if not file_path.endswith('.svg'):
+            return
 
-            w = max(40, int(result.get('width', 90)))
-            h = max(40, int(result.get('height', 72)))
-            self.spin_width.setValue(w)
-            self.spin_height.setValue(h)
-            self.cur_symbol.setdefault('visual', {})['elmt_path'] = file_path
-            self.scene.set_component_bounds(w, h, self.input_sym_type.currentText())
-            self.refresh_terminal_items()
-            self._fit_view_to_symbol(w, h)
+        with open(file_path, 'r', encoding='utf-8', errors='ignore') as handle:
+            svg_code = handle.read()
 
+        try:
+            parsed = SvgVectorImporter().import_from_svg(svg_code)
+        except Exception:
+            parsed = {"width": 90.0, "height": 72.0, "items": []}
+
+        self._clear_scene_primitives()
+        for item in parsed.get("items", []):
+            self.scene.addItem(item)
+        w = max(40.0, float(parsed.get("width", 90)))
+        h = max(40.0, float(parsed.get("height", 72)))
+        self.scene.set_component_bounds(w, h, "generic")
+
+        new_symbol = self._make_custom_symbol(
+            name=Path(file_path).stem,
+            width=w,
+            height=h,
+            terminals=[],
+            svg_content=svg_code,
+            elmt_path=file_path,
+        )
+        self._apply_symbol_to_editor(new_symbol, load_geometry=False)
+        self.refresh_terminal_items()
+        self._fit_view_to_symbol(w, h)
+        if self._persist_custom_and_select(new_symbol):
             QMessageBox.information(
                 self, "Importado con Éxito",
-                f"Símbolo QET desglosado en {len(result['items'])} elementos vectoriales interactivos "
-                f"y {len(result['terminals'])} bornes.\n\n"
-                f"Tipos: líneas, rectángulos, círculos, arcos, polígonos, textos."
+                f"El SVG se ha añadido como CUSTOM '{new_symbol['id']}'.\n"
+                "El símbolo que estaba editando no se ha modificado.",
             )
-        elif file_path.endswith('.svg'):
-            # Fallback para SVG simple
-            with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
-                svg_code = f.read()
-            self.cur_symbol.setdefault('visual', {})['svg_content'] = svg_code
-            self.cur_symbol['visual']['elmt_path'] = file_path
-            QMessageBox.information(self, "Importado", f"Archivo SVG cargado: {file_path}")
 
-    def new_custom_symbol(self):
-        self.cur_symbol = {
-            "id": "nuevo_simbolo",
-            "type": "generic",
-            "name": "Nuevo Símbolo Personalizado",
-            "tag_prefix": "-K",
-            "visual": {
-                "width": 90,
-                "height": 72,
-                "terminals": [
-                    {"id": "1", "name": "1", "x": 0, "y": 0, "orientation": "n", "type": "contact"},
-                    {"id": "2", "name": "2", "x": 0, "y": 72, "orientation": "s", "type": "contact"}
-                ]
-            },
-            "logic": {
-                "class": "AuxiliaryContact",
-                "behavior": "passive",
-                "internal_connections": [("1", "2")]
-            }
-        }
-        self.input_sym_id.setText(self.cur_symbol["id"])
-        self.input_sym_name.setText(self.cur_symbol["name"])
-        self.input_sym_type.setCurrentText("generic")
-        self.spin_width.setValue(90)
-        self.spin_height.setValue(72)
-        self.svg_renderer = None
+    def new_custom_symbol(self, checked=False, base_id: str = None, name: str = None):
+        self._clear_scene_primitives()
+        new_symbol = self._make_custom_symbol(
+            name=name or "Nuevo Símbolo Personalizado",
+            width=90,
+            height=72,
+            terminals=[
+                {"id": "1", "name": "1", "x": 0, "y": 0, "orientation": "n", "type": "contact"},
+                {"id": "2", "name": "2", "x": 0, "y": 72, "orientation": "s", "type": "contact"},
+            ],
+            svg_content="",
+            base_id=base_id,
+        )
+        self._apply_symbol_to_editor(new_symbol, load_geometry=False)
         self.scene.set_component_bounds(90, 72, "generic")
         self.refresh_terminal_items()
+        self._fit_view_to_symbol(90, 72)
+        self.info_status.setText(
+            f"Nuevo CUSTOM '{new_symbol['id']}' sin guardar. Pulsa 'Guardar en SimuCraft'."
+        )
+
+    def duplicate_as_custom(self, checked=False):
+        if not self.cur_symbol:
+            self.new_custom_symbol()
+            return
+        duplicate = copy.deepcopy(self.cur_symbol)
+        source_name = duplicate.get("name") or duplicate.get("id") or "simbolo"
+        duplicate = self._make_custom_symbol(
+            name=f"Copia de {source_name}",
+            width=float(duplicate.get("visual", {}).get("width", 90)),
+            height=float(duplicate.get("visual", {}).get("height", 72)),
+            terminals=duplicate.get("visual", {}).get("terminals", []),
+            svg_content=duplicate.get("visual", {}).get("svg_content", ""),
+            elmt_path=duplicate.get("visual", {}).get("elmt_path"),
+            base_id=f"{duplicate.get('id', 'simbolo')}_copia",
+            symbol_type=duplicate.get("type", "generic"),
+            tag_prefix=duplicate.get("tag_prefix", "-K"),
+            logic=duplicate.get("logic"),
+        )
+        # La escena actual ya contiene la geometría que se está duplicando.
+        self._apply_symbol_to_editor(duplicate, load_geometry=False)
+        self.refresh_terminal_items()
+        self.info_status.setText(
+            f"Variante CUSTOM '{duplicate['id']}' creada sin guardar. "
+            "El símbolo original no se modificará."
+        )
 
     def save_symbol_to_simucraft(self):
+        if not self.cur_symbol:
+            QMessageBox.warning(self, "Error", "No hay ningún símbolo cargado.")
+            return
+
+        symbol = copy.deepcopy(self.cur_symbol)
         sym_id = self.input_sym_id.text().strip()
         if not sym_id:
             QMessageBox.warning(self, "Error", "El símbolo debe tener un ID válido.")
             return
 
-        # Actualizar diccionario
-        self.cur_symbol['id'] = sym_id
-        self.cur_symbol['name'] = self.input_sym_name.text().strip()
-        self.cur_symbol['type'] = self.input_sym_type.currentText()
-        vis = self.cur_symbol.setdefault('visual', {})
-        vis['width'] = float(self.spin_width.value())
-        vis['height'] = float(self.spin_height.value())
-        # Exportar las geometrías de la escena a SVG
-        vis['svg_content'] = self.scene.export_primitives_to_svg()
-        
-        # Archivo de destino en data/
-        custom_file = BASE_PATH / "data" / "custom_symbols.json"
-        custom_file.parent.mkdir(parents=True, exist_ok=True)
-        existing = {}
-        if custom_file.exists():
-            try:
-                with open(custom_file, 'r', encoding='utf-8') as f:
-                    existing = json.load(f)
-            except Exception:
-                existing = {}
+        origin = getattr(self, "_loaded_origin", None)
+        if origin not in {"builtin", "custom"}:
+            origin = "custom" if _is_custom_symbol(symbol) else "builtin"
 
-        existing[sym_id] = self.cur_symbol
-        with open(custom_file, 'w', encoding='utf-8') as f:
-            json.dump(existing, f, indent=2, ensure_ascii=False)
+        if origin == "builtin":
+            loaded_id = getattr(self, "_loaded_symbol_id", None) or symbol.get("id")
+            if sym_id != loaded_id:
+                QMessageBox.warning(
+                    self, "ID de símbolo estándar",
+                    "El ID de un símbolo estándar no se puede cambiar.\n"
+                    "Usa 'Duplicar como CUSTOM' para crear una variante.",
+                )
+                self.input_sym_id.setText(loaded_id or sym_id)
+                return
+            if _is_custom_symbol(symbol):
+                QMessageBox.warning(
+                    self, "Símbolo estándar inválido",
+                    "Un símbolo estándar no puede tener custom=True ni la etiqueta CUSTOM.",
+                )
+                return
+            symbol["id"] = loaded_id
+            symbol["origin"] = "builtin"
+            symbol.pop("custom", None)
+            tags = [tag for tag in symbol.get("tags", []) if str(tag).upper() != CUSTOM_TAG]
+            if tags:
+                symbol["tags"] = tags
+            else:
+                symbol.pop("tags", None)
+        else:
+            if not sym_id.startswith("custom_"):
+                sym_id = self._unique_custom_id(f"custom_{_slugify(sym_id)}")
+                self.input_sym_id.setText(sym_id)
+            symbol["id"] = sym_id
+            symbol["origin"] = "custom"
+            symbol["custom"] = True
+            tags = [str(tag) for tag in symbol.get("tags", []) if str(tag).strip()]
+            if not any(tag.upper() == CUSTOM_TAG for tag in tags):
+                tags.append(CUSTOM_TAG)
+            symbol["tags"] = tags
 
-        # Actualizar en memoria viva
-        STANDARD_COMPONENTS[sym_id] = self.cur_symbol
-        
-        QMessageBox.information(
-            self, "Guardado con Éxito",
-            f"El símbolo '{sym_id}' se ha guardado en custom_symbols.json y está disponible de inmediato en SimuCraft."
-        )
-        self.load_component_list()
+        symbol["name"] = self.input_sym_name.text().strip() or symbol.get("name", sym_id)
+        symbol["type"] = self.input_sym_type.currentText() or symbol.get("type", "generic")
+        visual = symbol.setdefault("visual", {})
+        visual["width"] = float(self.spin_width.value())
+        visual["height"] = float(self.spin_height.value())
+        visual["svg_content"] = self.scene.export_primitives_to_svg()
+
+        meta = symbol.setdefault("meta", {})
+        meta.setdefault("created_at", _utc_now())
+        meta["updated_at"] = _utc_now()
+        meta["schema_version"] = 1
+
+        if symbol_registry is None:
+            QMessageBox.warning(
+                self, "Error", "El registro de símbolos de SimuCraft no está disponible."
+            )
+            return
+
+        try:
+            if origin == "builtin":
+                symbol_registry.save_standard_symbol(symbol)
+            else:
+                symbol_registry.save_custom_symbol(symbol)
+        except Exception as exc:
+            QMessageBox.warning(self, "No se pudo guardar", str(exc))
+            self.info_status.setText(f"⚠ No se pudo guardar '{sym_id}': {exc}")
+            return
+
+        reload_custom_symbols()
+        self.load_component_list(select_id=sym_id)
+        if origin == "builtin":
+            message = (
+                f"El símbolo estándar '{sym_id}' se ha sobrescrito en "
+                "data/symbols/standard_symbols.json.\n\n"
+                "Reinicia SimuCraft para ver la edición."
+            )
+        else:
+            message = (
+                f"El símbolo CUSTOM '{sym_id}' se ha guardado en "
+                "data/symbols/custom_symbols.json.\n\n"
+                "Reinicia SimuCraft para verlo en la biblioteca."
+            )
+        QMessageBox.information(self, "Guardado con Éxito", message)
+        self.info_status.setText(f"✔ Guardado: {sym_id} ({origin})")
 
     # ------------------------------------------------------------------ #
     # Clipboard                                                            #
@@ -796,23 +1107,19 @@ class SymbolEditorWidget(QWidget):
         self._clipboard = [it for it in self.scene.selectedItems() if hasattr(it, 'to_svg')]
 
     def paste_items(self):
-        """Pega los elementos copiados (implementación básica — pendiente serialización completa)."""
+        """Pega los elementos copiados desplazándolos una celda de rejilla."""
         if not self._clipboard:
             return
-        offset = 18.0  # desplazamiento de 1 celda
+        offset = (18.0, 18.0)
         self.scene.clearSelection()
         new_items = []
         for src in self._clipboard:
-            # Duplicar vía SVG round-trip cuando el item tiene to_svg
-            try:
-                import copy as _copy
-                dup = _copy.copy(src)
-                dup.setPos(src.pos().x() + offset, src.pos().y() + offset)
-                self.scene.addItem(dup)
-                dup.setSelected(True)
-                new_items.append(dup)
-            except Exception:
-                pass
+            duplicate = clone_graphic_item(src, offset=offset)
+            if duplicate is None:
+                continue
+            self.scene.addItem(duplicate)
+            duplicate.setSelected(True)
+            new_items.append(duplicate)
         if new_items and self.scene.undo_stack:
             from .undo_commands import AddItemsCommand
             self.scene.undo_stack.push(AddItemsCommand(self.scene, new_items))
