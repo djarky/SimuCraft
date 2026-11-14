@@ -12,11 +12,12 @@ from PySide6.QtWidgets import (
     QListWidgetItem, QButtonGroup, QColorDialog
 )
 from PySide6.QtCore import Qt, QPointF, QByteArray, QRectF
-from PySide6.QtGui import QColor, QPainter, QPen, QBrush
+from PySide6.QtGui import QColor, QPainter, QPen, QBrush, QKeySequence, QUndoStack
+from PySide6.QtGui import QShortcut
 
 from .config import BASE_PATH, CUSTOM_SYMBOLS_PATH
 from .terminal_handle import TerminalHandleItem
-from .canvas_scene import SymbolCanvasScene
+from .canvas_scene import SymbolCanvasScene, SymbolGraphicsView
 from .qet_importer import QETVectorImporter
 from .standard_primitive_factory import create_standard_primitives
 
@@ -42,6 +43,8 @@ class SymbolEditorWidget(QWidget):
         self.terminal_items = []
         self.selected_item = None
         self.svg_renderer = None
+        self._clipboard = []
+        self.undo_stack = QUndoStack(self)
         self.init_ui()
         self.load_component_list()
 
@@ -64,6 +67,22 @@ class SymbolEditorWidget(QWidget):
         btn_import_svg = QPushButton("📂 Importar SVG / .elmt")
         btn_import_svg.clicked.connect(self.import_svg_or_elmt)
         toolbar.addWidget(btn_import_svg)
+
+        btn_browse_qet = QPushButton("📦 Explorar Librería QET")
+        btn_browse_qet.clicked.connect(self.import_from_qet_browser)
+        toolbar.addWidget(btn_browse_qet)
+
+        toolbar.addSpacing(15)
+
+        btn_undo = QPushButton("↩ Deshacer")
+        btn_undo.setToolTip("Ctrl+Z")
+        btn_undo.clicked.connect(self.undo_stack.undo)
+        toolbar.addWidget(btn_undo)
+
+        btn_redo = QPushButton("↪ Rehacer")
+        btn_redo.setToolTip("Ctrl+Y")
+        btn_redo.clicked.connect(self.undo_stack.redo)
+        toolbar.addWidget(btn_redo)
 
         toolbar.addSpacing(15)
         toolbar.addWidget(QLabel("Rejilla:"))
@@ -140,11 +159,16 @@ class SymbolEditorWidget(QWidget):
         
         self.scene = SymbolCanvasScene(self)
         self.scene.selectionChanged.connect(self.on_scene_selection_changed)
+        self.scene.undo_stack = self.undo_stack
         
-        self.view = QGraphicsView(self.scene)
-        self.view.setRenderHint(QPainter.Antialiasing, True)
-        self.view.setDragMode(QGraphicsView.RubberBandDrag)
+        self.view = SymbolGraphicsView(self.scene)
         canvas_layout.addWidget(self.view)
+        
+        # Atajos de teclado globales
+        QShortcut(QKeySequence("Ctrl+Z"), self, self.undo_stack.undo)
+        QShortcut(QKeySequence("Ctrl+Y"), self, self.undo_stack.redo)
+        QShortcut(QKeySequence("Ctrl+C"), self, self.copy_selected)
+        QShortcut(QKeySequence("Ctrl+V"), self, self.paste_items)
         
         # Barra de zoom del lienzo
         zoom_bar = QHBoxLayout()
@@ -569,8 +593,14 @@ class SymbolEditorWidget(QWidget):
             self.scene.active_pen_width = widths[index]
 
     def delete_selected_primitives(self):
-        for it in self.scene.selectedItems():
-            if not isinstance(it, TerminalHandleItem):
+        items = [it for it in self.scene.selectedItems() if not isinstance(it, TerminalHandleItem)]
+        if not items:
+            return
+        if self.scene.undo_stack:
+            from .undo_commands import DeleteItemsCommand
+            self.scene.undo_stack.push(DeleteItemsCommand(self.scene, items))
+        else:
+            for it in items:
                 self.scene.removeItem(it)
 
     def _load_elmt_into_scene(self, elmt_path: str):
@@ -756,5 +786,52 @@ class SymbolEditorWidget(QWidget):
             f"El símbolo '{sym_id}' se ha guardado en custom_symbols.json y está disponible de inmediato en SimuCraft."
         )
         self.load_component_list()
+
+    # ------------------------------------------------------------------ #
+    # Clipboard                                                            #
+    # ------------------------------------------------------------------ #
+
+    def copy_selected(self):
+        """Copia los elementos seleccionados al portapapeles interno."""
+        self._clipboard = [it for it in self.scene.selectedItems() if hasattr(it, 'to_svg')]
+
+    def paste_items(self):
+        """Pega los elementos copiados (implementación básica — pendiente serialización completa)."""
+        if not self._clipboard:
+            return
+        offset = 18.0  # desplazamiento de 1 celda
+        self.scene.clearSelection()
+        new_items = []
+        for src in self._clipboard:
+            # Duplicar vía SVG round-trip cuando el item tiene to_svg
+            try:
+                import copy as _copy
+                dup = _copy.copy(src)
+                dup.setPos(src.pos().x() + offset, src.pos().y() + offset)
+                self.scene.addItem(dup)
+                dup.setSelected(True)
+                new_items.append(dup)
+            except Exception:
+                pass
+        if new_items and self.scene.undo_stack:
+            from .undo_commands import AddItemsCommand
+            self.scene.undo_stack.push(AddItemsCommand(self.scene, new_items))
+
+    # ------------------------------------------------------------------ #
+    # Explorador de Librería QET                                           #
+    # ------------------------------------------------------------------ #
+
+    def import_from_qet_browser(self):
+        """Abre el diálogo de exploración de la librería QET y carga el .elmt seleccionado."""
+        try:
+            from .qet_browser_dialog import QETLibraryBrowserDialog
+        except Exception as e:
+            QMessageBox.warning(self, "Error", f"No se pudo cargar el explorador QET:\n{e}")
+            return
+        dlg = QETLibraryBrowserDialog(self)
+        if dlg.exec():
+            path = dlg.get_selected_qet_path()
+            if path:
+                self.load_elmt_file(path)
 
 

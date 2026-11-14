@@ -2,12 +2,15 @@
 Widget de galería visual / biblioteca de miniaturas de bitmaps de CADe SIMU.
 """
 from pathlib import Path
+import json
 from PySide6.QtWidgets import QListWidget, QListWidgetItem
 from PySide6.QtCore import Qt, QSize
 from PySide6.QtGui import QPixmap, QPainter, QColor, QPen, QIcon
 from PIL import Image as _PILImage
 
-from .config import BMP_RESOURCE_DIR, KNOWN_BMP_IDS, SPLASH_FILES
+from .config import BMP_RESOURCE_DIR, KNOWN_BMP_IDS, SPLASH_FILES, BASE_PATH
+
+BITMAP_NAMES_FILE = BASE_PATH / 'data' / 'mappings' / 'bitmap_names.json'
 
 
 class GalleryListWidget(QListWidget):
@@ -47,10 +50,23 @@ class GalleryListWidget(QListWidget):
         self.all_gallery_items = []
         self._load_items()
 
+    def reload_items(self):
+        """Recarga los elementos y nombres actualizados desde disco."""
+        self._load_items()
+
     def _load_items(self):
         self.all_gallery_items = []
         if not BMP_RESOURCE_DIR.exists():
             return
+
+        # Cargar nombres personalizados
+        custom_names = {}
+        if BITMAP_NAMES_FILE.exists():
+            try:
+                with open(BITMAP_NAMES_FILE, 'r', encoding='utf-8') as f:
+                    custom_names = json.load(f)
+            except Exception:
+                custom_names = {}
 
         for bmp_path in sorted(BMP_RESOURCE_DIR.glob('*.bmp')):
             try:
@@ -60,22 +76,25 @@ class GalleryListWidget(QListWidget):
                 continue
 
             fname = bmp_path.name
+            friendly_name = custom_names.get(fname, '')
+
             if h <= 25:
                 cat = "🛠 Toolbars GUI (21px)"
-                desc = f"Toolbar ({w // 21} botones)" if h == 21 else f"Toolbar ({w}x{h})"
+                desc = friendly_name or (f"Toolbar ({w // 21} botones)" if h == 21 else f"Toolbar ({w}x{h})")
             elif fname in KNOWN_BMP_IDS:
-                cat = "📋 Hojas de Tiles / PLC"
-                desc = "Carátula PLC / Lámina de Símbolos"
+                cat = "📋 PLC"
+                desc = friendly_name or "Módulo / Lámina PLC"
             elif fname in SPLASH_FILES:
                 cat = "ℹ Splash & Acerca de"
-                desc = "Pantalla de Inicio / Créditos"
+                desc = friendly_name or "Pantalla de Inicio / Créditos"
             else:
                 cat = "🖼 Vistas 2D y 3D de hardware"
-                desc = f"Componente ({w}x{h}px)"
+                desc = friendly_name or f"Componente ({w}x{h}px)"
 
             item_data = {
                 'path': str(bmp_path),
                 'filename': fname,
+                'friendly_name': friendly_name,
                 'category': cat,
                 'width': w,
                 'height': h,
@@ -125,7 +144,7 @@ class GalleryListWidget(QListWidget):
                     pass
 
             # Borde indicador por categoría
-            if d['category'] == "📋 Hojas de Tiles / PLC":
+            if d['category'] == "📋 PLC":
                 p.setPen(QPen(QColor("#89b4fa"), 2))
                 p.drawRect(1, 1, 94, 94)
             elif d['category'] == "🛠 Toolbars GUI (21px)":

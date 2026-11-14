@@ -43,6 +43,7 @@ class SymbolCanvasScene(QGraphicsScene):
         self._is_drawing = False
         self._start_point = QPointF()
         self._temp_item: Optional[QGraphicsItem] = None
+        self.undo_stack = None
 
         # Callback cuando cambia algún item
         self.on_item_changed_callback = None
@@ -182,7 +183,13 @@ class SymbolCanvasScene(QGraphicsScene):
     def mouseReleaseEvent(self, event):
         if self._is_drawing:
             self._is_drawing = False
+            created = self._temp_item
             self._temp_item = None
+            if created and self.undo_stack:
+                from .undo_commands import AddItemsCommand
+                # Ya añadido, creamos el comando para que undo() lo retire
+                cmd = AddItemsCommand(self, [created])
+                self.undo_stack.push(cmd)
             if self.on_item_changed_callback:
                 self.on_item_changed_callback()
         super().mouseReleaseEvent(event)
@@ -190,14 +197,19 @@ class SymbolCanvasScene(QGraphicsScene):
     def keyPressEvent(self, event):
         # Eliminar items seleccionados con Delete o Backspace
         if event.key() in (Qt.Key_Delete, Qt.Key_Backspace):
-            selected = self.selectedItems()
-            for it in selected:
-                # No eliminar TerminalHandleItem por error aquí si está manejado por su lista
-                from .terminal_handle import TerminalHandleItem
-                if not isinstance(it, TerminalHandleItem):
-                    self.removeItem(it)
-            if self.on_item_changed_callback:
-                self.on_item_changed_callback()
+            from .terminal_handle import TerminalHandleItem
+            selected = [it for it in self.selectedItems() if not isinstance(it, TerminalHandleItem)]
+            if selected:
+                if self.undo_stack:
+                    from .undo_commands import DeleteItemsCommand
+                    self.undo_stack.push(DeleteItemsCommand(self, selected))
+                else:
+                    for it in selected:
+                        self.removeItem(it)
+                if self.on_item_changed_callback:
+                    self.on_item_changed_callback()
+            event.accept()
+            return
         super().keyPressEvent(event)
 
     def export_primitives_to_svg(self) -> str:
@@ -213,3 +225,111 @@ class SymbolCanvasScene(QGraphicsScene):
             f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" width="{w}" height="{h}">\n'
             + "\n".join(svg_parts) + "\n</svg>"
         )
+
+
+from PySide6.QtWidgets import QGraphicsView
+
+
+class SymbolGraphicsView(QGraphicsView):
+    """Vista gráfica con zoom centrado en el cursor, desplazamiento suave y atajos CAD."""
+
+    def __init__(self, scene, parent=None):
+        super().__init__(scene, parent)
+        self.setRenderHint(QPainter.Antialiasing, True)
+        self.setDragMode(QGraphicsView.RubberBandDrag)
+        self.setTransformationAnchor(QGraphicsView.AnchorUnderMouse)
+        self.setResizeAnchor(QGraphicsView.AnchorUnderMouse)
+        # Eliminar glitch de arrastre: modo de actualización inteligente
+        self.setViewportUpdateMode(QGraphicsView.SmartViewportUpdate)
+        self._is_panning = False
+        self._pan_start = QPointF()
+
+    def wheelEvent(self, event):
+        """Zoom progresivo centrado en el cursor con Ctrl + Rueda del ratón."""
+        if event.modifiers() & Qt.ControlModifier:
+            delta = event.angleDelta().y()
+            if delta == 0:
+                return
+            factor = 1.15 if delta > 0 else (1.0 / 1.15)
+            self.scale(factor, factor)
+            event.accept()
+        else:
+            super().wheelEvent(event)
+
+    def mousePressEvent(self, event):
+        if event.button() == Qt.MiddleButton or (event.button() == Qt.LeftButton and event.modifiers() & Qt.AltModifier):
+            self._is_panning = True
+            pos = event.position().toPoint() if hasattr(event, 'position') else event.pos()
+            self._pan_start = pos
+            self.setCursor(Qt.ClosedHandCursor)
+            event.accept()
+            return
+        super().mousePressEvent(event)
+
+    def mouseMoveEvent(self, event):
+        if self._is_panning:
+            pos = event.position().toPoint() if hasattr(event, 'position') else event.pos()
+            delta = pos - self._pan_start
+            self._pan_start = pos
+            self.horizontalScrollBar().setValue(int(self.horizontalScrollBar().value() - delta.x()))
+            self.verticalScrollBar().setValue(int(self.verticalScrollBar().value() - delta.y()))
+            event.accept()
+            return
+        super().mouseMoveEvent(event)
+
+    def mouseReleaseEvent(self, event):
+        if self._is_panning and (event.button() == Qt.MiddleButton or event.button() == Qt.LeftButton):
+            self._is_panning = False
+            self.setCursor(Qt.ArrowCursor)
+            event.accept()
+            return
+        super().mouseReleaseEvent(event)
+
+    def mouseDoubleClickEvent(self, event):
+        """Abre el diálogo modal de propiedades al hacer doble clic sobre un elemento.
+        Los bornes (TerminalHandleItem) se editan pero con sus propios campos.
+        """
+        from .terminal_handle import TerminalHandleItem
+        pos = event.position().toPoint() if hasattr(event, 'position') else event.pos()
+        item = self.itemAt(pos)
+        if item:
+            # Subir hasta el item raíz (sin padre)
+            target = item
+            while target.parentItem():
+                target = target.parentItem()
+            # Abrir propiedades solo para tipos conocidos (primitivas + bornes)
+            from .properties_dialog import PrimitivePropertiesDialog
+            try:
+                dlg = PrimitivePropertiesDialog(target, self)
+                if dlg.exec():
+                    sc = self.scene()
+                    if sc and hasattr(sc, 'on_item_changed_callback') and sc.on_item_changed_callback:
+                        sc.on_item_changed_callback()
+            except Exception:
+                pass  # Tipo no soportado → ignorar silenciosamente
+            event.accept()
+            return
+        super().mouseDoubleClickEvent(event)
+
+    def keyPressEvent(self, event):
+        nudge = 1.0 if (event.modifiers() & Qt.ShiftModifier) else 10.0
+        selected = self.scene().selectedItems() if self.scene() else []
+        if selected and event.key() in (Qt.Key_Left, Qt.Key_Right, Qt.Key_Up, Qt.Key_Down):
+            dx, dy = 0.0, 0.0
+            if event.key() == Qt.Key_Left:
+                dx = -nudge
+            elif event.key() == Qt.Key_Right:
+                dx = nudge
+            elif event.key() == Qt.Key_Up:
+                dy = -nudge
+            elif event.key() == Qt.Key_Down:
+                dy = nudge
+
+            for it in selected:
+                it.setPos(it.pos().x() + dx, it.pos().y() + dy)
+            if hasattr(self.scene(), 'on_item_changed_callback') and self.scene().on_item_changed_callback:
+                self.scene().on_item_changed_callback()
+            event.accept()
+            return
+
+        super().keyPressEvent(event)

@@ -27,23 +27,71 @@ _DEFAULT_PEN = QPen(QColor("#ffffff"), 1.8, Qt.SolidLine, Qt.RoundCap)
 
 
 class GraphicLineItem(QGraphicsLineItem):
-    """Línea vectorial interactiva con ajuste magnético a rejilla."""
+    """Línea vectorial interactiva con ajuste magnético a rejilla y tiradores de extremo."""
 
     def __init__(self, x1=0, y1=0, x2=20, y2=20, parent=None):
         super().__init__(x1, y1, x2, y2, parent)
         self.setFlags(_EDITABLE_FLAGS)
         self.setPen(QPen(QColor("#ffffff"), 1.8, Qt.SolidLine, Qt.RoundCap))
         self.setZValue(20)
+        self._dragging_endpoint = 0
+
+    def boundingRect(self) -> QRectF:
+        # Incluye el margen del grosor + 6px extra para los tiradores de extremo
+        extra = self.pen().widthF() / 2.0 + 6.0
+        return super().boundingRect().adjusted(-extra, -extra, extra, extra)
 
     def paint(self, painter: QPainter, option, widget=None):
         super().paint(painter, option, widget)
         if self.isSelected():
             painter.setPen(_SEL_PEN)
-            painter.setBrush(Qt.NoBrush)
             line = self.line()
             painter.setBrush(QBrush(QColor("#00e5ff")))
-            painter.drawEllipse(line.p1(), 3, 3)
-            painter.drawEllipse(line.p2(), 3, 3)
+            # Tiradores en ambos extremos para arrastrar interactivamente
+            painter.drawEllipse(line.p1(), 4, 4)
+            painter.drawEllipse(line.p2(), 4, 4)
+
+    def mousePressEvent(self, event):
+        pos = event.pos()
+        p1 = self.line().p1()
+        p2 = self.line().p2()
+        if (pos - p1).manhattanLength() <= 8:
+            self._dragging_endpoint = 1
+            event.accept()
+            return
+        elif (pos - p2).manhattanLength() <= 8:
+            self._dragging_endpoint = 2
+            event.accept()
+            return
+        self._dragging_endpoint = 0
+        super().mousePressEvent(event)
+
+    def mouseMoveEvent(self, event):
+        if getattr(self, '_dragging_endpoint', 0) in (1, 2):
+            self.prepareGeometryChange()
+            pos = event.pos()
+            if self.scene() and hasattr(self.scene(), 'snap_point'):
+                scene_pos = self.mapToScene(pos)
+                snapped_scene = self.scene().snap_point(scene_pos)
+                pos = self.mapFromScene(snapped_scene)
+            line = self.line()
+            if self._dragging_endpoint == 1:
+                self.setLine(QLineF(pos, line.p2()))
+            else:
+                self.setLine(QLineF(line.p1(), pos))
+            self.update()
+            event.accept()
+            return
+        super().mouseMoveEvent(event)
+
+    def mouseReleaseEvent(self, event):
+        if getattr(self, '_dragging_endpoint', 0) in (1, 2):
+            self._dragging_endpoint = 0
+            if self.scene() and hasattr(self.scene(), 'on_item_changed_callback') and self.scene().on_item_changed_callback:
+                self.scene().on_item_changed_callback()
+            event.accept()
+            return
+        super().mouseReleaseEvent(event)
 
     def to_svg(self) -> str:
         line = self.line()
@@ -57,7 +105,7 @@ class GraphicLineItem(QGraphicsLineItem):
 
 
 class GraphicRectItem(QGraphicsRectItem):
-    """Rectángulo vectorial interactivo con esquinas redondeables y relleno."""
+    """Rectángulo vectorial interactivo con esquinas redondeables, relleno y tiradores."""
 
     def __init__(self, x=0, y=0, w=40, h=40, rx=0, ry=0, parent=None):
         super().__init__(x, y, w, h, parent)
@@ -67,6 +115,11 @@ class GraphicRectItem(QGraphicsRectItem):
         self.setPen(QPen(QColor("#ffffff"), 1.8, Qt.SolidLine))
         self.setBrush(Qt.NoBrush)
         self.setZValue(15)
+        self._resizing_corner = False
+
+    def boundingRect(self) -> QRectF:
+        extra = self.pen().widthF() / 2.0 + 6.0
+        return super().boundingRect().adjusted(-extra, -extra, extra, extra)
 
     def paint(self, painter: QPainter, option, widget=None):
         painter.setRenderHint(QPainter.Antialiasing, True)
@@ -81,6 +134,45 @@ class GraphicRectItem(QGraphicsRectItem):
             painter.setPen(QPen(QColor("#00e5ff"), 1.5, Qt.DashLine))
             painter.setBrush(Qt.NoBrush)
             painter.drawRect(r.adjusted(-2, -2, 2, 2))
+            # Tirador en la esquina inferior derecha
+            painter.fillRect(QRectF(r.right() - 4, r.bottom() - 4, 8, 8), QColor("#00e5ff"))
+
+    def mousePressEvent(self, event):
+        pos = event.pos()
+        r = self.rect()
+        br = QPointF(r.right(), r.bottom())
+        if (pos - br).manhattanLength() <= 8:
+            self._resizing_corner = True
+            event.accept()
+            return
+        self._resizing_corner = False
+        super().mousePressEvent(event)
+
+    def mouseMoveEvent(self, event):
+        if getattr(self, '_resizing_corner', False):
+            self.prepareGeometryChange()
+            pos = event.pos()
+            if self.scene() and hasattr(self.scene(), 'snap_point'):
+                scene_pos = self.mapToScene(pos)
+                snapped_scene = self.scene().snap_point(scene_pos)
+                pos = self.mapFromScene(snapped_scene)
+            r = self.rect()
+            new_w = max(6.0, pos.x() - r.left())
+            new_h = max(6.0, pos.y() - r.top())
+            self.setRect(QRectF(r.left(), r.top(), new_w, new_h))
+            self.update()
+            event.accept()
+            return
+        super().mouseMoveEvent(event)
+
+    def mouseReleaseEvent(self, event):
+        if getattr(self, '_resizing_corner', False):
+            self._resizing_corner = False
+            if self.scene() and hasattr(self.scene(), 'on_item_changed_callback') and self.scene().on_item_changed_callback:
+                self.scene().on_item_changed_callback()
+            event.accept()
+            return
+        super().mouseReleaseEvent(event)
 
     def to_svg(self) -> str:
         r = self.rect()
@@ -97,7 +189,7 @@ class GraphicRectItem(QGraphicsRectItem):
 
 
 class GraphicCircleItem(QGraphicsEllipseItem):
-    """Círculo o elipse vectorial interactiva."""
+    """Círculo o elipse vectorial interactiva con tirador de redimensionado."""
 
     def __init__(self, x=0, y=0, w=30, h=30, parent=None):
         super().__init__(x, y, w, h, parent)
@@ -105,6 +197,11 @@ class GraphicCircleItem(QGraphicsEllipseItem):
         self.setPen(QPen(QColor("#ffffff"), 1.8, Qt.SolidLine))
         self.setBrush(Qt.NoBrush)
         self.setZValue(15)
+        self._resizing_corner = False
+
+    def boundingRect(self) -> QRectF:
+        extra = self.pen().widthF() / 2.0 + 6.0
+        return super().boundingRect().adjusted(-extra, -extra, extra, extra)
 
     def paint(self, painter: QPainter, option, widget=None):
         painter.setRenderHint(QPainter.Antialiasing, True)
@@ -114,7 +211,47 @@ class GraphicCircleItem(QGraphicsEllipseItem):
         if self.isSelected():
             painter.setPen(QPen(QColor("#00e5ff"), 1.5, Qt.DashLine))
             painter.setBrush(Qt.NoBrush)
-            painter.drawRect(self.rect().adjusted(-2, -2, 2, 2))
+            r = self.rect()
+            painter.drawRect(r.adjusted(-2, -2, 2, 2))
+            # Tirador en la esquina inferior derecha
+            painter.fillRect(QRectF(r.right() - 4, r.bottom() - 4, 8, 8), QColor("#00e5ff"))
+
+    def mousePressEvent(self, event):
+        pos = event.pos()
+        r = self.rect()
+        br = QPointF(r.right(), r.bottom())
+        if (pos - br).manhattanLength() <= 8:
+            self._resizing_corner = True
+            event.accept()
+            return
+        self._resizing_corner = False
+        super().mousePressEvent(event)
+
+    def mouseMoveEvent(self, event):
+        if getattr(self, '_resizing_corner', False):
+            self.prepareGeometryChange()
+            pos = event.pos()
+            if self.scene() and hasattr(self.scene(), 'snap_point'):
+                scene_pos = self.mapToScene(pos)
+                snapped_scene = self.scene().snap_point(scene_pos)
+                pos = self.mapFromScene(snapped_scene)
+            r = self.rect()
+            new_w = max(6.0, pos.x() - r.left())
+            new_h = max(6.0, pos.y() - r.top())
+            self.setRect(QRectF(r.left(), r.top(), new_w, new_h))
+            self.update()
+            event.accept()
+            return
+        super().mouseMoveEvent(event)
+
+    def mouseReleaseEvent(self, event):
+        if getattr(self, '_resizing_corner', False):
+            self._resizing_corner = False
+            if self.scene() and hasattr(self.scene(), 'on_item_changed_callback') and self.scene().on_item_changed_callback:
+                self.scene().on_item_changed_callback()
+            event.accept()
+            return
+        super().mouseReleaseEvent(event)
 
     def to_svg(self) -> str:
         r = self.rect()
