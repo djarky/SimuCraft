@@ -55,7 +55,11 @@ class MainWindow(QMainWindow):
         local_symbols = os.path.join(self.project_root, "assets", "qet_symbols")
         if os.path.isdir(local_symbols):
             self.qet_loader.add_directory(local_symbols)
-        qet_elements = "/home/vibecode/DevS/qelectrotech-elements/elements"
+        qet_elements = os.environ.get("QET_ELEMENTS_DIR") or os.path.join(
+            os.path.dirname(self.project_root),
+            "qelectrotech-elements",
+            "elements",
+        )
         if os.path.isdir(qet_elements):
             self.qet_loader.add_directory(qet_elements)
             

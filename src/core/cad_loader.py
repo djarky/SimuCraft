@@ -15,9 +15,16 @@ from ..graphics.wire_item import WireItem
 from .graph import Node, Edge, NodeType
 try:
     from ..qet import QETLoader
+    _project_root = Path(__file__).resolve().parents[2]
+    _qet_elements = Path(
+        os.environ.get(
+            "QET_ELEMENTS_DIR",
+            _project_root.parent / 'qelectrotech-elements' / 'elements',
+        )
+    )
     _qet_loader = QETLoader()
-    _qet_loader.add_directory(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'assets', 'qet_symbols'))
-    _qet_loader.add_directory('/home/vibecode/DevS/qelectrotech-elements/elements')
+    _qet_loader.add_directory(str(_project_root / 'assets' / 'qet_symbols'))
+    _qet_loader.add_directory(str(_qet_elements))
 except Exception:
     _qet_loader = None
 
