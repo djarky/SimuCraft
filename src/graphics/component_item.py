@@ -3,14 +3,16 @@ Item gráfico para componentes - renderiza símbolos vectoriales industriales y 
 Soporta interacción interactiva (clic para pulsar botones), visualización de tags y estado de simulación
 """
 import os
+import re
 import uuid
+import xml.etree.ElementTree as ET
 from typing import Dict, Any, Optional
 
 from PySide6.QtWidgets import QGraphicsItem
 from PySide6.QtSvgWidgets import QGraphicsSvgItem
 from PySide6.QtSvg import QSvgRenderer
 from PySide6.QtCore import Qt, QRectF, QByteArray, QPointF
-from PySide6.QtGui import QPainter, QFont, QPen, QBrush, QColor
+from PySide6.QtGui import QPainter, QFont, QPen, QBrush, QColor, QTransform
 
 from .terminal_item import TerminalItem
 from ..components.power import PowerRail
@@ -18,6 +20,288 @@ from ..components.pushbutton import PushButton
 from ..components.contactor import Contactor
 from ..components.auxiliary import AuxiliaryContact, PilotLamp, ThermalRelay, Motor
 from ..qet.parser import QETParser
+
+
+_NUMBER_RE = re.compile(r"[-+]?(?:\d*\.\d+|\d+)(?:[eE][-+]?\d+)?")
+
+
+def _color_rgb(value: str):
+    """Convierte un color SVG sencillo a ``(r, g, b)`` o devuelve None."""
+    if not value:
+        return None
+    color = value.strip().lower()
+    named = {
+        "black": (0, 0, 0),
+        "white": (255, 255, 255),
+        "red": (255, 0, 0),
+        "green": (0, 128, 0),
+        "blue": (0, 0, 255),
+    }
+    if color in named:
+        return named[color]
+    if color.startswith("#"):
+        digits = color[1:]
+        if len(digits) == 3:
+            digits = "".join(ch * 2 for ch in digits)
+        if len(digits) == 6:
+            try:
+                return tuple(int(digits[i : i + 2], 16) for i in (0, 2, 4))
+            except ValueError:
+                return None
+    if color.startswith("rgb(") and color.endswith(")"):
+        parts = color[4:-1].replace("%", "").split(",")
+        if len(parts) == 3:
+            try:
+                return tuple(int(float(part.strip())) for part in parts)
+            except ValueError:
+                return None
+    return None
+
+
+def _is_white_color(value: str) -> bool:
+    """Devuelve True para blanco puro en formatos hex, nombre o ``rgb()``."""
+    rgb = _color_rgb(value)
+    return rgb is not None and all(channel >= 250 for channel in rgb)
+
+
+def _is_dark_color(value: str) -> bool:
+    rgb = _color_rgb(value)
+    if rgb is None:
+        return False
+    red, green, blue = rgb
+    return (0.2126 * red + 0.7152 * green + 0.0722 * blue) < 128
+
+
+def adapt_svg_for_light_background(svg_content: str) -> str:
+    """Adapta SVG del Studio (canvas oscuro) al fondo claro de SimuCraft.
+
+    El Studio dibuja con trazos y textos blancos. En la hoja blanca de
+    SimuCraft esos elementos serían invisibles. Se convierten a tinta oscura
+    únicamente los trazos blancos y el relleno de textos; los rellenos blancos
+    de formas con contorno oscuro se conservan (por ejemplo, la bobina de un
+    contactor). No modifica el ``svg_content`` guardado en el registro.
+    """
+    if not isinstance(svg_content, str) or not svg_content.strip():
+        return svg_content
+
+    try:
+        root = ET.fromstring(svg_content)
+    except ET.ParseError:
+        # Un SVG inválido se deja intacto para que QSvgRenderer lo rechace y
+        # ComponentItem use el dibujo procedural.
+        return svg_content
+
+    for element in root.iter():
+        tag = element.tag.rsplit("}", 1)[-1].lower()
+        if tag in {"text", "tspan"}:
+            continue
+        fill = element.get("fill")
+        if fill and _is_dark_color(fill):
+            # Ya hay una forma/fondo oscuro que da contraste a los trazos
+            # blancos; no se debe invertir el tema del símbolo.
+            return svg_content
+
+    changed = False
+    for element in root.iter():
+        tag = element.tag.rsplit("}", 1)[-1].lower()
+        stroke = element.get("stroke")
+        if stroke and _is_white_color(stroke):
+            element.set("stroke", "#111111")
+            changed = True
+        if tag in {"text", "tspan"}:
+            fill = element.get("fill")
+            if fill and _is_white_color(fill):
+                element.set("fill", "#111111")
+                changed = True
+
+    if not changed:
+        return svg_content
+
+    ET.register_namespace("", "http://www.w3.org/2000/svg")
+    return ET.tostring(root, encoding="unicode")
+
+
+_SKIP_SVG_TAGS = {
+    "defs",
+    "clippath",
+    "mask",
+    "symbol",
+    "marker",
+    "pattern",
+    "title",
+    "desc",
+    "metadata",
+    "style",
+    "script",
+}
+
+
+def _to_float(value, default: float = 0.0) -> float:
+    if value is None:
+        return default
+    match = _NUMBER_RE.search(str(value))
+    return float(match.group()) if match else default
+
+
+def _style_value(element, name: str):
+    for declaration in (element.get("style") or "").split(";"):
+        if ":" not in declaration:
+            continue
+        key, value = declaration.split(":", 1)
+        if key.strip() == name:
+            return value.strip()
+    return None
+
+
+def _attr_or_style(element, name: str, default=None):
+    value = element.get(name)
+    if value is None:
+        value = _style_value(element, name)
+    return value if value is not None else default
+
+
+def _parse_transform(value: str) -> QTransform:
+    transform = QTransform()
+    if not value:
+        return transform
+    for name, args_text in re.findall(r"([a-zA-Z]+)\s*\(([^)]*)\)", value):
+        args = [float(number) for number in _NUMBER_RE.findall(args_text)]
+        name = name.lower()
+        if name == "matrix" and len(args) >= 6:
+            current = QTransform(
+                args[0], args[1], args[2], args[3], args[4], args[5]
+            )
+        elif name == "translate" and args:
+            current = QTransform.fromTranslate(
+                args[0], args[1] if len(args) > 1 else 0.0
+            )
+        elif name == "scale" and args:
+            current = QTransform.fromScale(
+                args[0], args[1] if len(args) > 1 else args[0]
+            )
+        elif name == "rotate" and args:
+            current = QTransform()
+            if len(args) >= 3:
+                current.translate(args[1], args[2])
+                current.rotate(args[0])
+                current.translate(-args[1], -args[2])
+            else:
+                current.rotate(args[0])
+        else:
+            continue
+        transform = current * transform
+    return transform
+
+
+def _element_local_bounds(element) -> Optional[QRectF]:
+    tag = element.tag.rsplit("}", 1)[-1].lower()
+
+    if tag == "line":
+        x1 = _to_float(element.get("x1"))
+        y1 = _to_float(element.get("y1"))
+        x2 = _to_float(element.get("x2"))
+        y2 = _to_float(element.get("y2"))
+        if x1 == x2 and y1 == y2:
+            return None
+        return QRectF(QPointF(x1, y1), QPointF(x2, y2)).normalized()
+
+    if tag == "rect":
+        x = _to_float(element.get("x"))
+        y = _to_float(element.get("y"))
+        width = _to_float(element.get("width"))
+        height = _to_float(element.get("height"))
+        if width <= 0 or height <= 0:
+            return None
+        return QRectF(x, y, width, height)
+
+    if tag == "circle":
+        cx = _to_float(element.get("cx"))
+        cy = _to_float(element.get("cy"))
+        radius = _to_float(element.get("r"))
+        if radius <= 0:
+            return None
+        return QRectF(cx - radius, cy - radius, radius * 2, radius * 2)
+
+    if tag == "ellipse":
+        cx = _to_float(element.get("cx"))
+        cy = _to_float(element.get("cy"))
+        rx = _to_float(element.get("rx"))
+        ry = _to_float(element.get("ry"))
+        if rx <= 0 or ry <= 0:
+            return None
+        return QRectF(cx - rx, cy - ry, rx * 2, ry * 2)
+
+    if tag in {"polygon", "polyline"}:
+        numbers = [
+            float(number) for number in _NUMBER_RE.findall(element.get("points") or "")
+        ]
+        if len(numbers) < 2:
+            return None
+        xs = numbers[0::2]
+        ys = numbers[1::2]
+        if not xs or not ys:
+            return None
+        return QRectF(
+            min(xs), min(ys), max(xs) - min(xs), max(ys) - min(ys)
+        )
+
+    if tag in {"text", "tspan"}:
+        if tag == "tspan" and not (element.get("x") or element.get("y")):
+            return None
+        text = "".join(element.itertext()).strip()
+        if not text:
+            return None
+        x = _to_float(_attr_or_style(element, "x"))
+        y = _to_float(_attr_or_style(element, "y"))
+        font_size = _to_float(_attr_or_style(element, "font-size"), 12.0)
+        if font_size <= 0:
+            font_size = 12.0
+        width = max(1.0, float(len(text))) * font_size * 0.6
+        return QRectF(x, y - font_size, width, font_size * 1.2)
+
+    return None
+
+
+def estimate_svg_bounds(svg_content: str) -> Optional[QRectF]:
+    """Estima los límites del contenido SVG para no recortar símbolos legados.
+
+    No sustituye al viewBox: solo se usa para ampliarlo cuando hay contenido o
+    terminales fuera de él. Los ``path`` complejos se dejan al viewBox original.
+    """
+    if not isinstance(svg_content, str) or not svg_content.strip():
+        return None
+    try:
+        root = ET.fromstring(svg_content)
+    except ET.ParseError:
+        return None
+
+    bounds = QRectF()
+
+    def walk(element, parent_transform: QTransform):
+        nonlocal bounds
+        tag = element.tag.rsplit("}", 1)[-1].lower()
+        if tag in _SKIP_SVG_TAGS:
+            return
+        if element.get("display") == "none" or element.get("visibility") == "hidden":
+            return
+
+        local_transform = _parse_transform(element.get("transform"))
+        combined = parent_transform * local_transform
+        local_bounds = _element_local_bounds(element)
+        if local_bounds is not None and not local_bounds.isNull():
+            mapped = combined.mapRect(local_bounds)
+            if mapped.width() < 0 or mapped.height() < 0:
+                mapped = mapped.normalized()
+            if bounds.isNull():
+                bounds = QRectF(mapped)
+            else:
+                bounds = bounds.united(mapped)
+
+        for child in element:
+            walk(child, combined)
+
+    walk(root, QTransform())
+    return bounds if not bounds.isNull() else None
 
 
 class ComponentItem(QGraphicsSvgItem):
@@ -56,19 +340,93 @@ class ComponentItem(QGraphicsSvgItem):
         self._setup_terminals(visual.get('terminals', []))
         
     def _load_svg(self):
+        """Carga ``svg_content`` como geometría canónica.
+
+        Si no hay SVG guardado y existe ``elmt_path``, se convierte el .elmt
+        una sola vez y se cachea en ``visual['svg_content']``. Ya no se exige
+        ``elmt_path`` para usar un SVG.
+        """
         visual = self.component_def.get('visual', {})
         svg_content = visual.get('svg_content')
-        
+
         if not svg_content and visual.get('elmt_path') and os.path.exists(visual.get('elmt_path')):
             parser = QETParser()
             svg_content = parser.elmt_to_svg(visual.get('elmt_path'))
             visual['svg_content'] = svg_content
-            
-        if svg_content and 'elmt_path' in visual:
-            data = QByteArray(svg_content.encode('utf-8'))
+
+        if not isinstance(svg_content, str) or not svg_content.strip():
+            return
+
+        try:
+            render_svg = adapt_svg_for_light_background(svg_content)
+            self._render_svg_content = render_svg
+            data = QByteArray(render_svg.encode('utf-8'))
             self.renderer = QSvgRenderer(data)
-            if self.renderer.isValid():
-                self.setSharedRenderer(self.renderer)
+        except Exception:
+            self.renderer = None
+            return
+
+        if self.renderer.isValid():
+            self._expand_renderer_viewbox(svg_content)
+            self.setSharedRenderer(self.renderer)
+
+    def _renderer_rect(self) -> QRectF:
+        """Devuelve el rectángulo del viewBox del SVG en coordenadas locales.
+
+        Renderizar el SVG en su propio viewBox conserva la alineación con los
+        terminales, incluso cuando el viewBox tiene origen negativo (por
+        ejemplo ``-25 -15 125 97``).
+        """
+        if not self.renderer or not self.renderer.isValid():
+            return QRectF(0, 0, self.width, self.height)
+
+        view_box = self.renderer.viewBoxF()
+        if view_box.isValid() and view_box.width() > 0 and view_box.height() > 0:
+            return view_box
+
+        size = self.renderer.defaultSize()
+        return QRectF(0, 0, float(size.width()), float(size.height()))
+
+    def _expand_renderer_viewbox(self, svg_content: str):
+        """Amplía el viewBox si el contenido o los terminales quedan fuera.
+
+        Los SVG legados del Studio usan un viewBox de ``0 0 width height`` pero
+        dibujan etiquetas o terminales fuera de él. Ampliar el viewBox (sin
+        escalar) conserva las coordenadas y evita recortes/desalineaciones.
+        """
+        if not self.renderer or not self.renderer.isValid():
+            return
+
+        view_box = self.renderer.viewBoxF()
+        if not view_box.isValid() or view_box.width() <= 0 or view_box.height() <= 0:
+            return
+
+        union = QRectF(view_box)
+        content_bounds = estimate_svg_bounds(svg_content)
+        if content_bounds is not None and not content_bounds.isNull():
+            union = union.united(content_bounds)
+
+        xs = []
+        ys = []
+        for terminal in self.component_def.get("visual", {}).get("terminals", []):
+            if not isinstance(terminal, dict):
+                continue
+            try:
+                xs.append(float(terminal.get("x", 0)))
+                ys.append(float(terminal.get("y", 0)))
+            except (TypeError, ValueError):
+                continue
+        if xs and ys:
+            terminal_rect = QRectF(
+                min(xs), min(ys), max(xs) - min(xs), max(ys) - min(ys)
+            ).adjusted(-4, -4, 4, 4)
+            union = union.united(terminal_rect)
+
+        if union == view_box:
+            return
+
+        margin = 8.0
+        self.renderer.setViewBox(union.adjusted(-margin, -margin, margin, margin))
 
     def _init_logic(self):
         c_type = self.component_type
@@ -103,8 +461,9 @@ class ComponentItem(QGraphicsSvgItem):
 
     def boundingRect(self) -> QRectF:
         if self.renderer and self.renderer.isValid():
-            base = super().boundingRect()
-            return base.adjusted(-15, -15, 30, 20)
+            # El viewBox ya incluye el contenido y los terminales. Se añade
+            # margen a la derecha/inferior para el tag, que se dibuja fuera.
+            return self._renderer_rect().adjusted(0, 0, 15, 10)
         if getattr(self, 'tag', '') == 'LOGO' or 'LOGO' in str(getattr(self, 'tag', '')):
             return QRectF(-60, -45, 120, 90)
         # Límites para símbolos nativos
@@ -115,13 +474,11 @@ class ComponentItem(QGraphicsSvgItem):
     def paint(self, painter: QPainter, option, widget=None):
         painter.setRenderHint(QPainter.Antialiasing, True)
         
-        # 1. Si es símbolo QElectroTech externo cargado por SVG
-        if self.renderer and self.renderer.isValid() and self.component_def.get('visual', {}).get('elmt_path'):
-            if option is not None:
-                super().paint(painter, option, widget)
-            else:
-                self.renderer.render(painter)
+        # 1. SVG canónico guardado por el editor/mapper (con o sin elmt_path)
+        if self.renderer and self.renderer.isValid():
+            self.renderer.render(painter, self._renderer_rect())
             self._draw_tag(painter)
+            self._draw_selection(painter)
             return
 
         # 2. Dibujo vectorial normalizado de componentes eléctricos
@@ -160,12 +517,15 @@ class ComponentItem(QGraphicsSvgItem):
             self._draw_generic(painter, h)
 
         self._draw_tag(painter)
-        
-        # Indicador de selección
-        if self.isSelected():
-            painter.setPen(QPen(QColor(30, 144, 255), 1.5, Qt.DashLine))
-            painter.setBrush(Qt.NoBrush)
-            painter.drawRect(self.boundingRect().adjusted(1, 1, -1, -1))
+        self._draw_selection(painter)
+
+    def _draw_selection(self, painter: QPainter):
+        """Dibuja el marco punteado de selección, también sobre SVG."""
+        if not self.isSelected():
+            return
+        painter.setPen(QPen(QColor(30, 144, 255), 1.5, Qt.DashLine))
+        painter.setBrush(Qt.NoBrush)
+        painter.drawRect(self.boundingRect().adjusted(1, 1, -1, -1))
 
     def _draw_tag(self, painter: QPainter):
         """Dibujar identificador del componente (-S1, -KM1, etc.)"""

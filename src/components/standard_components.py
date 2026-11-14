@@ -3,13 +3,15 @@ Biblioteca de componentes estándar de automatismos eléctricos para SimuCraft
 Contiene definiciones geométricas, bornes normalizados y lógica de simulación
 """
 from typing import Dict, Any
+import copy
+import os
 import uuid
 
 # Alturas normalizadas en píxeles (basadas en 12 y 21 unidades de cuadrícula x 6px)
 CONTROL_H = 72.0
 BREAKER_H = 126.0
 
-STANDARD_COMPONENTS: Dict[str, Dict[str, Any]] = {
+_BUILTIN_DEFAULTS: Dict[str, Dict[str, Any]] = {
     "power_l": {
         "id": "power_l",
         "type": "power",
@@ -772,34 +774,36 @@ STANDARD_COMPONENTS: Dict[str, Dict[str, Any]] = {
 }
 
 
-_BUILTIN_COMPONENTS = set(STANDARD_COMPONENTS.keys())
+_BUILTIN_COMPONENTS = set(_BUILTIN_DEFAULTS.keys())
 
-# Cargar símbolos personalizados definidos por el usuario desde custom_symbols.json
-def reload_custom_symbols():
-    from pathlib import Path
-    import json
-    root = Path(__file__).resolve().parent.parent.parent
-    custom_path = root / "data" / "custom_symbols.json"
-    if not custom_path.exists():
-        custom_path = root / "custom_symbols.json"
-    if custom_path.exists():
-        try:
-            with open(custom_path, "r", encoding="utf-8") as f:
-                custom_data = json.load(f)
-                if isinstance(custom_data, dict):
-                    for k, v in custom_data.items():
-                        if k not in _BUILTIN_COMPONENTS:
-                            STANDARD_COMPONENTS[k] = v
-        except Exception as e:
-            print(f"Aviso: no se pudo cargar custom_symbols.json: {e}")
+# Diccionario vivo: builtins + overrides + customs.
+STANDARD_COMPONENTS: Dict[str, Dict[str, Any]] = {}
 
-reload_custom_symbols()
+
+def reload_symbol_registry() -> None:
+    """Recarga builtins editables y símbolos CUSTOM desde ``data/symbols/``."""
+    from .symbol_registry import ensure_registry, merge_into_standard_components
+
+    ensure_registry(_BUILTIN_DEFAULTS)
+    merge_into_standard_components()
+
+
+def reload_custom_symbols() -> None:
+    """Alias de compatibilidad; ya no ignora las ediciones de builtins."""
+    reload_symbol_registry()
+
+
+if os.environ.get("SIMUCRAFT_SKIP_REGISTRY_BOOTSTRAP") == "1":
+    # Modo migración: no crear registros ni renderizar nada al importar.
+    STANDARD_COMPONENTS.update(copy.deepcopy(_BUILTIN_DEFAULTS))
+else:
+    reload_symbol_registry()
 
 
 def create_standard_component(comp_key: str, tag: str = None) -> Dict[str, Any]:
     """Crea una copia fresca de un componente estándar con ID único"""
     if comp_key not in STANDARD_COMPONENTS:
-        reload_custom_symbols()
+        reload_symbol_registry()
     if comp_key not in STANDARD_COMPONENTS:
         raise ValueError(f"Componente estándar '{comp_key}' no encontrado")
         
