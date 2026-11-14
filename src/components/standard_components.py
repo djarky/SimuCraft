@@ -772,6 +772,8 @@ STANDARD_COMPONENTS: Dict[str, Dict[str, Any]] = {
 }
 
 
+_BUILTIN_COMPONENTS = set(STANDARD_COMPONENTS.keys())
+
 # Cargar símbolos personalizados definidos por el usuario desde custom_symbols.json
 def reload_custom_symbols():
     from pathlib import Path
@@ -785,7 +787,9 @@ def reload_custom_symbols():
             with open(custom_path, "r", encoding="utf-8") as f:
                 custom_data = json.load(f)
                 if isinstance(custom_data, dict):
-                    STANDARD_COMPONENTS.update(custom_data)
+                    for k, v in custom_data.items():
+                        if k not in _BUILTIN_COMPONENTS:
+                            STANDARD_COMPONENTS[k] = v
         except Exception as e:
             print(f"Aviso: no se pudo cargar custom_symbols.json: {e}")
 
@@ -810,7 +814,7 @@ def create_standard_component(comp_key: str, tag: str = None) -> Dict[str, Any]:
         "voltage": base.get("voltage", 0.0),
         "normally_open": base.get("normally_open", True),
         "visual": dict(base["visual"]),
-        "logic": dict(base["logic"]),
+        "logic": dict(base.get("logic", {})),
         "tags": {
             "auto_name_prefix": base.get("tag_prefix", "K"),
             "can_auto_name": True
