@@ -268,6 +268,18 @@ class CADLoader:
           - 8001  → Pulsador NC paro            (11-12)
         """
 
+        # ── DISPATCH TABLE: autoritativa para cualquier ID mapeado ───────────
+        # El mapper/Studio es la fuente de verdad. La tabla hardcodeada solo
+        # actúa como fallback para IDs que todavía no tienen mapeo manual.
+        cls._ensure_dispatch_table()
+        dispatch_entry = cls._dispatch_table.get(str(tid))
+        if dispatch_entry:
+            comp_key = dispatch_entry.get('component_key', '')
+            if comp_key in STANDARD_COMPONENTS:
+                defn = create_standard_component(comp_key, tag)
+                defn['name'] = f"{dispatch_entry.get('name', tag)} [{tag}]"
+                return ComponentItem(defn)
+
         # ── ACCIONAMIENTOS (8000-8023) ────────────────────────────────────────
         if tid == 8000:                        # Pulsador NA (Marcha)
             defn = create_standard_component("pushbutton_no", tag)

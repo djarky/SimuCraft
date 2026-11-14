@@ -16,24 +16,30 @@ from PySide6.QtGui import QPixmap, QPainter, QColor, QFont, QPen, QBrush, QIcon
 from PySide6.QtSvg import QSvgRenderer
 
 from ..components.standard_components import STANDARD_COMPONENTS, create_standard_component
+from ..components.symbol_registry import is_custom as is_custom_symbol
 from ..graphics.component_item import ComponentItem
 from ..qet import QETLoader
 from ..qet.parser import QETParser
 
+_PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+_CATALOG_DIR = os.path.join(_PROJECT_ROOT, "data", "catalogs")
+
 # Cargar catálogo de símbolos de CADe SIMU
 CADESIMU_CATALOG = {}
-_catalog_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "cadesimu_symbol_catalog_detailed.json")
+_catalog_path = os.path.join(_CATALOG_DIR, "cadesimu_symbol_catalog_detailed.json")
 if os.path.exists(_catalog_path):
     try:
         with open(_catalog_path, 'r', encoding='utf-8') as f:
             for item in json.load(f):
-                CADESIMU_CATALOG[item['type_id']] = item
+                catalog_id = item.get('type_id', item.get('CAD_ID'))
+                if catalog_id is not None:
+                    CADESIMU_CATALOG[catalog_id] = item
     except Exception:
         pass
 
 # Cargar librería completa estilo CADe SIMU
 CADESIMU_LIBRARY_COMPLETE = {}
-_lib_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "cadesimu_library_complete.json")
+_lib_path = os.path.join(_CATALOG_DIR, "cadesimu_library_complete.json")
 if os.path.exists(_lib_path):
     try:
         with open(_lib_path, 'r', encoding='utf-8') as f:
@@ -55,6 +61,7 @@ CADESIMU_CATEGORIES = {
     "PLC/Autómata": [10202],
     "Barras/Conexiones": [3000, 3001, 3002, 3003, 3004, 3005, 3006, 3007, 3008, 3009],
     "Cables/Hilos": [4000, 4001, 4009, 4010, 4018, 4019],
+    "CUSTOM": [],
 }
 
 
@@ -491,7 +498,9 @@ class SymbolLibraryWidget(QWidget):
 
             # Mapear a categoría CADe SIMU
             category = "Otros"
-            if ctype == 'motor':
+            if is_custom_symbol(defn):
+                category = "CUSTOM"
+            elif ctype == 'motor':
                 category = "Motor"
             elif ctype == 'contactor':
                 category = "Contactor"
